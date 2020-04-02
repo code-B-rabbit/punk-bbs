@@ -11,7 +11,5 @@ qiniu:
   bucketName: *
   fileDomain: *
 
-blog:
-  name: "xhb"
 
 
