@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+  <head th:replace="header::head(${art.title})">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Bootstrap Blog - B4 Template by Bootstrap Temple</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <!-- Bootstrap CSS-->
+  <link rel="stylesheet" href="../static/vendor/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome CSS-->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- Custom icon font-->
+  <link rel="stylesheet" href="../static/css/fontastic.css">
+  <!-- Google fonts - Open Sans-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+  <!-- Fancybox-->
+  <link rel="stylesheet" href="vendor/@fancyapps/fancybox/jquery.fancybox.min.css">
+  <!-- theme stylesheet-->
+  <link rel="stylesheet" href="../static/css/style.default.css" id="theme-stylesheet">
+  <!-- Custom stylesheet - for your changes-->
+  <link rel="stylesheet" href="../static/css/custom.css">
+  <!-- Favicon-->
+  <link rel="shortcut icon" href="favicon.png">
+  <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+  </head>
+  <body>
+
+<!--  <link rel="stylesheet" href="../static/editor/examples/css/timestyle.css" th:href="@{/editor/examples/css/timestyle.css}" />-->
+<!--这里如果实在兼容不了再改回去....  -->
+<link rel="stylesheet" href="../static/editor/css/editormd.preview.css" th:href="@{/editor/css/editormd.preview.css}" />
+
+  <!--引入js文件-->
+  <script src="../static/editor/examples/js/jquery.min.js" th:src="@{/editor/examples/js/jquery.min.js}"></script>
+  <script src="../static/editor/lib/marked.min.js" th:src="@{/editor/lib/marked.min.js}"></script>
+  <script src="../static/editor/lib/prettify.min.js" th:src="@{/editor/lib/prettify.min.js}"></script>
+  <script src="../static/editor/lib/raphael.min.js" th:src="@{/editor/lib/raphael.min.js}"></script>
+  <script src="../static/editor/lib/underscore.min.js" th:src="@{/editor/lib/underscore.min.js}"></script>
+  <script src="../static/editor/lib/sequence-diagram.min.js" th:src="@{/editor/lib/sequence-diagram.min.js}"></script>
+  <script src="../static/editor/lib/flowchart.min.js" th:src="@{/editor/lib/flowchart.min.js}"></script>
+  <script src="../static/editor/lib/jquery.flowchart.min.js" th:src="@{/editor/lib/jquery.flowchart.min.js}"></script>
+  <script src="../static/editor/editormd.js" th:src="@{/editor/editormd.js}"></script>
+    <header class="header" th:replace="header::header(2)">
+      <!-- Main Navbar-->
+      <nav class="navbar navbar-expand-lg">
+        <div class="search-area">
+          <div class="search-area-inner d-flex align-items-center justify-content-center">
+            <div class="close-btn"><i class="icon-close"></i></div>
+            <div class="row d-flex justify-content-center">
+              <div class="col-md-8">
+                <form action="#">
+                  <div class="form-group">
+                    <input type="search" name="search" id="search" placeholder="What are you looking for?">
+                    <button type="submit" class="submit"><i class="icon-search-1"></i></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <!-- Navbar Brand -->
+          <div class="navbar-header d-flex align-items-center justify-content-between">
+            <!-- Navbar Brand --><a href="index.html" class="navbar-brand">Bootstrap Blog</a>
+            <!-- Toggle Button-->
+            <button type="button" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"><span></span><span></span><span></span></button>
+          </div>
+          <!-- Navbar Menu -->
+          <div id="navbarcollapse" class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item"><a href="index.html" class="nav-link ">Home</a>
+              </li>
+              <li class="nav-item"><a href="blog.html" class="nav-link ">Blog</a>
+              </li>
+              <li class="nav-item"><a href="post.html" class="nav-link active ">Post</a>
+              </li>
+              <li class="nav-item"><a href="#" class="nav-link ">Contact</a>
+              </li>
+            </ul>
+            <div class="navbar-text"><a href="#" class="search-btn"><i class="icon-search-1"></i></a></div>
+            <ul class="langs navbar-text"><a href="#" class="active">EN</a><span>           </span><a href="#">ES</a></ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="container">
+      <div class="modal" tabindex="-1" id="modal1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">emmmmm....</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>请把您的个人信息填写完整,谢谢💩</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Latest Posts -->
+        <main class="post blog-post col-lg-8">
+          <div class="container">
+            <div class="post-single">
+<!--              <div class="post-thumbnail"><img src="img/blog-post-3.jpeg" alt="..." class="img-fluid"></div>-->
+              <div class="post-details">
+
+<!--                <div class="post-meta d-flex justify-content-between">-->
+<!--                  <div class="category"><a href="#" th:href="@{/articlesByTag(tid=${art.tag.id})}" th:text="${art.tag.name}">Business</a></div>-->
+<!--                </div>-->
+
+                <h2 th:text="${art.title}">Diversity in Engineering: The Effect on Questions</h2>
+                <div class="post-footer d-flex align-items-center flex-column flex-sm-row">
+<!--                    <div class="avatar"><img th:src src="../static/img/avatar-1.jpg" alt="..." class="img-fluid"></div>-->
+<!--                    <div class="title"><span>John Doe</span></div></a>-->
+                  <div class="d-flex align-items-center flex-wrap">
+                    <div class="date">
+                      <svg class="bi bi-eye" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 001.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0014.828 8a13.133 13.133 0 00-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 001.172 8z" clip-rule="evenodd"/>
+                        <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0z" clip-rule="evenodd"/>
+                      </svg>
+                      <span th:text="${art.visit}">2 months ago</span>
+                    </div>
+                    <div class="date">
+                      <svg class="bi bi-stopwatch" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M8 15A6 6 0 108 3a6 6 0 000 12zm0 1A7 7 0 108 2a7 7 0 000 14z" clip-rule="evenodd"/>
+                        <path fill-rule="evenodd" d="M8 4.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4.5a.5.5 0 010-1h3V5a.5.5 0 01.5-.5zM5.5.5A.5.5 0 016 0h4a.5.5 0 010 1H6a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
+                        <path d="M7 1h2v2H7V1z"/>
+                      </svg>
+                      <span th:text="${#dates.format(art.createTime,'yyyy-MM-dd')}">2 months ago</span>
+                    </div>
+                    <div class="comments">
+                      <svg class="bi bi-chat-square-dots" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v8a1 1 0 001 1h2.5a2 2 0 011.6.8L8 14.333 9.9 11.8a2 2 0 011.6-.8H14a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v8a2 2 0 002 2h2.5a1 1 0 01.8.4l1.9 2.533a1 1 0 001.6 0l1.9-2.533a1 1 0 01.8-.4H14a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"/>
+                        <path d="M5 6a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0z"/>
+                      </svg>
+                      <span th:text="${art.commentSize}">12</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="post-body">
+                  <div id="layout"  class="editor">
+                    <div id="test-editormd" >
+                      <textarea th:text="${art.content}"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <script type="text/javascript">
+                  testEditor = editormd.markdownToHTML("test-editormd", {
+                    //markdown: $scope.apidetails.content,
+                    htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                    emoji           : true,
+                    taskList        : true,
+                    tex             : true,  // 默认不解析
+                    flowChart       : true,  // 默认不解析
+                    sequenceDiagram : true,  // 默认不解析
+                  });
+                </script>
+                <div class="post-tags"><a href="#" th:href="@{/articlesByTag(tid=${art.tag.id})}" th:text="|#${art.tag.name}|" class="tag">#Business</a></div>
+                <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row">
+                  <a th:href="${art.lastName}?@{article(id=${art.lastId})}:''" href="#" class="prev-post text-left d-flex align-items-center">
+                    <div class="icon prev">
+                      <i class="fa fa-angle-left"></i>
+                    </div>
+                    <div class="text"><strong class="text-primary">上一篇</strong>
+                      <h6 th:text="${art.lastName}?${art.lastName}:'没有了'">I Bought a Wedding Dress.</h6>
+                    </div>
+                  </a>
+                  <a th:href="${art.nextName}?@{article(id=${art.nextId})}:''" href="#" class="next-post text-right d-flex align-items-center justify-content-end">
+                    <div class="text"><strong class="text-primary">下一篇</strong>
+                      <h6 th:text="${art.nextName}?${art.nextName}:'没有了'">I Bought a Wedding Dress.</h6>
+                    </div>
+                    <div class="icon next">
+                      <i class="fa fa-angle-right"></i>
+                    </div>
+                  </a>
+                </div>
+
+<!--                <span th:replace="comment::comment"></span>-->
+                <div class="post-comments">
+                  <header>
+                    <h3 class="h6">Post Comments<span class="no-of-comments">(3)</span></h3>
+                  </header>
+                  <div class="comment">
+                    <div class="comment-header d-flex justify-content-between">
+                      <div class="user d-flex align-items-center">
+                        <div class="image"><img src="img/user.svg" alt="..." class="img-fluid rounded-circle"></div>
+                        <div class="title"><strong>Jabi Hernandiz</strong><span class="date">May 2016</span></div>
+                      </div>
+                    </div>
+                    <div class="comment-body">
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                    </div>
+                  </div>
+                  <div class="comment">
+                    <div class="comment-header d-flex justify-content-between">
+                      <div class="user d-flex align-items-center">
+                        <div class="image"><img src="img/user.svg" alt="..." class="img-fluid rounded-circle"></div>
+                        <div class="title"><strong>Nikolas</strong><span class="date">May 2016</span></div>
+                      </div>
+                    </div>
+                    <div class="comment-body">
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                    </div>
+                  </div>
+                  <div class="comment">
+                    <div class="comment-header d-flex justify-content-between">
+                      <div class="user d-flex align-items-center">
+                        <div class="image"><img src="img/user.svg" alt="..." class="img-fluid rounded-circle"></div>
+                        <div class="title"><strong>John Doe</strong><span class="date">May 2016</span></div>
+                      </div>
+                    </div>
+                    <div class="comment-body">
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="add-comment">
+                  <header>
+                    <h3 class="h6">写写宁的想法吧~~~</h3>
+                  </header>
+                  <div  class="commenting-form">
+                    <div class="row">
+                      <div class="form-group col-md-6">
+                        <input type="text" name="visitor_name" id="visitor_name" placeholder="请填写您的昵称" class="form-control">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <input type="email" name="visitor_email" id="visitor_email" placeholder="请填写您的电子邮箱地址" class="form-control">
+                      </div>
+                      <div class="form-group col-md-12">
+                        <textarea name="content" id="content" placeholder="Type your comment" class="form-control"></textarea>
+                      </div>
+                      <input name="aid" id="aid" th:value="${art.id}" type="hidden" />
+                      <div class="form-group col-md-12">
+                        <button id="submit" type="submit" class="btn btn-warning">发送评论</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </main>
+        <aside class="col-lg-4">
+          <!-- Widget [Search Bar Widget]-->
+          <div class="widget search">
+            <header>
+              <h3 class="h6">Search the blog</h3>
+            </header>
+            <form action="/blogsearch" class="search-form">
+              <div class="form-group">
+                <input type="search" name="search" placeholder="请输入你要寻找的文章标题或文章内容.......">
+                <button type="submit" class="submit">
+                  <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clip-rule="evenodd"/>
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="widget tags">
+            <header>
+              <h3 class="h6">Tags</h3>
+            </header>
+            <ul class="list-inline">
+              <li class="list-inline-item" th:each="tag:${tags}">
+                <a th:href="@{/articlesByTag(tid=${tag.id})}" th:text="|#${tag.name}|" class="tag" th:classappend="${tag.id}==${art.tid}?'text-white bg-dark':''">#Business</a>
+              </li>
+              <!--              <li class="list-inline-item"><a href="#" class="tag">#Technology</a></li>-->
+              <!--              <li class="list-inline-item"><a href="#" class="tag">#Fashion</a></li>-->
+              <!--              <li class="list-inline-item"><a href="#" class="tag">#Sports</a></li>-->
+              <!--              <li class="list-inline-item"><a href="#" class="tag">#Economy</a></li>-->
+            </ul>
+          </div>
+
+          <!-- Widget [Latest Posts Widget]        -->
+          <div class="widget latest-posts">
+            <header>
+              <h3 class="h6">最新文章</h3>
+            </header>
+            <div class="blog-posts">
+              <a href="#" th:href="@{article(id=${a.id})}"  th:each="a:${lastestArticles}">
+                <div class="item d-flex align-items-center">
+                  <div class="image"><img th:src="${a.firstPicture}" src="../static/img/small-thumbnail-1.jpg" alt="..." class="img-fluid"></div>
+                  <div class="title"><strong th:text="${a.title}">Alberto Savoia Can Teach You About</strong>
+                    <div class="d-flex align-items-center">
+                      <div class="views">
+                        <svg class="bi bi-eye" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 001.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0014.828 8a13.133 13.133 0 00-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 001.172 8z" clip-rule="evenodd"/>
+                          <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span th:text="${a.visit}">2 months ago</span>
+                      </div>
+                      <div class="comments">
+                        <svg class="bi bi-chat-square-dots" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v8a1 1 0 001 1h2.5a2 2 0 011.6.8L8 14.333 9.9 11.8a2 2 0 011.6-.8H14a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v8a2 2 0 002 2h2.5a1 1 0 01.8.4l1.9 2.533a1 1 0 001.6 0l1.9-2.533a1 1 0 01.8-.4H14a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"/>
+                          <path d="M5 6a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0z"/>
+                        </svg>
+                        <span th:text="${a.commentSize}">12</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Page Footer-->
+    <footer class="main-footer" th:replace="foot::foot">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="logo">
+              <h6 class="text-white">Bootstrap Blog</h6>
+            </div>
+            <div class="contact-details">
+              <p>53 Broadway, Broklyn, NY 11249</p>
+              <p>Phone: (020) 123 456 789</p>
+              <p>Email: <a href="mailto:info@company.com">Info@Company.com</a></p>
+              <ul class="social-menu">
+                <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
+                <li class="list-inline-item"><a href="#"><i class="fa fa-twitter"></i></a></li>
+                <li class="list-inline-item"><a href="#"><i class="fa fa-instagram"></i></a></li>
+                <li class="list-inline-item"><a href="#"><i class="fa fa-behance"></i></a></li>
+                <li class="list-inline-item"><a href="#"><i class="fa fa-pinterest"></i></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="menus d-flex">
+              <ul class="list-unstyled">
+                <li> <a href="#">My Account</a></li>
+                <li> <a href="#">Add Listing</a></li>
+                <li> <a href="#">Pricing</a></li>
+                <li> <a href="#">Privacy &amp; Policy</a></li>
+              </ul>
+              <ul class="list-unstyled">
+                <li> <a href="#">Our Partners</a></li>
+                <li> <a href="#">FAQ</a></li>
+                <li> <a href="#">How It Works</a></li>
+                <li> <a href="#">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="latest-posts"><a href="#">
+                <div class="post d-flex align-items-center">
+                  <div class="image"><img src="img/small-thumbnail-1.jpg" alt="..." class="img-fluid"></div>
+                  <div class="title"><strong>Hotels for all budgets</strong><span class="date last-meta">October 26, 2016</span></div>
+                </div></a><a href="#">
+                <div class="post d-flex align-items-center">
+                  <div class="image"><img src="img/small-thumbnail-2.jpg" alt="..." class="img-fluid"></div>
+                  <div class="title"><strong>Great street atrs in London</strong><span class="date last-meta">October 26, 2016</span></div>
+                </div></a><a href="#">
+                <div class="post d-flex align-items-center">
+                  <div class="image"><img src="img/small-thumbnail-3.jpg" alt="..." class="img-fluid"></div>
+                  <div class="title"><strong>Best coffee shops in Sydney</strong><span class="date last-meta">October 26, 2016</span></div>
+                </div></a></div>
+          </div>
+        </div>
+      </div>
+      <div class="copyrights">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <p>&copy; 2017. Bootstrapious All rights reserved. Your great site.</p>
+            </div>
+            <div class="col-md-6 text-right">
+              More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
+                
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- JavaScript files-->
+  <script src="../static/vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
+  <script src="../static/vendor/popper.js/umd/popper.min.js" th:src="@{/vendor/popper.js/umd/popper.min.js}"> </script>
+  <script src="../static/vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+  <script src="../static/vendor/jquery.cookie/jquery.cookie.js" th:src="@{/vendor/jquery.cookie/jquery.cookie.js}"> </script>
+  <script src="../static/vendor/@fancyapps/fancybox/jquery.fancybox.min.js" th:src="@{/vendor/@fancyapps/fancybox/jquery.fancybox.min.js}"></script>
+  <script src="../static/js/front.js" th:src="@{/js/front.js}"></script>
+  <script th:inline="javascript">
+    $(function () {
+      //alert([[${art.id}]]);
+      $('div.post-comments').load(
+              '/comments?aid='+[[${art.id}]],function () {
+                //alert("加载成功!!");
+              }
+      )
+
+      $('button#submit').click(
+              function () {
+                visitor_name=$('input#visitor_name').val();
+                visitor_email=$('input#visitor_email').val();
+                content=$('textarea#content').val();
+                if(visitor_name==""||visitor_email==""||content=="")
+                {
+                  //alert("不合格！！！");
+                  $('#modal1').modal('show');
+                  return;
+                }
+                aid=$('input#aid').val();
+                data={'visitor_name':visitor_name,'visitor_email':visitor_email,'content':content,'aid':aid};
+                $('div.post-comments').load(
+                        '/Addcomment',data,function () {
+                          $('input#visitor_name').val("");
+                          $('input#visitor_email').val("");
+                          $('textarea#content').val("");
+                        }
+                );
+                $('html,body').animate({scrollTop:$('.post-comments').offset().top});
+              }
+      )
+    })
+  </script>
+  </body>
+</html>

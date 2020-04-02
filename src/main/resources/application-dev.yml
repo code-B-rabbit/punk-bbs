@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/xhb_blog?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+    username: root
+    password: admin
+
+  mvc:
+    favicon:
+      enabled : false
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+  thymeleaf:
+    prefix: classpath:/templates/
+
+
+
+  level:
+    root: info
+    com.lrm: debug
+  file: log/blog-dev.log
+
+
+server:
+  servlet:
+    session:
+      timeout: 7200
+  port: 80
+  max-http-header-size: 1024000

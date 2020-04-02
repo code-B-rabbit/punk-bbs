@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="admin/login::head">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>后台管理</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="../../static/vendor/bootstrap/css/bootstrap.min.css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="../../static/vendor/font-awesome/css/font-awesome.min.css" th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
+    <!-- Custom icon font-->
+    <link rel="stylesheet" href="../../static/css/fontastic.css" th:href="@{/css/fontastic.css}">
+    <!-- Google fonts - Open Sans-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <!-- Fancybox-->
+    <link rel="stylesheet" href="../../static/vendor/@fancyapps/fancybox/jquery.fancybox.min.css">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="../../static/css/style.default.css" id="theme-stylesheet" th:href="@{/css/style.default.css}">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="../../static/css/custom.css" th:href="@{/css/custom.css}">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="favicon.png">
+
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+</head>
+<nav th:replace="admin/nav::admin_nav(2)"></nav>
+<body>
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page"><a href="/admin/articleList">博客列表</a></li>
+        </ol>
+    </nav>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">序号</th>
+            <th scope="col">文章名</th>
+            <th scope="col">评论数(点击可进入评论页)</th>
+            <th scope="col">是否发表</th>
+            <th scope="col">
+                <form method="get" action="/admin/articleLike">
+                <div class="input-group">
+                    <input type="text" name="key" class="form-control" placeholder="输入博客内容或标题" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">模糊搜索</button>
+                    </div>
+                </div>
+                </form>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="article:${page.list}">
+            <th scope="row" th:text="${article.id}">1</th>
+            <td th:text="${article.title}">数据结构与算法</td>
+            <td><a th:href="@{/admin/listByAid(aid=${article.id})}" th:text="${article.commentSize}">100</a></td>
+            <td th:text="${article.published}">100</td>
+            <td><div class="btn-group" role="group" aria-label="Basic example">
+                <a type="button" th:href="@{editArticle(id=${article.id})}" class="btn btn-warning">修改</a>
+                <a type="button" th:href="@{deleteArticle(id=${article.id})}" class="btn btn-danger">删除</a>
+            </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/admin/addArticle}"><button type="button" class="btn btn-success">写博客</button></a>
+    <nav th:replace="admin/page::page"></nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="admin/login::head">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>后台管理</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="../../static/vendor/bootstrap/css/bootstrap.min.css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="../../static/vendor/font-awesome/css/font-awesome.min.css" th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
+    <!-- Custom icon font-->
+    <link rel="stylesheet" href="../../static/css/fontastic.css" th:href="@{/css/fontastic.css}">
+    <!-- Google fonts - Open Sans-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <!-- Fancybox-->
+    <link rel="stylesheet" href="../../static/vendor/@fancyapps/fancybox/jquery.fancybox.min.css">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="../../static/css/style.default.css" id="theme-stylesheet" th:href="@{/css/style.default.css}">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="../../static/css/custom.css" th:href="@{/css/custom.css}">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="favicon.png">
+
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+</head>
+<nav th:replace="admin/nav::admin_nav(4)"></nav>
+<body>
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">序号</th>
+            <th scope="col">友链名</th>
+            <th scope="col">友链邮箱</th>
+            <th scope="col">友链链接</th>
+            <th scope="col">
+                友链状态
+            </th>
+            <th scope="col">
+                操作
+                <a href="/admin/flList?agree=false" role="button" class="btn btn-sm btn-outline-info">只显示未同意</a>
+                <a href="/admin/flList?agree=true" role="button" class="btn btn-sm btn-outline-dark">只显示同意</a>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="fl:${page.list}">
+            <th scope="row" th:text="${fl.id}">1</th>
+            <td th:text="${fl.name}">数据结构与算法</td>
+            <td th:text="${fl.email}">511928849@qq.com</td>
+            <td><a th:href="${fl.link}" th:text="${fl.link}"></a></td>
+            <th th:text="${fl.allowed}?'同意':'未同意'">同意</th>
+            <td><div class="btn-group" role="group" aria-label="Basic example">
+                <a type="button" th:unless="${fl.allowed}" th:href="@{checkAgree(id=${fl.id},start=${page.pageSize*(page.pageNum-1)})}" class="btn btn-warning">同意</a>
+                <a type="button" th:href="@{deleteFl(id=${fl.id},agree=${agree})}" class="btn btn-danger">删除</a>
+            </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <nav th:replace="admin/page::page"></nav>
+
+
+    <form method="get" th:action="@{addFl}">
+
+        <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">友链名称</span>
+            </div>
+            <input type="text" class="form-control" name="name" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+        </div>
+
+        <input type="hidden" name="agree" th:value="${agree}"/>
+
+        <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">友链邮箱</span>
+            </div>
+            <input type="text" class="form-control" name="email" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+        </div>
+
+        <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">友链地址</span>
+            </div>
+            <input type="text" class="form-control" name="link" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+        </div>
+
+        <input type="hidden" class="form-control" name="allowed" value="true" aria-label="Text input with radio button"/>
+
+        <button class="btn btn-warning" type="submit">添加友链</button>
+<!--这里由于是站主主动添加的操作,所以无需审核        -->
+    </form>
+</div>
+</body>
+</html>

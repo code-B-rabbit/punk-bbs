@@ -1,0 +1,17 @@
+.sec{
+    background: url(../img/壁纸_2.jpg);
+    background-size: cover;
+    background-position: center center;
+}
+
+.sec2{
+    background: url(../img/divider-bg.jpg);
+    background-size: cover;
+    background-position: center bottom;
+}
+
+.sec3{
+    background: url(../img/壁纸2.jpg);
+    background-size: cover;
+    background-position: center center;
+}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Bootstrap Blog - B4 Template by Bootstrap Temple</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!--     Bootstrap CSS-->
+    <link rel="stylesheet" href="../static/vendor/bootstrap/css/bootstrap.min.css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!--     Font Awesome CSS-->
+    <!---->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!--    <link rel="stylesheet" href="../static/vendor/font-awesome/css/font-awesome.min.css" th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">-->
+    <!-- Custom icon font-->
+    <link rel="stylesheet" href="../static/css/fontastic.css" th:href="@{/css/fontastic.css}">
+    <!-- Google fonts - Open Sans-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <!-- Fancybox-->
+    <link rel="stylesheet" href="../static/vendor/@fancyapps/fancybox/jquery.fancybox.min.css" th:href="@{/vendor/@fancyapps/fancybox/jquery.fancybox.min.css}">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="../static/css/style.default.css" id="theme-stylesheet" th:href="@{/css/style.default.css}">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="../static/css/custom.css" th:href="@{/css/custom.css}">
+    <!-- Favicon-->
+    <link rel="stylesheet" href="../static/css/sec.css" th:href="@{/css/sec.css}">
+
+    <link rel="shortcut icon" href="../static/favicon.png">
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+</head>
+<body>
+<span th:fragment="comment" class="container">
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<div th:fragment="comments" class="post-comments">
+    <header>
+        <h3 class="h6">博客の评论<span class="no-of-comments" th:text="|${total}|">(3)</span></h3>
+    </header>
+    <div class="comment" th:each="comment:${page.list}">
+        <div class="comment-header d-flex justify-content-between">
+            <div class="user d-flex align-items-center">
+                <div class="image"><img th:src="@{/img/user.svg}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle"></div>
+                <div class="title"><strong th:text="${comment.visitor_name}">Jabi Hernandiz</strong><span class="date" th:text="${#dates.format(comment.createTime,'yyyy-MM-dd')}">May 2016</span></div>
+            </div>
+        </div>
+        <div class="comment-body">
+            <p th:text="${comment.content}">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+        </div>
+    </div>
+    <div class="container">
+    <nav aria-label="...">
+  <ul class="pagination  justify-content-center">
+    <li class="page-item" th:if="${page.hasPreviousPage}">
+      <a class="page-link" th:onclick="|javascript : list('${page.pageSize*(page.pageNum-2)}')|" >Previous</a>
+    </li>
+    <li class="page-item" th:if="${page.hasPreviousPage}"><a th:onclick="|javascript : list('${page.pageSize*(page.pageNum-2)}')|" th:text="${page.pageNum-1}" class="page-link">1</a></li>
+    <li class="page-item active" aria-current="page">
+      <a class="page-link" href="#" th:text="${page.pageNum}">2 <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="page-item" th:if="${page.hasNextPage}"><a th:onclick="|javascript : list('${page.pageNum*page.pageSize}')|"  th:text="${page.pageNum+1}" class="page-link">3</a></li>
+    <li class="page-item" th:if="${page.hasNextPage}">
+      <a class="page-link"  th:onclick="|javascript : list('${page.pageNum*page.pageSize}')|">Next</a>
+    </li>
+  </ul>
+    </nav>
+        <script th:inline="javascript">
+        $(function () {
+            aid=[[${aid}]];
+            list=function (start) {
+                $('div.post-comments').load(
+                    '/comments',{'aid':aid,'start':start},function () {
+                        $('html,body').animate({scrollTop:$('div.post-comments').offset().top}, 200);
+                    }
+                )
+            }
+        })
+        </script>
+        </div>
+</div>
+<div class="add-comment">
+    <header>
+        <h3 class="h6">Leave a reply</h3>
+    </header>
+    <form action="#" class="commenting-form">
+        <div class="row">
+            <div class="form-group col-md-6">
+                <input type="text" name="username" id="username" placeholder="Name" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+                <input type="email" name="username" id="useremail" placeholder="Email Address (will not be published)" class="form-control">
+            </div>
+            <div class="form-group col-md-12">
+                <textarea name="usercomment" id="usercomment" placeholder="Type your comment" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-md-12">
+                <button type="submit" class="btn btn-secondary">Submit Comment</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+</span>
+<script src="../static/vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script src="../static/vendor/popper.js/umd/popper.min.js" th:src="@{/vendor/popper.js/umd/popper.min.js}"> </script>
+<script src="../static/vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../static/vendor/jquery.cookie/jquery.cookie.js" th:src="@{/vendor/jquery.cookie/jquery.cookie.js}"> </script>
+<script src="../static/vendor/@fancyapps/fancybox/jquery.fancybox.min.js" th:src="@{/vendor/@fancyapps/fancybox/jquery.fancybox.min.js}"></script>
+<script src="../static/js/front.js" th:src="@{/js/front.js}"></script>
+</body>
+</html>

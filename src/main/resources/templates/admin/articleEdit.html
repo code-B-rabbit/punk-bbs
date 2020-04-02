@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>后台管理</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="../../static/vendor/bootstrap/css/bootstrap.min.css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="../../static/vendor/font-awesome/css/font-awesome.min.css" th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
+    <!-- Custom icon font-->
+    <link rel="stylesheet" href="../../static/css/fontastic.css" th:href="@{/css/fontastic.css}">
+    <!-- Google fonts - Open Sans-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <!-- Fancybox-->
+    <link rel="stylesheet" href="../../static/vendor/@fancyapps/fancybox/jquery.fancybox.min.css" th:href="@{/vendor/@fancyapps/fancybox/jquery.fancybox.min.css}">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="../../static/css/style.default.css" id="theme-stylesheet" th:href="@{/css/style.default.css}">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="../../static/css/custom.css" th:href="@{/css/custom.css}">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="favicon.png">
+
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+</head>
+<body>
+<link rel="stylesheet" th:href="@{/editor/css/editormd.css}" href="../../static/editor/css/editormd.css" />
+<form id="blog-form" method="get" action="/admin/articleSave" th:object="${article}">
+    <div class="container">
+        <h1>博客修改</h1>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">@</span>
+            </div>
+            <input type="text" th:field="*{title}" name="title" class="form-control" placeholder="标题" aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+
+        <input type="hidden" name="id" th:field="*{id}"/>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">首图地址</span>
+            </div>
+            <input type="text" th:field="*{firstPicture}" name="firstPicture" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+        </div>
+
+<!--        <div class="form-group">-->
+<!--            <label class="radio-inline" th:field="*{tid}">-->
+<!--                <span th:each="tag:${tags}">-->
+<!--                <input type="radio" name="tid" th:value="${tag.id}"  />-->
+<!--                <span th:text="${tag.name}">男性</span>-->
+<!--                </span>-->
+<!--            </label>-->
+<!--        </div>-->
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">选择文章标签</label>
+            </div>
+            <select class="custom-select" id="inputGroupSelect01" name="tid">
+                <option th:selected="${tag.id eq article.tid}"  th:each="tag:${tags}" th:value="${tag.id}" th:text="${tag.name}">Choose...</option>
+            </select>
+        </div>
+
+        <input id="published" name="published" type="hidden"/>
+
+        <div id="test-editor">
+    <textarea name="content" th:text="*{content}"></textarea>
+        </div>
+        <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+        <script src="../../static/editor/editormd.min.js" th:src="@{/editor/editormd.min.js}"></script>
+        <script type="text/javascript" th:inline="javascript">
+            $(function() {
+                var editor = editormd("test-editor", {
+                    width  : "100%",
+                    height : 800,
+                    imageUpload: true,
+                    emoji : true,
+                    imageUploadURL: "/uploadImage",
+                    imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                    path   : "/editor/lib/"
+                });
+            });
+        </script>
+<!--        <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>-->
+<!--        <script src="../../static/editor/editormd.min.js" th:src="@{/editor/editormd.min.js}"></script>-->
+<!--        <script type="text/javascript" th:inline="javascript">-->
+<!--            $(function() {-->
+<!--                var editor = editormd("test-editor", {-->
+<!--                    width  : "100%",-->
+<!--                    height : 800,-->
+<!--                    path   : "/editor/lib/"-->
+<!--                });-->
+<!--            });-->
+<!--        </script>-->
+        <button type="submit" class="btn btn-primary btn-lg btn-block publish">发表</button>
+        <button type="submit" class="btn btn-secondary btn-lg btn-block save">保存</button>
+    </div>
+</form>
+<script>
+    $(function () {
+        $('button.publish').click(
+            function () {
+                $('input#published').val(true);
+                $('#blog-form').submit();
+            }
+        );
+        $('button.save').click(
+            function () {
+                $('input#published').val(false);
+                $('#blog-form').submit();
+            }
+        )
+    })
+</script>
+</body>
+</html>

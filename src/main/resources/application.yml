@@ -1,0 +1,17 @@
+spring:
+#  thymeleaf:
+#    mode: HTML
+  profiles:
+    active: dev
+
+#七牛云配置信息
+qiniu:
+  accessKey: *
+  secretKey: *
+  bucketName: *
+  fileDomain: *
+
+blog:
+  name: "xhb"
+
+

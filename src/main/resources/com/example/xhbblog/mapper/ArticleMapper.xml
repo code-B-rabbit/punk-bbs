@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.xhbblog.mapper.ArticleMapper" >
+  <resultMap id="BaseResultMap" type="com.example.xhbblog.pojo.Article" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tid" property="tid" jdbcType="INTEGER" />
+    <result column="createTime" property="createTime" jdbcType="DATE" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="firstPicture" property="firstPicture" jdbcType="VARCHAR" />
+    <result column="visit" property="visit" jdbcType="BIGINT" />
+    <result column="published" property="published" jdbcType="BIT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.example.xhbblog.pojo.Article" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, tid, createTime, title, firstPicture, visit, published
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.example.xhbblog.pojo.ArticleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from article
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.xhbblog.pojo.ArticleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from article
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from article
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from article
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.xhbblog.pojo.Article" useGeneratedKeys="true" keyProperty="id" >
+    insert into article (tid, createTime, title, 
+      firstPicture, visit, published, 
+      content)
+    values (#{tid,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, #{title,jdbcType=VARCHAR}, 
+      #{firstPicture,jdbcType=VARCHAR}, #{visit,jdbcType=BIGINT}, #{published,jdbcType=BIT}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.xhbblog.pojo.Article" useGeneratedKeys="true" keyProperty="id" >
+    insert into article
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tid != null" >
+        tid,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="firstPicture != null" >
+        firstPicture,
+      </if>
+      <if test="visit != null" >
+        visit,
+      </if>
+      <if test="published != null" >
+        published,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tid != null" >
+        #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="firstPicture != null" >
+        #{firstPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="visit != null" >
+        #{visit,jdbcType=BIGINT},
+      </if>
+      <if test="published != null" >
+        #{published,jdbcType=BIT},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.xhbblog.pojo.Article" >
+    update article
+    <set >
+      <if test="tid != null" >
+        tid = #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="firstPicture != null" >
+        firstPicture = #{firstPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="visit != null" >
+        visit = #{visit,jdbcType=BIGINT},
+      </if>
+      <if test="published != null" >
+        published = #{published,jdbcType=BIT},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.xhbblog.pojo.Article" >
+    update article
+    set tid = #{tid,jdbcType=INTEGER},
+      createTime = #{createTime,jdbcType=DATE},
+      title = #{title,jdbcType=VARCHAR},
+      firstPicture = #{firstPicture,jdbcType=VARCHAR},
+      visit = #{visit,jdbcType=BIGINT},
+      published = #{published,jdbcType=BIT},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.xhbblog.pojo.Article" >
+    update article
+    set tid = #{tid,jdbcType=INTEGER},
+      createTime = #{createTime,jdbcType=DATE},
+      title = #{title,jdbcType=VARCHAR},
+      firstPicture = #{firstPicture,jdbcType=VARCHAR},
+      visit = #{visit,jdbcType=BIGINT},
+      published = #{published,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <resultMap id="timeLines" type="com.example.xhbblog.pojo.TimeLine">
+    <result column="createTime" property="time"/>
+    <collection property="articleList" ofType="com.example.xhbblog.pojo.Article">
+      <id column="id" property="id"/>
+      <result column="title" property="title"/>
+      <result column="content" property="content"/>
+    </collection>
+  </resultMap>
+
+  <select id="findTimeLines" resultMap="timeLines">
+    select a1.createTime,a2.id,a2.title,a2.content from article a1
+    left join article a2 ON a2.createTime=a1.createTime
+    where a1.published=true and a2.published=true
+    order by a1.createTime desc
+  </select>
+
+</mapper>

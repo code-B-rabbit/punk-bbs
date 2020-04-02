@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav aria-label="Page navigation example" th:fragment="page">
+    <ul class="pagination pagination-template d-flex justify-content-center">
+        <li class="page-item">
+            <a th:classappend="${page.hasPreviousPage}?'disabled'" th:href="|?start=${page.pageSize*(page.pageNum-2)}&${limit}|" class="page-link">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        </li>
+        <li class="page-item" th:if="${page.hasPreviousPage}"><a th:href="|?start=${page.pageSize*(page.pageNum-2)}&${limit}|" th:text="${page.pageNum-1}" href="#" class="page-link active">1</a></li>
+        <li class="page-item  active"><a th:text="${page.pageNum}" href="#" class="page-link">2</a></li>
+        <li class="page-item" th:if="${page.hasNextPage}"><a th:href="|?start=${page.pageNum*page.pageSize}&${limit}|" th:text="${page.pageNum+1}" href="#" class="page-link">3</a></li>
+        <li class="page-item">
+            <a th:classappend="${page.hasNextPage}?'disabled'" href="#" th:href="|?start=${page.pageNum*page.pageSize}&${limit}|" class="page-link">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+    </ul>
+</nav>
+</body>
+</html>

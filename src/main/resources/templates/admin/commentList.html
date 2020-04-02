@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="admin/login::head">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>后台管理</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="../../static/vendor/bootstrap/css/bootstrap.min.css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="../../static/vendor/font-awesome/css/font-awesome.min.css" th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
+    <!-- Custom icon font-->
+    <link rel="stylesheet" href="../../static/css/fontastic.css" th:href="@{/css/fontastic.css}">
+    <!-- Google fonts - Open Sans-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <!-- Fancybox-->
+    <link rel="stylesheet" href="../../static/vendor/@fancyapps/fancybox/jquery.fancybox.min.css">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="../../static/css/style.default.css" id="theme-stylesheet" th:href="@{/css/style.default.css}">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="../../static/css/custom.css" th:href="@{/css/custom.css}">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="favicon.png">
+
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+</head>
+<nav th:replace="admin/nav::admin_nav(2)"></nav>
+<body>
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/articleList">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="|${article.title}的评论|">
+                ****的评论
+            </li>
+        </ol>
+    </nav>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">序号</th>
+            <th scope="col">评论文章</th>
+            <th scope="col">评论时间</th>
+            <th scope="col">评论者</th>
+            <th scope="col">评论邮箱</th>
+            <th scope="col">评论详情</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"><a><button type="button" class="btn btn-white">操作</button></a></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="comment:${page.list}">
+            <th scope="row" th:text="${comment.id}">1</th>
+            <td th:text="${comment.article.title}">单表增删改查</td>
+            <td th:text="${#dates.format(comment.createTime,'yyyy-MM-dd')}"></td>
+            <td th:text="${comment.visitor_name}">徐浩博</td>
+            <td th:text="${comment.visitor_email}">511928849@qq.com</td>
+            <td th:text="${comment.content}" colspan="3">511928849@qq.com.........................</td>
+            <td><a type="button" th:href="@{deleteComment(id=${comment.id},aid=${article.id})}" class="btn btn-danger">删除</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <nav th:replace="admin/page::page"></nav>
+
+</div>
+</body>
+</html>
