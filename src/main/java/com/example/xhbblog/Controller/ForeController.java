@@ -51,6 +51,7 @@ public class ForeController {
         model.addAttribute("lastestArticles", articleService.findLastestArticle());
         model.addAttribute("tags", tagService.list());
         model.addAttribute("fls", friendLyLinkService.ListOf(true));   //友链
+        model.addAttribute("title","博客列表");   //用于显示标题
         return "blog";
     }
 
@@ -64,6 +65,7 @@ public class ForeController {
         model.addAttribute("fls", friendLyLinkService.ListOf(true));   //友链
         model.addAttribute("tid",tid);
         model.addAttribute("limit","tid="+tid);
+        model.addAttribute("title","标签:"+tagService.get(tid).getName());
         return "blog";
     }
 
@@ -76,7 +78,7 @@ public class ForeController {
         model.addAttribute("tags", tagService.list());
         model.addAttribute("fls", friendLyLinkService.ListOf(true));   //友链
         model.addAttribute("limit","search="+search);
-        //model.addAttribute("search",search);
+        model.addAttribute("title",search+" 的搜索结果");
         return "blog";
     }
 
