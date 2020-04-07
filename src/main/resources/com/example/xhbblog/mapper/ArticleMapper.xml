@@ -208,7 +208,7 @@
 <!--  </resultMap>-->
 
 <!--  <select id="findTimeLines" resultMap="timeLines" parameterType="map">-->
-<!--    select  DISTINCT createTime from article-->
+<!--    select  DISTINCT createTime from article order by createTime-->
 <!--  </select>-->
 
 <!--  <select id="getArticlesByTime" parameterType="map"-->

@@ -160,7 +160,7 @@ public interface ArticleMapper {
 
     //这里发现mybatis一对多查询分页时如果要以那个"1"为标准进行分页必须要使用子查询
 
-    @Select("select DISTINCT createTime from article where published=true")
+    @Select("select DISTINCT createTime from article where published=true order by createTime desc")
     @Results({
             @Result(property = "time",column = "createTime"),
             @Result(property = "articleList",column = "createTime",one=@One(select = "com.example.xhbblog.mapper.ArticleMapper.selectByCreateTime"))
