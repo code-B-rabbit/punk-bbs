@@ -49,11 +49,11 @@
         <!-- 指定数据库表  多个表示,可用多个table标签-->
 
 
-        <table tableName="picture" domainObjectName="Picture" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">
-            <property name="my.isgen.usekeys" value="true"/>
-            <property name="useActualColumnNames" value="true"/>
-            <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>
+<!--        <table tableName="picture" domainObjectName="Picture" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">-->
+<!--            <property name="my.isgen.usekeys" value="true"/>-->
+<!--            <property name="useActualColumnNames" value="true"/>-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--        </table>-->
 
 
 

@@ -5,6 +5,7 @@ import com.example.xhbblog.pojo.ArticleExample;
 import com.example.xhbblog.pojo.TimeLine;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -60,15 +61,24 @@ public interface ArticleMapper {
     List<Article> listByTid(Integer tid);       //用于后台
 
 
-    @Select("select * from article where and content like #{string} or title like #{string}")
+    @Select("select * from article where content like #{string} or title like #{string}")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
             @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
             @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle"))
     })
-    List<Article> listArticleLike(String s);         //给后台用
+    List<Article> listArticleLike(String string);         //给后台用
 
+
+    @Select("select * from article where published=true and id IN (select id from article where content like #{string} or title like #{string})")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "tid", column = "tid"),
+            @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
+            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle"))
+    })
+    List<Article> findArticleLike(String string);
 
     @Select("select * from article where published=true order by createTime desc")
     @Results({
@@ -103,19 +113,7 @@ public interface ArticleMapper {
     @Select("select count(*) from article where tid=#{tid}")
     Integer countOfTag(Integer tid);        //同样用于后台不许考虑published
 
-
-    @Select("select * from article where published=true and id IN (select id from article where content like #{string} or title like #{string})")
-    @Results({
-            @Result(property = "id",column = "id"),
-            @Result(property = "tid", column = "tid"),
-            @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
-            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle"))
-    })
-    List<Article> findArticleLike(String s);
-
-
-
-    @Select("select * from article where published=true order by visit limit 2")     //最热门的访问文章
+    @Select("select * from article where published=true order by visit desc limit 2")     //最热门的访问文章
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
@@ -159,5 +157,20 @@ public interface ArticleMapper {
     })
     List<Article> findLastestArticle();      //用于博客页查询
 
+
+    //这里发现mybatis一对多查询分页时如果要以那个"1"为标准进行分页必须要使用子查询
+
+    @Select("select DISTINCT createTime from article where published=true")
+    @Results({
+            @Result(property = "time",column = "createTime"),
+            @Result(property = "articleList",column = "createTime",one=@One(select = "com.example.xhbblog.mapper.ArticleMapper.selectByCreateTime"))
+    })
     List<TimeLine> findTimeLines();      //时间轴查询
+
+    @Select("select id,title from article where published=true and createTime=#{createTime}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "title",column = "title")
+    })
+    List<Article> selectByCreateTime(Date createTime);
 }

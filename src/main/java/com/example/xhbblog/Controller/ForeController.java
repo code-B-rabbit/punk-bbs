@@ -133,13 +133,14 @@ public class ForeController {
     }
 
     @RequestMapping("timeLine")
-    public String timeLine(Model model)
+    public String timeLine(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "5") Integer count, Model model)
     {
         model.addAttribute("fls", friendLyLinkService.ListOf(true));
+        PageHelper.offsetPage(start,count);
         List<TimeLine> timeLines = articleService.timeLine();
-        model.addAttribute("timeLines",timeLines);
+        model.addAttribute("page",new PageInfo<TimeLine>(timeLines));
         //System.out.println(timeLines.get(0).getArticleList().size());
-        return "timeStamp/index";
+        return "timestamp";
     }
 
 

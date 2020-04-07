@@ -199,20 +199,21 @@
   </update>
 
 
-  <resultMap id="timeLines" type="com.example.xhbblog.pojo.TimeLine">
-    <result column="createTime" property="time"/>
-    <collection property="articleList" ofType="com.example.xhbblog.pojo.Article">
-      <id column="id" property="id"/>
-      <result column="title" property="title"/>
-      <result column="content" property="content"/>
-    </collection>
-  </resultMap>
+<!--  <resultMap id="timeLines" type="com.example.xhbblog.pojo.TimeLine">-->
+<!--    <result column="createTime" property="time"/>-->
+<!--    <collection property="articleList" ofType="com.example.xhbblog.pojo.Article" select="getArticlesByTime" javaType="java.util.List" column="{createTime=createTime}">-->
+<!--      <result column="id" property="id"/>-->
+<!--      <result column="title" property="title"/>-->
+<!--    </collection>-->
+<!--  </resultMap>-->
 
-  <select id="findTimeLines" resultMap="timeLines">
-    select a1.createTime,a2.id,a2.title,a2.content from article a1
-    left join article a2 ON a2.createTime=a1.createTime
-    where a1.published=true and a2.published=true
-    order by a1.createTime desc
-  </select>
+<!--  <select id="findTimeLines" resultMap="timeLines" parameterType="map">-->
+<!--    select  DISTINCT createTime from article-->
+<!--  </select>-->
+
+<!--  <select id="getArticlesByTime" parameterType="map"-->
+<!--          resultType="map">-->
+<!--    select id,title from article a2 where a2.createTime=#{createTime}-->
+<!--  </select>-->
 
 </mapper>

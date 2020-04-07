@@ -51,7 +51,17 @@ public class TestTmall {
 
     @Test
     public void delete() throws QiniuException {
-        qiniuUtil.delete("0649c33d84ad45daa229c6c0c6e9ebd2.jpg");
+        for (int i =0; i < 5; i++) {
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.DATE,i);
+            Date now = c.getTime();
+            Article article=new Article();
+            article.setCreateTime(now);
+            article.setTitle("测试(2)"+i);
+            article.setPublished(true);
+            article.setTid(6);
+            articleService.add(article);
+        }
     }
 
     @Test
