@@ -111,7 +111,7 @@ public interface ArticleMapper {
     List<Article> findByVisit();
 
     @Select("select count(*) from article where tid=#{tid}")
-    Integer countOfTag(Integer tid);        //同样用于后台不许考虑published
+    Integer countOfTag(Integer tid);        //同样用于后台不需要考虑published
 
     @Select("select * from article where published=true order by visit desc limit 2")     //最热门的访问文章
     @Results({
