@@ -71,14 +71,13 @@ public class ArticleController {
     }
     //修改
 
-    //这里保存在了一个方法里
+    //这里修改和新增保存在了一个方法里
     @RequestMapping("/articleSave")
     public String save(Article article)
     {
-        article.setCreateTime(new Date());
-        //System.out.println(article.getPublished());
-        if(article.getId()==null)
+        if(article.getId()==null)         //新增
         {
+            article.setCreateTime(new Date());
             service.add(article);
         }else
         {
