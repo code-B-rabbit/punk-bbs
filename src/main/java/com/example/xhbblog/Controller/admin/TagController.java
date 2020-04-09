@@ -4,6 +4,7 @@ import com.example.xhbblog.Service.TagService;
 import com.example.xhbblog.pojo.Tag;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.annotations.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,6 +54,12 @@ public class TagController {
     {
         tagService.delete(id);
         return "redirect:/admin/tagList";
+    }
+
+    @RequestMapping("/articlesOfTag")
+    public String showArticles(Integer id)
+    {
+        return "redirect:/admin/articleListByTag?tid="+id;
     }
 
 }

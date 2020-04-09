@@ -5,6 +5,7 @@ import com.example.xhbblog.Service.TagService;
 import com.example.xhbblog.pojo.Article;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.annotations.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +31,16 @@ public class ArticleController {
         PageHelper.offsetPage(start,count);
         List<Article> articles=service.listAll();
         model.addAttribute("page",new PageInfo<Article>(articles));
+        return "admin/articleList";
+    }
+
+    @RequestMapping("/articleListByTag")
+    private String list(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count, Model model,Integer tid)
+    {
+        PageHelper.offsetPage(start,count);
+        List<Article> articles=service.listByTid(tid);   //后台调用标签的管理方法
+        model.addAttribute("page",new PageInfo<Article>(articles));
+        model.addAttribute("limit","tid="+tid);
         return "admin/articleList";
     }
 
@@ -62,13 +73,13 @@ public class ArticleController {
     //修改
 
     //这里保存在了一个方法里
+    //修改逻辑:这里修改时间不再显示
     @RequestMapping("/articleSave")
     public String save(Article article)
     {
-        article.setCreateTime(new Date());
-        //System.out.println(article.getPublished());
         if(article.getId()==null)
         {
+            article.setCreateTime(new Date());
             service.add(article);
         }else
         {
