@@ -43,7 +43,8 @@
         <tr>
             <th scope="col">序号</th>
             <th scope="col">文章名</th>
-            <th scope="col">评论数(点击可进入评论页)</th>
+            <th scope="col">评论数</th>
+            <th scope="col">浏览量</th>
             <th scope="col">是否发表</th>
             <th scope="col">
                 <form method="get" action="/admin/articleLike">
@@ -62,6 +63,7 @@
             <th scope="row" th:text="${article.id}">1</th>
             <td th:text="${article.title}">数据结构与算法</td>
             <td><a th:href="@{/admin/listByAid(aid=${article.id})}" th:text="${article.commentSize}">100</a></td>
+            <td th:text="${article.visit}"></td>
             <td th:text="${article.published}">100</td>
             <td><div class="btn-group" role="group" aria-label="Basic example">
                 <a type="button" th:href="@{editArticle(id=${article.id})}" class="btn btn-warning">修改</a>

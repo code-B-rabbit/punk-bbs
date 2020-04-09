@@ -5,7 +5,6 @@ import com.example.xhbblog.Service.TagService;
 import com.example.xhbblog.pojo.Article;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.ibatis.annotations.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -73,13 +72,13 @@ public class ArticleController {
     //修改
 
     //这里保存在了一个方法里
-    //修改逻辑:这里修改时间不再显示
     @RequestMapping("/articleSave")
     public String save(Article article)
     {
+        article.setCreateTime(new Date());
+        //System.out.println(article.getPublished());
         if(article.getId()==null)
         {
-            article.setCreateTime(new Date());
             service.add(article);
         }else
         {

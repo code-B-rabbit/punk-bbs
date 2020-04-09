@@ -44,7 +44,9 @@
         <tbody>
         <tr th:each="tag:${page.list}">
             <th scope="row" th:text="${tag.id}">1</th>
-            <td><a th:text="${tag.name}" th:href="@{articlesOfTag(id=${tag.id})}">数据结构与算法</a></td>
+            <td>
+                <a th:text="${tag.name}" th:href="@{articlesOfTag(id=${tag.id})}">数据结构与算法</a>
+            </td>
             <td th:text="${tag.numbersOfBlog}">100</td>
             <td><div class="btn-group" role="group" aria-label="Basic example">
                 <a type="button" th:href="@{editTag(id=${tag.id})}" class="btn btn-warning">修改</a>

@@ -28,7 +28,7 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public void update(Article article) {
-        articleMapper.updateByPrimaryKeySelective(article);     //这里的update要选择BLOB大字段(这块我也没搞懂)
+        articleMapper.updateByPrimaryKeyWithBLOBs(article);     //这里的update要选择BLOB大字段(这块我也没搞懂)
     }
 
     @Override
