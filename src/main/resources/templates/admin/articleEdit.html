@@ -31,7 +31,7 @@
 </head>
 <body>
 <link rel="stylesheet" th:href="@{/editor/css/editormd.css}" href="../../static/editor/css/editormd.css" />
-<form id="blog-form" method="get" action="/admin/articleSave" th:object="${article}">
+<form id="blog-form" method="get" action="/admin/articleSave" th:object="${article}" target="iframe">
     <div class="container">
         <h1>博客修改</h1>
         <div class="input-group mb-3">
@@ -40,6 +40,7 @@
             </div>
             <input type="text" th:field="*{title}" name="title" class="form-control" placeholder="标题" aria-label="Username" aria-describedby="basic-addon1">
         </div>
+
 
         <input type="hidden" name="id" th:field="*{id}"/>
 
@@ -101,6 +102,8 @@
 <!--        </script>-->
         <button type="submit" class="btn btn-primary btn-lg btn-block publish">发表</button>
         <button type="submit" class="btn btn-secondary btn-lg btn-block save">保存</button>
+        <button onclick="javascript:window.location.replace(document.referrer);" class="btn btn-secondary btn-lg btn-dark">返回</button>
+        <iframe id="iframe" name="iframe" style="display:none;"></iframe>
     </div>
 </form>
 <script>
@@ -109,12 +112,14 @@
             function () {
                 $('input#published').val(true);
                 $('#blog-form').submit();
+                alert("文章修改成功!!!");
             }
         );
         $('button.save').click(
             function () {
                 $('input#published').val(false);
                 $('#blog-form').submit();
+                alert("文章修改成功!!!");
             }
         )
     })

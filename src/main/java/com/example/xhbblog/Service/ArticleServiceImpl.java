@@ -32,8 +32,8 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public List<Article> listByTid(Integer tid) {
-        return articleMapper.listByTid(tid);
+    public List<Article> listByTid(Integer tid,Boolean published) {
+        return articleMapper.listByTid(tid,published);
     }
 
     @Override
@@ -47,8 +47,8 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public List<Article> listAll() {
-        return articleMapper.listAll();     //用于后台预览全部
+    public List<Article> listAll(Boolean published) {
+        return articleMapper.listAll(published);     //用于后台预览全部
     }
 
     @Override
@@ -77,8 +77,8 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public List<Article> listArticleLike(String s) {
-        return articleMapper.listArticleLike("%"+s+"%");
+    public List<Article> listArticleLike(String s,Boolean published) {
+        return articleMapper.listArticleLike("%"+s+"%",published);
     }
 
     @Override

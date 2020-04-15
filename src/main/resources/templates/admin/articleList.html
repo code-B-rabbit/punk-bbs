@@ -34,8 +34,13 @@
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page"><a href="/admin/articleList">博客列表</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <span class="text-info" th:if="${tag}" th:text="|${tag.name}标签下的|"></span>
+                <a href="/admin/articleList">博客列表</a>
+                <span class="text-info" th:if="${param.key}" th:text="|--->${param.key}的搜索结果|"></span>
+            </li>
         </ol>
+
     </nav>
 
     <table class="table">
@@ -45,16 +50,13 @@
             <th scope="col">文章名</th>
             <th scope="col">评论数</th>
             <th scope="col">浏览量</th>
-            <th scope="col">是否发表</th>
             <th scope="col">
-                <form method="get" action="/admin/articleLike">
-                <div class="input-group">
-                    <input type="text" name="key" class="form-control" placeholder="输入博客内容或标题" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">模糊搜索</button>
-                    </div>
-                </div>
-                </form>
+                是否发表
+            </th>
+            <th scope="col">创建时间</th>
+            <th scope="col">文章标签</th>
+            <th scope="col">
+                操作
             </th>
         </tr>
         </thead>
@@ -64,16 +66,32 @@
             <td th:text="${article.title}">数据结构与算法</td>
             <td><a th:href="@{/admin/listByAid(aid=${article.id})}" th:text="${article.commentSize}">100</a></td>
             <td th:text="${article.visit}"></td>
-            <td th:text="${article.published}">100</td>
-            <td><div class="btn-group" role="group" aria-label="Basic example">
+            <td th:text="${article.published}?'已发表':'未发表'">100</td>
+            <td th:text="${#dates.format(article.createTime,'yyyy年MM月dd日')}"></td>
+            <td><a th:text="${article.tag.name}" th:href="|articleListByTag?tid=${article.tag.id}|">数据结构与算法</a></td>
+            <td>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                <a type="button" th:href="@{getArticle(id=${article.id})}" class="btn btn-primary">查看</a>
                 <a type="button" th:href="@{editArticle(id=${article.id})}" class="btn btn-warning">修改</a>
                 <a type="button" th:href="@{deleteArticle(id=${article.id})}" class="btn btn-danger">删除</a>
-            </div>
+                </div>
             </td>
         </tr>
         </tbody>
     </table>
     <a th:href="@{/admin/addArticle}"><button type="button" class="btn btn-success">写博客</button></a>
+    <a th:href="|?published=true&${limit}|">
+        <button type="button" class="btn btn-primary">
+            <span th:if="${limit} and ${#strings.contains(limit,'true')}">√</span>
+            已发表
+        </button>
+    </a>
+    <a  th:href="|?published=false&${limit}|">
+        <button type="button" class="btn btn-warning">
+            <span th:if="${limit} and ${#strings.contains(limit,'false')}">√</span>
+            未发表
+        </button>
+    </a>
     <nav th:replace="admin/page::page"></nav>
 </div>
 </body>

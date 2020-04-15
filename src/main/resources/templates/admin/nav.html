@@ -56,6 +56,16 @@
                 <li class="nav-item">
                     <a class="nav-link" th:classappend="${index==7} ? 'active':''" href="/admin/user">我</a>
                 </li>
+                <li  class="nav-item">
+                    <form method="get" action="/admin/articleLike">
+                        <div class="input-group">
+                            <input type="text" name="key" class="form-control" th:value="${param.key}" placeholder="输入博客内容或标题" aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">模糊搜索</button>
+                            </div>
+                        </div>
+                    </form>
+                </li>
             </ul>
         </div>
     </nav>

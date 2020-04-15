@@ -11,8 +11,7 @@
     <link rel="stylesheet" href="../static/vendor/bootstrap/css/bootstrap.min.css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
 <!--     Font Awesome CSS-->
 <!---->
-
-    <link rel="stylesheet" href="../static/vendor/font-awesome/css/font-awesome.min.css" th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
+      <link rel="stylesheet" href="../static/vendor/font-awesome/css/font-awesome.min.css" th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
     <!-- Custom icon font-->
     <link rel="stylesheet" href="../static/css/fontastic.css" th:href="@{/css/fontastic.css}">
     <!-- Google fonts - Open Sans-->
@@ -26,7 +25,6 @@
     <!-- Favicon-->
     <link rel="stylesheet" href="../static/css/sec.css" th:href="@{/css/sec.css}">
 
-    <link rel="shortcut icon" href="../static/favicon.png">
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
@@ -355,26 +353,26 @@
       </div>
     </section>
     <!-- Gallery Section-->
-    <section class="gallery no-padding">    
-      <div class="row">
-        <div class="mix col-lg-3 col-md-3 col-sm-6">
-          <div class="item"><a th:href="@{/img/eminem.jpg}" href="../static/img/eminem.jpg" data-fancybox="gallery" class="image"><img th:src="@{/img/eminem.jpg}" src="../static/img/eminem.jpg" alt="..." class="img-fluid">
-              <div class="overlay d-flex align-items-center justify-content-center"><i class="icon-search"></i></div></a></div>
-        </div>
-        <div class="mix col-lg-3 col-md-3 col-sm-6">
-          <div class="item"><a th:href="@{/img/github.jpg}" href="../static/img/github.jpg" data-fancybox="gallery" class="image"><img th:src="@{/img/github.jpg}" src="../static/img/github.jpg" alt="..." class="img-fluid">
-              <div class="overlay d-flex align-items-center justify-content-center"><i class="icon-search"></i></div></a></div>
-        </div>
-        <div class="mix col-lg-3 col-md-3 col-sm-6">
-          <div class="item"><a th:href="@{/img/贴图2.jpg}" href="../static/img/贴图2.jpg" data-fancybox="gallery" class="image"><img th:src="@{/img/贴图2.jpg}" src="../static/img/贴图2.jpg" alt="..." class="img-fluid">
-              <div class="overlay d-flex align-items-center justify-content-center"><i class="icon-search"></i></div></a></div>
-        </div>
-        <div class="mix col-lg-3 col-md-3 col-sm-6">
-          <div class="item"><a th:href="@{/img/main.jpg}" href="../static/img/main.jpg" data-fancybox="gallery" class="image"><img th:src="@{/img/main.jpg}" src="../static/img/main.jpg" alt="..." class="img-fluid">
-              <div class="overlay d-flex align-items-center justify-content-center"><i class="icon-search"></i></div></a></div>
-        </div>
-      </div>
-    </section>
+<!--    <section class="gallery no-padding">    -->
+<!--      <div class="row">-->
+<!--        <div class="mix col-lg-3 col-md-3 col-sm-6">-->
+<!--          <div class="item"><a th:href="@{/img/eminem.jpg}" href="../static/img/eminem.jpg" data-fancybox="gallery" class="image"><img th:src="@{/img/eminem.jpg}" src="../static/img/eminem.jpg" alt="..." class="img-fluid">-->
+<!--              <div class="overlay d-flex align-items-center justify-content-center"><i class="icon-search"></i></div></a></div>-->
+<!--        </div>-->
+<!--        <div class="mix col-lg-3 col-md-3 col-sm-6">-->
+<!--          <div class="item"><a th:href="@{/img/github.jpg}" href="../static/img/github.jpg" data-fancybox="gallery" class="image"><img th:src="@{/img/github.jpg}" src="../static/img/github.jpg" alt="..." class="img-fluid">-->
+<!--              <div class="overlay d-flex align-items-center justify-content-center"><i class="icon-search"></i></div></a></div>-->
+<!--        </div>-->
+<!--        <div class="mix col-lg-3 col-md-3 col-sm-6">-->
+<!--          <div class="item"><a th:href="@{/img/贴图2.jpg}" href="../static/img/贴图2.jpg" data-fancybox="gallery" class="image"><img th:src="@{/img/贴图2.jpg}" src="../static/img/贴图2.jpg" alt="..." class="img-fluid">-->
+<!--              <div class="overlay d-flex align-items-center justify-content-center"><i class="icon-search"></i></div></a></div>-->
+<!--        </div>-->
+<!--        <div class="mix col-lg-3 col-md-3 col-sm-6">-->
+<!--          <div class="item"><a th:href="@{/img/main.jpg}" href="../static/img/main.jpg" data-fancybox="gallery" class="image"><img th:src="@{/img/main.jpg}" src="../static/img/main.jpg" alt="..." class="img-fluid">-->
+<!--              <div class="overlay d-flex align-items-center justify-content-center"><i class="icon-search"></i></div></a></div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </section>-->
     <!-- Page Footer-->
     <footer class="main-footer" th:replace="foot::foot">
       <div class="container">

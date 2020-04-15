@@ -25,31 +25,47 @@ public class ArticleController {
     private TagService tagService;
 
     @RequestMapping("/articleList")
-    private String list(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count, Model model)
+    private String list(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count, Model model,Boolean published)
     {
         PageHelper.offsetPage(start,count);
-        List<Article> articles=service.listAll();
+        List<Article> articles=service.listAll(published);
         model.addAttribute("page",new PageInfo<Article>(articles));
+        if(published!=null)
+        {
+            model.addAttribute("limit","published="+published);           //若存在筛选则进入添加筛选项
+        }
         return "admin/articleList";
     }
 
     @RequestMapping("/articleListByTag")
-    private String list(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count, Model model,Integer tid)
+    private String list(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count, Model model,Integer tid,Boolean published)
     {
+        model.addAttribute("tag",tagService.get(tid));
         PageHelper.offsetPage(start,count);
-        List<Article> articles=service.listByTid(tid);   //后台调用标签的管理方法
+        List<Article> articles=service.listByTid(tid,published);   //后台调用标签的管理方法
         model.addAttribute("page",new PageInfo<Article>(articles));
-        model.addAttribute("limit","tid="+tid);
+        String limit="tid="+tid;
+        if(published!=null)
+        {
+            limit+="&published="+published;            //添加分页的约束条件
+        }
+        model.addAttribute("limit",limit);
         return "admin/articleList";
     }
 
     @RequestMapping("/articleLike")
-    public String research(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count, Model model,String key)
+    public String research(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count, Model model,String key
+    ,Boolean published)
     {
         PageHelper.offsetPage(start,count);
-        List<Article> articles=service.listArticleLike(key);
+        List<Article> articles=service.listArticleLike(key,published);
         model.addAttribute("page",new PageInfo<Article>(articles));
-        model.addAttribute("limit","key="+key);
+        String limit="key="+key;
+        if(published!=null)
+        {
+            limit+="&published="+published;            //添加分页的约束条件
+        }
+        model.addAttribute("limit",limit);
         return "admin/articleList";
     }
 
@@ -64,7 +80,6 @@ public class ArticleController {
     @RequestMapping("/editArticle")
     public String edit(Integer id,Model model)
     {
-        //System.out.println(service.findById(id));
         model.addAttribute("tags",tagService.list());
         model.addAttribute("article",service.findById(id));
         return "admin/articleEdit";
@@ -93,4 +108,9 @@ public class ArticleController {
         return "redirect:/admin/articleList";
     }
 
+    @RequestMapping("/getArticle")
+    public String get(Integer id)
+    {
+        return "redirect:/article?id="+id; //重定向到fore路径下
+    }
 }

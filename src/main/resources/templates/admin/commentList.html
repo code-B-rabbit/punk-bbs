@@ -35,8 +35,10 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/admin/articleList">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page" th:text="|${article.title}的评论|">
-                ****的评论
+            <li class="breadcrumb-item active" aria-current="page">
+                <a class="text-info" th:text="${article.title}" th:href="@{getArticle(id=${article.id})}">
+                    ****
+                </a>的评论
             </li>
         </ol>
     </nav>

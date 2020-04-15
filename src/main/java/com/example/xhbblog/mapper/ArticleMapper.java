@@ -40,7 +40,13 @@ public interface ArticleMapper {
     })
     Article findById(Integer id);
 
-    @Select("select * from article order by createTime desc")
+    @Select("<script>" +
+            "select * from article" +
+            "<if test='published!=null'>"+
+            "where published=#{published} " +
+            "</if>"+
+            "order by id desc" +
+            "</script>")           //在注解中使用published动态拼接
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
@@ -48,30 +54,43 @@ public interface ArticleMapper {
             @Result(property = "commentSize",column = "id",one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle")),
     }
     )
-    List<Article> listAll();        //给后台用的
+    List<Article> listAll(Boolean published);        //给后台用的
 
 
-    @Select("select * from article where tid=#{tid} order by createTime desc")
+    @Select("<script>" +
+            "select * from article where tid=#{tid}" +
+            "<when test='published!=null'>"+
+            "and published=#{published}"+
+            "</when>"+
+            "order by id desc" +
+            "</script>")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
             @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
             @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle"))
     })
-    List<Article> listByTid(Integer tid);       //用于后台
+    List<Article> listByTid(Integer tid,Boolean published);       //用于后台
 
 
-    @Select("select * from article where content like #{string} or title like #{string}")
+    @Select("<script>" +
+            "select * from article where id IN(select id from article where content like #{string} or title like #{string})" +
+            "<when test='published!=null'>"+
+            "and published=#{published}"+
+            "</when>"+
+            "order by id desc"+
+            "</script>")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
             @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
             @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle"))
     })
-    List<Article> listArticleLike(String string);         //给后台用
+    List<Article> listArticleLike(String string,Boolean published);         //给后台用
 
 
-    @Select("select * from article where published=true and id IN (select id from article where content like #{string} or title like #{string})")
+    @Select("select * from article where published=true and id IN (select id from article where content like #{string} or title like #{string}) " +
+            "order by id desc")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
@@ -80,7 +99,7 @@ public interface ArticleMapper {
     })
     List<Article> findArticleLike(String string);
 
-    @Select("select * from article where published=true order by createTime desc")
+    @Select("select * from article where published=true order by id desc")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
@@ -92,7 +111,7 @@ public interface ArticleMapper {
 
 
 
-    @Select("select * from article where tid=#{tid} and published=true order by createTime desc")
+    @Select("select * from article where tid=#{tid} and published=true order by id desc")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
@@ -134,7 +153,7 @@ public interface ArticleMapper {
     @Select("select id from article where id>#{aid} and published=true order by id limit 1")
     Integer findNextId(Integer aid);
 
-    @Select("select * from article where published=true order by createTime desc limit 3")     //最新的三篇访问文章
+    @Select("select * from article where published=true order by id desc limit 3")     //最新的三篇访问文章
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
@@ -144,7 +163,7 @@ public interface ArticleMapper {
     })
     List<Article> getLastestArticle();    //用于首页查询
 
-    @Select("select title,id,tid,createTime,visit,firstPicture from article where published=true order by createTime desc limit 3")     //最新的三篇访问文章
+    @Select("select title,id,tid,createTime,visit,firstPicture from article where published=true order by id desc limit 3")     //最新的三篇访问文章
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
