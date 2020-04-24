@@ -13,56 +13,19 @@ public class Article {
 
     private String firstPicture;
 
-    private Long visit=new Long(0);
-
-    private Boolean published;
-
-    private String content;
-
-    private Integer commentSize=0;
-
-    private Tag tag;
+    private Long visit=new Long(0);        //默认值
 
     private String nextName;
 
-    public String getNextName() {
-        return nextName;
-    }
-
-    public void setNextName(String nextName) {
-        this.nextName = nextName;
-    }
-
-    public Integer getNextId() {
-        return nextId;
-    }
-
-    public void setNextId(Integer nextId) {
-        this.nextId = nextId;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Integer getLastId() {
-        return lastId;
-    }
-
-    public void setLastId(Integer lastId) {
-        this.lastId = lastId;
-    }
+    private String lastName;
 
     private Integer nextId;
 
-    private String lastName;
-
     private Integer lastId;
 
+    private Tag tag;
+
+    private Integer commentSize;
 
     public Integer getCommentSize() {
         return commentSize;
@@ -79,6 +42,40 @@ public class Article {
     public void setTag(Tag tag) {
         this.tag = tag;
     }
+
+    public String getNextName() {
+        return nextName;
+    }
+
+    public void setNextName(String nextName) {
+        this.nextName = nextName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Integer getNextId() {
+        return nextId;
+    }
+
+    public void setNextId(Integer nextId) {
+        this.nextId = nextId;
+    }
+
+    public Integer getLastId() {
+        return lastId;
+    }
+
+    public void setLastId(Integer lastId) {
+        this.lastId = lastId;
+    }
+
+    private Boolean published;
 
     public Integer getId() {
         return id;
@@ -134,33 +131,5 @@ public class Article {
 
     public void setPublished(Boolean published) {
         this.published = published;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
-    }
-
-    @Override
-    public String toString() {
-        return "Article{" +
-                "id=" + id +
-                ", tid=" + tid +
-                ", createTime=" + createTime +
-                ", title='" + title + '\'' +
-                ", firstPicture='" + firstPicture + '\'' +
-                ", visit=" + visit +
-                ", published=" + published +
-                ", content='" + content + '\'' +
-                ", commentSize=" + commentSize +
-                ", tag=" + tag +
-                ", nextName='" + nextName + '\'' +
-                ", nextId=" + nextId +
-                ", lastName='" + lastName + '\'' +
-                ", lastId=" + lastId +
-                '}';
     }
 }

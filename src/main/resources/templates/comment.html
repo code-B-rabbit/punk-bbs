@@ -44,9 +44,22 @@
                 <div class="image"><img th:src="@{/img/user.svg}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle"></div>
                 <div class="title"><strong th:text="${comment.visitor_name}">Jabi Hernandiz</strong><span class="date" th:text="${#dates.format(comment.createTime,'yyyy-MM-dd')}">May 2016</span></div>
             </div>
+            <button type="button" th:onclick="reply([[${comment.id}]],[[${comment.visitor_name}]])" class="btn btn-light float-right reply">回复</button>
         </div>
         <div class="comment-body">
             <p th:text="${comment.content}">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+            <div class="comment" th:each="comment:${comment.childs}">
+                <div class="comment-header d-flex justify-content-between">
+            <div class="user d-flex align-items-center">
+                <div class="image"><img th:src="@{/img/user.svg}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle"></div>
+                <div class="title"><strong th:text="|${comment.visitor_name} 回复 ${comment.parentVisitorName}|">Jabi Hernandiz</strong><span class="date" th:text="${#dates.format(comment.createTime,'yyyy-MM-dd')}">May 2016</span></div>
+            </div>
+            <button type="button" th:onclick="reply([[${comment.id}]],[[${comment.visitor_name}]])" class="btn btn-light float-right reply">回复</button>
+                </div>
+            <div class="comment-body">
+                <p th:text="${comment.content}">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+            </div>
+            </div>
         </div>
     </div>
     <div class="container">
@@ -74,10 +87,70 @@
                         $('html,body').animate({scrollTop:$('div.post-comments').offset().top}, 200);
                     }
                 )
+            };
+            reply=function (id,name) {
+                $('#exampleModal').modal('show');
+                $('.modal-title').text("回复  "+name+" 的评论:");
+                $('input.parentId').val(id);
+            };
+            submit=function () {
+                visitor_name=$('input.visitor_name').val();
+                visitor_email=$('input.visitor_email').val();
+                content=$('textarea.content').val();
+                parentID=$('input.parentId').val();
+                if(visitor_name==""||visitor_email==""||content=="")
+                {
+                    alert("请将个人信息填写完整,谢谢");
+                    return;
+                }
+                data={'visitor_name':visitor_name,'visitor_email':visitor_email,'content':content,'aid':aid,'parentID':parentID};
+                $('#exampleModal').on('hidden.bs.modal',function () {
+                    $('div.post-comments').load(
+                        '/Addcomment',data,function () {
+                            $('input.visitor_name').val("");
+                            $('input.visitor_email').val("");
+                            $('input.parentId').val("");
+                            $('textarea.content').val("");
+                        }
+                    );
+                })
+                $('#exampleModal').modal('hide');
             }
         })
         </script>
         </div>
+            <div class="modal fade" id="exampleModal" tabindex="-999999" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">您的姓名:</label>
+            <input type="text" class="form-control visitor_name" >
+              <input type="hidden" class="parentId"/>
+          </div>
+            <div class="form-group">
+            <label for="recipient-name" class="col-form-label">您的电子邮箱:</label>
+            <input type="text" class="form-control visitor_email" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">您的回复信息:</label>
+            <textarea class="form-control content" id="message-text"></textarea>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="submit()">Send message</button>
+      </div>
+    </div>
+  </div>
+
+    </div>
 </div>
 <div class="add-comment">
     <header>

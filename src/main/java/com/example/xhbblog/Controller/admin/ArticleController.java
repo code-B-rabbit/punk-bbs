@@ -3,6 +3,7 @@ package com.example.xhbblog.Controller.admin;
 import com.example.xhbblog.Service.ArticleService;
 import com.example.xhbblog.Service.TagService;
 import com.example.xhbblog.pojo.Article;
+import com.example.xhbblog.pojo.ArticleWithBLOBs;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +89,7 @@ public class ArticleController {
 
     //这里修改和新增保存在了一个方法里
     @RequestMapping("/articleSave")
-    public String save(Article article)
+    public String save(ArticleWithBLOBs article)
     {
         if(article.getId()==null)         //新增
         {

@@ -39,13 +39,9 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> list() {List<Tag> tags=tagMapper.list();
-        tags.sort(new Comparator<Tag>() {
-            @Override
-            public int compare(Tag o1, Tag o2) {
-                return o2.getNumbersOfBlog()-o1.getNumbersOfBlog();
-            }
-        });
+    public List<Tag> list() {
+        List<Tag> tags=tagMapper.list();
+        tags.sort((t1,t2)->t2.getNumbersOfBlog()-t1.getNumbersOfBlog());
         return tags;            //使得标签按照文章数多少进行排序
     }
 }

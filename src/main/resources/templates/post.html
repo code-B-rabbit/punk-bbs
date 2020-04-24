@@ -192,9 +192,22 @@
                         <div class="image"><img src="img/user.svg" alt="..." class="img-fluid rounded-circle"></div>
                         <div class="title"><strong>Jabi Hernandiz</strong><span class="date">May 2016</span></div>
                       </div>
+                      <button type="button" class="btn btn-light float-right">回复</button>
                     </div>
                     <div class="comment-body">
                       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                      <div class="comment">
+                        <div class="comment-header d-flex justify-content-between">
+                          <div class="user d-flex align-items-center">
+                            <div class="image"><img src="img/user.svg" alt="..." class="img-fluid rounded-circle"></div>
+                            <div class="title"><strong>Jabi Hernandiz</strong><span class="date">May 2016</span></div>
+                          </div>
+                          <button type="button" class="btn btn-light float-right reply">回复</button>
+                        </div>
+                        <div class="comment-body">
+                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="comment">
@@ -275,10 +288,6 @@
               <li class="list-inline-item" th:each="tag:${tags}">
                 <a th:href="@{/articlesByTag(tid=${tag.id})}" th:text="|#${tag.name}|" class="tag" th:classappend="${tag.id}==${art.tid}?'text-white bg-dark':''">#Business</a>
               </li>
-              <!--              <li class="list-inline-item"><a href="#" class="tag">#Technology</a></li>-->
-              <!--              <li class="list-inline-item"><a href="#" class="tag">#Fashion</a></li>-->
-              <!--              <li class="list-inline-item"><a href="#" class="tag">#Sports</a></li>-->
-              <!--              <li class="list-inline-item"><a href="#" class="tag">#Economy</a></li>-->
             </ul>
           </div>
 
@@ -400,7 +409,7 @@
               '/comments?aid='+[[${art.id}]],function () {
                 //alert("加载成功!!");
               }
-      )
+      );
 
       $('button#submit').click(
               function () {

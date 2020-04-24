@@ -46,8 +46,8 @@ public class ForeController {
     @RequestMapping("/articles")
     public String articles(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "4") Integer count, Model model) {
         PageHelper.offsetPage(start, count);
-        List<Article> all = articleService.findAll();
-        model.addAttribute("page", new PageInfo<Article>(all));
+        List<ArticleWithBLOBs> all = articleService.findAll();
+        model.addAttribute("page", new PageInfo<ArticleWithBLOBs>(all));
         model.addAttribute("lastestArticles", articleService.findLastestArticle());
         model.addAttribute("tags", tagService.list());
         model.addAttribute("fls", friendLyLinkService.ListOf(true));   //友链
@@ -58,8 +58,8 @@ public class ForeController {
     @RequestMapping("/articlesByTag")
     public String articles(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "4") Integer count, Model model, Integer tid) {
         PageHelper.offsetPage(start, count);
-        List<Article> all = articleService.findByTid(tid);
-        model.addAttribute("page", new PageInfo<Article>(all));
+        List<ArticleWithBLOBs> all = articleService.findByTid(tid);
+        model.addAttribute("page", new PageInfo<ArticleWithBLOBs>(all));
         model.addAttribute("lastestArticles", articleService.findLastestArticle());
         model.addAttribute("tags", tagService.list());
         model.addAttribute("fls", friendLyLinkService.ListOf(true));   //友链
@@ -72,8 +72,8 @@ public class ForeController {
     @RequestMapping("/blogsearch")
     public String articles(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "4") Integer count, Model model, String search) {
         PageHelper.offsetPage(start, count);
-        List<Article> all = articleService.findArticleLike(search);
-        model.addAttribute("page", new PageInfo<Article>(all));
+        List<ArticleWithBLOBs> all = articleService.findArticleLike(search);
+        model.addAttribute("page", new PageInfo<ArticleWithBLOBs>(all));
         model.addAttribute("lastestArticles", articleService.findLastestArticle());
         model.addAttribute("tags", tagService.list());
         model.addAttribute("fls", friendLyLinkService.ListOf(true));   //友链
@@ -92,7 +92,7 @@ public class ForeController {
     @RequestMapping("/article")
     public String article(Integer id,Model model)
     {
-        Article article=articleService.findById(id);
+        ArticleWithBLOBs article=articleService.findById(id);
         //System.out.println(article);
         if(article.getVisit()==null)
         {
@@ -110,17 +110,28 @@ public class ForeController {
         return "post";
     }
 
-
+    //这里pageHelper分页失效了,一时半会没找到解决方案,就只能这么做了
+    public PageInfo<Comment> getPageInfo(Integer total,List<Comment> comments,Integer start,Integer count)       //这里pagehelper分页失效了就只能这么做了
+    {
+        PageInfo<Comment> pageInfo=new PageInfo<Comment>(comments);
+        pageInfo.setTotal(total);
+        pageInfo.setHasNextPage((start+count)<pageInfo.getTotal());
+        pageInfo.setHasPreviousPage(start-count>=0);
+        pageInfo.setPageNum(start/count+1);
+        pageInfo.setPageSize(count);
+        return  pageInfo;
+    }
 
     @RequestMapping("/comments")
     public String comments(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "5") Integer count, Model model,Integer aid)
     {
-        PageHelper.offsetPage(start, count);
-        List<Comment> byAid = commentService.findByAid(aid);
-        PageInfo<Comment> pageInfo=new PageInfo<Comment>(byAid);
-        model.addAttribute("page",pageInfo);
+        Integer total=commentService.countOfArticle(aid);
+        Integer commentSize=commentService.countOfComment(aid);
         model.addAttribute("aid",aid);
-        model.addAttribute("total",commentService.countOfArticle(aid));    //评论总数显示
+        model.addAttribute("total",commentSize);    //评论总数显示;
+        List<Comment> byAid = commentService.findByAid(aid,start,count);
+        PageInfo<Comment> pageInfo = getPageInfo(total, byAid, start, count);
+        model.addAttribute("page",pageInfo);
         return "comment::comments";         //只返回分页后的列表
     }
 
@@ -139,7 +150,6 @@ public class ForeController {
         PageHelper.offsetPage(start,count);
         List<TimeLine> timeLines = articleService.timeLine();
         model.addAttribute("page",new PageInfo<TimeLine>(timeLines));
-        //System.out.println(timeLines.get(0).getArticleList().size());
         return "timestamp";
     }
 

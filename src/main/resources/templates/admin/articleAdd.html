@@ -66,10 +66,19 @@
 
     <input id="published" name="published" type="hidden"/>
 
+    <div class="input-group-lg">
+        <div class="input-group-prepend-lg">
+            <span class="input-group-text">博客介绍</span>
+        </div>
+        <textarea class="form-control" name="info" aria-label="With textarea"></textarea>
+    </div>
+    <br>
+
     <div id="test-editor">
     <textarea  name="content">
     </textarea>
     </div>
+
 
 <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 <script src="../../static/editor/editormd.min.js" th:src="@{/editor/editormd.min.js}"></script>

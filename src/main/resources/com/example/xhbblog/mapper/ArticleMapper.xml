@@ -10,8 +10,9 @@
     <result column="visit" property="visit" jdbcType="BIGINT" />
     <result column="published" property="published" jdbcType="BIT" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.example.xhbblog.pojo.Article" extends="BaseResultMap" >
+  <resultMap id="ResultMapWithBLOBs" type="com.example.xhbblog.pojo.ArticleWithBLOBs" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
+    <result column="info" property="info" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -46,7 +47,7 @@
     id, tid, createTime, title, firstPicture, visit, published
   </sql>
   <sql id="Blob_Column_List" >
-    content
+    content, info
   </sql>
   <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.example.xhbblog.pojo.ArticleExample" >
     select
@@ -92,15 +93,15 @@
     delete from article
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.example.xhbblog.pojo.Article" useGeneratedKeys="true" keyProperty="id" >
+  <insert id="insert" parameterType="com.example.xhbblog.pojo.ArticleWithBLOBs" useGeneratedKeys="true" keyProperty="id" >
     insert into article (tid, createTime, title, 
       firstPicture, visit, published, 
-      content)
+      content, info)
     values (#{tid,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, #{title,jdbcType=VARCHAR}, 
       #{firstPicture,jdbcType=VARCHAR}, #{visit,jdbcType=BIGINT}, #{published,jdbcType=BIT}, 
-      #{content,jdbcType=LONGVARCHAR})
+      #{content,jdbcType=LONGVARCHAR}, #{info,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.example.xhbblog.pojo.Article" useGeneratedKeys="true" keyProperty="id" >
+  <insert id="insertSelective" parameterType="com.example.xhbblog.pojo.ArticleWithBLOBs" useGeneratedKeys="true" keyProperty="id" >
     insert into article
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="tid != null" >
@@ -123,6 +124,9 @@
       </if>
       <if test="content != null" >
         content,
+      </if>
+      <if test="info != null" >
+        info,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -147,9 +151,12 @@
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
       </if>
+      <if test="info != null" >
+        #{info,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.xhbblog.pojo.Article" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.xhbblog.pojo.ArticleWithBLOBs" >
     update article
     <set >
       <if test="tid != null" >
@@ -173,10 +180,13 @@
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
+      <if test="info != null" >
+        info = #{info,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.xhbblog.pojo.Article" >
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.xhbblog.pojo.ArticleWithBLOBs" >
     update article
     set tid = #{tid,jdbcType=INTEGER},
       createTime = #{createTime,jdbcType=DATE},
@@ -184,7 +194,8 @@
       firstPicture = #{firstPicture,jdbcType=VARCHAR},
       visit = #{visit,jdbcType=BIGINT},
       published = #{published,jdbcType=BIT},
-      content = #{content,jdbcType=LONGVARCHAR}
+      content = #{content,jdbcType=LONGVARCHAR},
+      info = #{info,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.xhbblog.pojo.Article" >
@@ -197,23 +208,4 @@
       published = #{published,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-
-<!--  <resultMap id="timeLines" type="com.example.xhbblog.pojo.TimeLine">-->
-<!--    <result column="createTime" property="time"/>-->
-<!--    <collection property="articleList" ofType="com.example.xhbblog.pojo.Article" select="getArticlesByTime" javaType="java.util.List" column="{createTime=createTime}">-->
-<!--      <result column="id" property="id"/>-->
-<!--      <result column="title" property="title"/>-->
-<!--    </collection>-->
-<!--  </resultMap>-->
-
-<!--  <select id="findTimeLines" resultMap="timeLines" parameterType="map">-->
-<!--    select  DISTINCT createTime from article order by createTime-->
-<!--  </select>-->
-
-<!--  <select id="getArticlesByTime" parameterType="map"-->
-<!--          resultType="map">-->
-<!--    select id,title from article a2 where a2.createTime=#{createTime}-->
-<!--  </select>-->
-
 </mapper>

@@ -83,7 +83,8 @@
             <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clip-rule="evenodd"/>
               <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clip-rule="evenodd"/>
-            </svg></a></div>
+            </svg></a>
+          </div>
           <ul class="langs navbar-text"><a href="#" class="active">EN</a><span>           </span><a href="#">ES</a></ul>
         </div>
       </div>
@@ -138,14 +139,10 @@
                     <div class="category"><a th:href="@{/articlesByTag(tid=${a.tag.id})}" th:text="${a.tag.name}" href="#">Business</a></div>
                   </div><a th:href="@{article(id=${a.id})}">
                     <h3 class="h4" th:text="${a.title}">Alberto Savoia Can Teach You About Interior</h3></a>
-                  <p class="text-muted" th:text="|${#strings.abbreviate(a.content,150)}.....|">
+                  <p class="text-muted" th:text="|${#strings.abbreviate(a.info,150)}.....|">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.
                   </p>
                   <footer class="post-footer d-flex align-items-center">
-<!--                    <a href="#" class="author d-flex align-items-center flex-wrap">-->
-<!--                      <div class="avatar"><img src="../static/img//avatar-3.jpg" alt="..." class="img-fluid"></div>-->
-<!--                      <div class="title"><span>John Doe</span></div>-->
-<!--                    </a>-->
 
                     <div class="views">
                       <svg class="bi bi-eye" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -203,7 +200,7 @@
           <!-- Widget [Search Bar Widget]-->
           <div class="widget search">
             <header>
-              <h3 class="h6">Search the blog</h3>
+              <h3 class="h6">搜索博客内容</h3>
             </header>
             <form action="/blogsearch" class="search-form">
               <div class="form-group">
@@ -220,16 +217,12 @@
 
           <div class="widget tags">
             <header>
-              <h3 class="h6">Tags</h3>
+              <h3 class="h6">标签</h3>
             </header>
             <ul class="list-inline">
               <li class="list-inline-item" th:each="tag:${tags}">
                 <a th:href="@{/articlesByTag(tid=${tag.id})}" th:text="|#${tag.name}|" class="tag" th:classappend="${tag.id}==${tid}?'text-white bg-dark':''">#Business</a>
               </li>
-<!--              <li class="list-inline-item"><a href="#" class="tag">#Technology</a></li>-->
-<!--              <li class="list-inline-item"><a href="#" class="tag">#Fashion</a></li>-->
-<!--              <li class="list-inline-item"><a href="#" class="tag">#Sports</a></li>-->
-<!--              <li class="list-inline-item"><a href="#" class="tag">#Economy</a></li>-->
             </ul>
           </div>
 
@@ -264,18 +257,6 @@
               </a>
             </div>
           </div>
-          <!-- Widget [Categories Widget]-->
-<!--          <div class="widget categories">-->
-<!--            <header>-->
-<!--              <h3 class="h6">Categories</h3>-->
-<!--            </header>-->
-<!--            <div class="item d-flex justify-content-between"><a href="#">Growth</a><span>12</span></div>-->
-<!--            <div class="item d-flex justify-content-between"><a href="#">Local</a><span>25</span></div>-->
-<!--            <div class="item d-flex justify-content-between"><a href="#">Sales</a><span>8</span></div>-->
-<!--            <div class="item d-flex justify-content-between"><a href="#">Tips</a><span>17</span></div>-->
-<!--            <div class="item d-flex justify-content-between"><a href="#">Local</a><span>25</span></div>-->
-<!--          </div>-->
-          <!-- Widget [Tags Cloud Widget]-->
         </aside>
       </div>
     </div>

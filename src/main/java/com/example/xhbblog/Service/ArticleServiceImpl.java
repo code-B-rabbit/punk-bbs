@@ -2,6 +2,7 @@ package com.example.xhbblog.Service;
 
 import com.example.xhbblog.mapper.ArticleMapper;
 import com.example.xhbblog.pojo.Article;
+import com.example.xhbblog.pojo.ArticleWithBLOBs;
 import com.example.xhbblog.pojo.TimeLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class ArticleServiceImpl implements ArticleService{
     private ArticleMapper articleMapper;
 
     @Override
-    public void add(Article article) {
+    public void add(ArticleWithBLOBs article) {
         articleMapper.insert(article);
     }
 
@@ -27,7 +28,7 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public void update(Article article) {
+    public void update(ArticleWithBLOBs article) {
         articleMapper.updateByPrimaryKeySelective(article);     //若为更改则不更新时间
     }
 
@@ -37,12 +38,12 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public Article findById(Integer id) {
+    public ArticleWithBLOBs findById(Integer id) {
         return articleMapper.findById(id);
     }
 
     @Override
-    public List<Article> findByTid(Integer tid) {
+    public List<ArticleWithBLOBs> findByTid(Integer tid) {
         return articleMapper.findByTid(tid);
     }
 
@@ -57,22 +58,22 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public List<Article> getLastestArticle() {
+    public List<ArticleWithBLOBs> getLastestArticle() {
         return articleMapper.getLastestArticle();
     }
 
     @Override
-    public List<Article> findAll() {
+    public List<ArticleWithBLOBs> findAll() {
         return articleMapper.findAll();       //前台只向用户展示已经出版的
     }
 
     @Override
-    public List<Article> findByVisit() {
+    public List<ArticleWithBLOBs> findByVisit() {
         return articleMapper.findByVisit();
     }
 
     @Override
-    public List<Article> findArticleLike(String s) {
+    public List<ArticleWithBLOBs> findArticleLike(String s) {
         return articleMapper.findArticleLike("%"+s+"%");     //模糊查询具体逻辑在业务层完成
     }
 
@@ -82,12 +83,12 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public List<Article> foreArticle() {
+    public List<ArticleWithBLOBs> foreArticle() {
         return articleMapper.findForeArticle();
     }
 
     @Override
-    public List<Article> findLastestArticle() {
+    public List<ArticleWithBLOBs> findLastestArticle() {
         return articleMapper.findLastestArticle();
     }
 

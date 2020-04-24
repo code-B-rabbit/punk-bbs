@@ -71,9 +71,19 @@
 
         <input id="published" name="published" type="hidden"/>
 
+        <div class="input-group-lg">
+            <div class="input-group-prepend-lg">
+                <span class="input-group-text">博客介绍</span>
+            </div>
+            <textarea class="form-control" name="info" th:text="${article.info}" aria-label="With textarea"></textarea>
+        </div>
+        <br>
+
         <div id="test-editor">
     <textarea name="content" th:text="*{content}"></textarea>
         </div>
+
+
         <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
         <script src="../../static/editor/editormd.min.js" th:src="@{/editor/editormd.min.js}"></script>
         <script type="text/javascript" th:inline="javascript">
@@ -89,17 +99,6 @@
                 });
             });
         </script>
-<!--        <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>-->
-<!--        <script src="../../static/editor/editormd.min.js" th:src="@{/editor/editormd.min.js}"></script>-->
-<!--        <script type="text/javascript" th:inline="javascript">-->
-<!--            $(function() {-->
-<!--                var editor = editormd("test-editor", {-->
-<!--                    width  : "100%",-->
-<!--                    height : 800,-->
-<!--                    path   : "/editor/lib/"-->
-<!--                });-->
-<!--            });-->
-<!--        </script>-->
         <button type="submit" class="btn btn-primary btn-lg btn-block publish">发表</button>
         <button type="submit" class="btn btn-secondary btn-lg btn-block save">保存</button>
         <button onclick="javascript:window.location.replace(document.referrer);" class="btn btn-secondary btn-lg btn-dark">返回</button>

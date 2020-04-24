@@ -1,7 +1,5 @@
 package com.example.xhbblog.pojo;
 
-import com.example.xhbblog.pojo.Article;
-
 import java.util.Date;
 import java.util.List;
 

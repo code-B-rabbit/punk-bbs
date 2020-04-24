@@ -2,6 +2,7 @@ package com.example.xhbblog.mapper;
 
 import com.example.xhbblog.pojo.Article;
 import com.example.xhbblog.pojo.ArticleExample;
+import com.example.xhbblog.pojo.ArticleWithBLOBs;
 import com.example.xhbblog.pojo.TimeLine;
 import org.apache.ibatis.annotations.*;
 
@@ -12,21 +13,22 @@ import java.util.List;
 public interface ArticleMapper {
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Article record);
+    int insert(ArticleWithBLOBs record);
 
-    int insertSelective(Article record);
+    int insertSelective(ArticleWithBLOBs record);
 
-    List<Article> selectByExampleWithBLOBs(ArticleExample example);
+    List<ArticleWithBLOBs> selectByExampleWithBLOBs(ArticleExample example);
 
     List<Article> selectByExample(ArticleExample example);
 
-    Article selectByPrimaryKey(Integer id);
+    ArticleWithBLOBs selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(Article record);
+    int updateByPrimaryKeySelective(ArticleWithBLOBs record);
 
-    int updateByPrimaryKeyWithBLOBs(Article record);
+    int updateByPrimaryKeyWithBLOBs(ArticleWithBLOBs record);
 
     int updateByPrimaryKey(Article record);
+
 
     @Select("select * from article where id=#{id}")
     @Results({
@@ -38,7 +40,7 @@ public interface ArticleMapper {
             @Result(property = "lastName",column = "id",one = @One(select = "com.example.xhbblog.mapper.ArticleMapper.findLastName")),
             @Result(property = "lastId",column = "id",one = @One(select = "com.example.xhbblog.mapper.ArticleMapper.findLastId")),
     })
-    Article findById(Integer id);
+    ArticleWithBLOBs findById(Integer id);
 
     @Select("<script>" +
             "select * from article" +
@@ -51,7 +53,7 @@ public interface ArticleMapper {
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
             @Result(property = "tag",column = "tid",one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
-            @Result(property = "commentSize",column = "id",one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle")),
+            @Result(property = "commentSize",column = "id",one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment")),
     }
     )
     List<Article> listAll(Boolean published);        //给后台用的
@@ -68,7 +70,7 @@ public interface ArticleMapper {
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
             @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
-            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle"))
+            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment"))
     })
     List<Article> listByTid(Integer tid,Boolean published);       //用于后台
 
@@ -84,7 +86,7 @@ public interface ArticleMapper {
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
             @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
-            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle"))
+            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment"))
     })
     List<Article> listArticleLike(String string,Boolean published);         //给后台用
 
@@ -95,19 +97,19 @@ public interface ArticleMapper {
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
             @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
-            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle"))
+            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment"))
     })
-    List<Article> findArticleLike(String string);
+    List<ArticleWithBLOBs> findArticleLike(String string);
 
     @Select("select * from article where published=true order by id desc")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
             @Result(property = "tag",column = "tid",one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
-            @Result(property = "commentSize",column = "id",one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle")),
+            @Result(property = "commentSize",column = "id",one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment")),
     }
     )
-    List<Article> findAll();
+    List<ArticleWithBLOBs> findAll();
 
 
 
@@ -116,18 +118,18 @@ public interface ArticleMapper {
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
             @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
-            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle"))
+            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment"))
     })
-    List<Article> findByTid(Integer tid);
+    List<ArticleWithBLOBs> findByTid(Integer tid);
 
     @Select("select * from article where published=true order by visit desc limit 5")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
             @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
-            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle"))
+            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment"))
     })
-    List<Article> findByVisit();
+    List<ArticleWithBLOBs> findByVisit();
 
     @Select("select count(*) from article where tid=#{tid}")
     Integer countOfTag(Integer tid);        //同样用于后台不需要考虑published
@@ -137,9 +139,9 @@ public interface ArticleMapper {
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
             @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
-            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle"))
+            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment"))
     })
-    List<Article> findForeArticle();
+    List<ArticleWithBLOBs> findForeArticle();
 
     @Select("select title from article where id<#{aid} and published=true order by id desc limit 1")
     String findLastName(Integer aid);
@@ -158,10 +160,10 @@ public interface ArticleMapper {
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),
             @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
-            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle")),
+            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment")),
             @Result(property = "createTime",column = "createTime"),
     })
-    List<Article> getLastestArticle();    //用于首页查询
+    List<ArticleWithBLOBs> getLastestArticle();    //用于首页查询
 
     @Select("select title,id,tid,createTime,visit,firstPicture from article where published=true order by id desc limit 3")     //最新的三篇访问文章
     @Results({
@@ -169,12 +171,12 @@ public interface ArticleMapper {
             @Result(property = "tid", column = "tid"),
             @Result(property = "title",column = "title"),
             @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
-            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfArticle")),
+            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment")),
             @Result(property = "createTime",column = "createTime"),
             @Result(property = "visit",column = "visit"),
             @Result(property = "firstPicture",column = "firstPicture"),
     })
-    List<Article> findLastestArticle();      //用于博客页查询
+    List<ArticleWithBLOBs> findLastestArticle();      //用于博客页查询
 
 
     //这里发现mybatis一对多查询分页时如果要以那个"1"为标准进行分页必须要使用子查询

@@ -1,19 +1,34 @@
 package com.example.xhbblog.pojo;
 
 import java.util.Date;
+import java.util.List;
 
 public class Comment {
     private Integer id;
 
     private Integer aid;
 
-    private Date createTime;
+    private Article article;   //映射的文章
 
-    private String visitor_name;
+    private String parentVisitorName;   //父评论的用户名
 
-    private String visitor_email;
+    private List<Comment> childs;     //该评论的回复
 
-    private String content;
+    public String getParentVisitorName() {
+        return parentVisitorName;
+    }
+
+    public void setParentVisitorName(String parentVisitorName) {
+        this.parentVisitorName = parentVisitorName;
+    }
+
+    public List<Comment> getChilds() {
+        return childs;
+    }
+
+    public void setChilds(List<Comment> childs) {
+        this.childs = childs;
+    }
 
     public Article getArticle() {
         return article;
@@ -23,7 +38,15 @@ public class Comment {
         this.article = article;
     }
 
-    private Article article;   //文章的映射类
+    private Date createTime;
+
+    private String visitor_name;
+
+    private String visitor_email;
+
+    private Integer parentID;
+
+    private String content;
 
     public Integer getId() {
         return id;
@@ -63,6 +86,14 @@ public class Comment {
 
     public void setVisitor_email(String visitor_email) {
         this.visitor_email = visitor_email == null ? null : visitor_email.trim();
+    }
+
+    public Integer getParentID() {
+        return parentID;
+    }
+
+    public void setParentID(Integer parentID) {
+        this.parentID = parentID;
     }
 
     public String getContent() {
