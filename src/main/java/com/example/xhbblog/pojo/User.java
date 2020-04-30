@@ -1,36 +1,43 @@
 package com.example.xhbblog.pojo;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-public class User {
+public class User implements Serializable {
+
     private Integer id;
 
-    @NotBlank(message = "用户名称不能为空!!!")            //只能对字符串使用的注解
+    private Integer commentSize=0;       //默认为零
+
+    @NotNull
     private String name;
 
-    @NotBlank(message = "用户密码不能为空!!!")
+    private Boolean checked;               //是否记住密码(传参用)
+
+
+    public Boolean getChecked() {
+        return checked;
+    }
+
+    public void setChecked(Boolean checked) {
+        this.checked = checked;
+    }
+
+    public Integer getCommentSize() {
+        return commentSize;
+    }
+
+    public void setCommentSize(Integer commentSize) {
+        this.commentSize = commentSize;
+    }
+
+
+    @NotNull
     private String password;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", remembered=" + remembered +
-                '}';
-    }
+    private String role;
 
-    public Boolean getRemembered() {
-        return remembered;
-    }
-
-    public void setRemembered(Boolean remembered) {
-        this.remembered = remembered;
-    }
-
-    private Boolean remembered; //是否记住密码
+    private String email;
 
     public Integer getId() {
         return id;
@@ -54,5 +61,34 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password == null ? null : password.trim();
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role == null ? null : role.trim();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", commentSize=" + commentSize +
+                ", name='" + name + '\'' +
+                ", checked=" + checked +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

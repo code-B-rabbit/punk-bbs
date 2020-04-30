@@ -1452,6 +1452,14 @@ main.posts-listing .post-footer {
   margin-top: 10px;
   margin-bottom: 25px;
   padding-bottom: 15px;
+  text-align: center!important;
+  border-bottom: 1px solid #eee;
+}
+.comment-reply{
+  margin-left: 55px;
+  margin-top: 10px;
+  margin-bottom: 25px;
+  text-align: center;
   border-bottom: 1px solid #eee;
 }
 
@@ -1652,6 +1660,8 @@ STYLE SWITCHER FOR DEMO
 .navbar-light .navbar-text {
   color: rgba(0, 0, 0, 0.5);
 }
+
+
 
 .navbar-dark .navbar-brand {
   color: white;

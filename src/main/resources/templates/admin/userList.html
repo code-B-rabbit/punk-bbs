@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="admin/login::head">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>后台管理</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="../../static/vendor/bootstrap/css/bootstrap.min.css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="../../static/vendor/font-awesome/css/font-awesome.min.css" th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
+    <!-- Custom icon font-->
+    <link rel="stylesheet" href="../../static/css/fontastic.css" th:href="@{/css/fontastic.css}">
+    <!-- Google fonts - Open Sans-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <!-- Fancybox-->
+    <link rel="stylesheet" href="../../static/vendor/@fancyapps/fancybox/jquery.fancybox.min.css">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="../../static/css/style.default.css" id="theme-stylesheet" th:href="@{/css/style.default.css}">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="../../static/css/custom.css" th:href="@{/css/custom.css}">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="favicon.png">
+
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+</head>
+<nav th:replace="admin/nav::admin_nav(8)"></nav>
+<body>
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">序号</th>
+            <th scope="col">用户名</th>
+            <th scope="col">用户邮箱</th>
+            <th scope="col">评论数</th>
+            <th scope="col">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user:${page.list}">
+            <th scope="row" th:text="${user.id}">1</th>
+            <td th:text="${user.name}">
+                数据结构与算法
+            </td>
+            <td th:text="${user.email}">
+                3
+            </td>
+            <td>
+                <a th:href="@{commentsByUser(id=${user.id})}" th:text="${user.commentSize}"></a>
+            </td>
+            <td>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                <a type="button" th:href="@{deleteUser(id=${user.id})}" class="btn btn-danger">删除</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <nav th:replace="admin/page::page"></nav>
+
+    <form method="get" th:action="@{saveTag}">
+        <div class="panel panel-default">
+            <div class="panel-heading">新增标签</div>
+            <div class="panel-body">
+                <input type="text" aria-label="Dollar amount (with dot and two decimal places)" name="name" placeholder="请输入标签内容">
+            </div>
+            <input type="submit"/>
+        </div>
+    </form>
+
+</div>
+</div>
+</body>
+</html>

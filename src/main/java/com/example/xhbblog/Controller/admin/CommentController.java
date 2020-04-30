@@ -2,6 +2,7 @@ package com.example.xhbblog.Controller.admin;
 
 import com.example.xhbblog.Service.ArticleService;
 import com.example.xhbblog.Service.CommentService;
+import com.example.xhbblog.Service.UserService;
 import com.example.xhbblog.pojo.Comment;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +23,9 @@ public class CommentController {   //后台评论只有查找和删除逻辑,添
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/commentList")
     public String list(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "100")Integer count, Model model)
@@ -50,4 +54,14 @@ public class CommentController {   //后台评论只有查找和删除逻辑,添
         return "admin/commentList";
     }
 
+    @RequestMapping("/listByUid")
+    public String listByUid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count,Integer uid,Model model)
+    {
+        model.addAttribute("limit","uid="+uid);
+        model.addAttribute("user",userService.get(uid));
+        PageHelper.offsetPage(start,count);
+        List<Comment> comments=commentService.listByUid(uid);
+        model.addAttribute("page",new PageInfo<Comment>(comments));
+        return "admin/commentList";
+    }
 }

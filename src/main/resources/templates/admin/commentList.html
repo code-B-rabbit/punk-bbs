@@ -35,10 +35,15 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/admin/articleList">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">
+            <li th:if="${article}" class="breadcrumb-item active" aria-current="page">
                 <a class="text-info" th:text="${article.title}" th:href="@{getArticle(id=${article.id})}">
                     ****
-                </a>的评论
+                </a>的所有评论
+            </li>
+            <li th:if="${user}" class="breadcrumb-item active" aria-current="page">
+                <a class="text-info" th:text="${user.name}">
+                    ****
+                </a>的所有评论
             </li>
         </ol>
     </nav>
@@ -62,11 +67,17 @@
             <th scope="row" th:text="${comment.id}">1</th>
             <td th:text="${comment.article.title}">单表增删改查</td>
             <td th:text="${#dates.format(comment.createTime,'yyyy-MM-dd')}"></td>
-            <td th:text="${comment.visitor_name}">徐浩博</td>
-            <td><span th:each="child:${comment.childs}" th:text="${child.visitor_name}">徐浩博</span></td>
+            <td>
+                <a th:text="${comment.visitor_name}" th:href="@{/admin/listByUid(uid=${comment.uid})}">徐浩博</a>
+            </td>
+            <td>
+                <span>
+                    <a style="margin: 0 5px"  th:each="child:${comment.childs}" th:href="@{/admin/listByUid(uid=${child.uid})}" th:text="${child.visitor_name}"></a>
+                </span>
+            </td>
             <td th:text="${comment.visitor_email}">511928849@qq.com</td>
             <td th:text="${comment.content}" colspan="3">511928849@qq.com.........................</td>
-            <td><a type="button" th:href="@{deleteComment(id=${comment.id},aid=${article.id})}" class="btn btn-danger">删除</a></td>
+            <td><a type="button" th:href="@{deleteComment(id=${comment.id},aid=${comment.article.id})}" class="btn btn-danger">删除</a></td>
         </tr>
         </tbody>
     </table>

@@ -30,7 +30,8 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
 </head>
 <nav th:replace="admin/nav::admin_nav(7)"></nav>
-<body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<body class="bg-info">
 <script th:inline="javascript">
     var msg=[[${message}]];
     if(msg)
@@ -39,58 +40,75 @@
     }
 </script>
 <div class="container">
-    <form id="form" method="post" action="/admin/changeAccount">
-    <div class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Small</span>
+    <div class="row justify-content-center" style="height: 520px">
+        <div class="align-self-center">
+            <div class="card">
+                <div class="card-header">
+                    管理员账户管理
+                </div>
+                <div class="card-body">
+                    <form id="form" method="post" action="/admin/changeAccount">
+                        <div class="input-group input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing">姓名</span>
+                            </div>
+                            <input id="name" type="text" name="name" th:value="${session.user.name}" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="hidden" name="id" th:value="${session.user.id}"/>
+                            <input type="password" id="password" name="password" th:value="${session.user.password}" class="form-control" placeholder="密码" aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="button-show">点我显示</button>
+                            </div>
+                            <script>
+                                $(function () {
+                                    hide=true;        //全局的是否隐藏的变量
+                                    $("#button-show").click(
+                                        function () {
+                                            hide=!hide;
+                                            if(hide==true)
+                                            {
+                                                $('#password').attr('type','password');
+                                                $(this).text("点我显示");
+                                            }else
+                                            {
+                                                $('#password').attr('type','text');
+                                                $(this).text("点我隐藏");
+                                            }
+                                        }
+                                    );
+                                    $(".btn-outline-info").click(function(){
+                                        if($('#password').val()==""||$('#password').val()==null||$('#name').val()==""||$('#name').val()==null)            //表单校验
+                                        {
+                                            alert("请将个人信息填写完整!!!")
+                                            return;
+                                        }else
+                                        {
+                                            d = confirm("真的要对账号密码进行修改吗???");
+                                            if(d==true)
+                                            {
+                                                $("#form").submit();
+                                            }else
+                                            {
+                                                return;
+                                            }
+                                        }
+                                    });
+                                })
+                            </script>
+                        </div>
+                        <div class="input-group input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="ema">邮箱</span>
+                            </div>
+                            <input  type="email" name="email" th:value="${session.user.email}" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </form>
+                    <button type="submit" class="btn btn-outline-info">提交修改</button>
+                </div>
+            </div>
         </div>
-        <input id="name" type="text" name="name" th:value="${session.user.name}" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
     </div>
-    <div class="input-group mb-3">
-        <input type="hidden" name="id" th:value="${session.user.id}"/>
-        <input type="password" id="password" name="password" th:value="${session.user.password}" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" id="button-addon2">点我显示</button>
-        </div>
-        <script>
-            $(function () {
-                hide=true;        //全局的是否隐藏的变量
-                $("#button-addon2").click(
-                    function () {
-                        hide=!hide;
-                        if(hide==true)
-                        {
-                            $('#password').attr('type','password');
-                            $(this).text("点我显示");
-                        }else
-                        {
-                            $('#password').attr('type','text');
-                            $(this).text("点我隐藏");
-                        }
-                    }
-                );
-                $(".btn-outline-info").click(function(){
-                    if($('#password').val()==""||$('#password').val()==null||$('#name').val()==""||$('#name').val()==null)            //表单校验
-                    {
-                        alert("请将个人信息填写完整!!!")
-                        return;
-                    }else
-                    {
-                        d = confirm("真的要对账号密码进行修改吗???");
-                        if(d==true)
-                        {
-                            $("#form").submit();
-                        }else
-                        {
-                            return;
-                        }
-                    }
-                });
-            })
-        </script>
-    </div>
-    </form>
-    <button type="submit" class="btn btn-outline-info">提交修改</button>
 </div>
 </div>
 </body>

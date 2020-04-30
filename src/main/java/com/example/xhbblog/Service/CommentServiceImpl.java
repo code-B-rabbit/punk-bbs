@@ -88,4 +88,9 @@ public class CommentServiceImpl implements CommentService{
     public Integer countOfComment(Integer aid) {
         return mapper.countOfComment(aid);
     }
+
+    @Override
+    public List<Comment> listByUid(Integer aid) {
+        return mapper.listByUid(aid);       //给后台查看评论使用的接口
+    }
 }

@@ -36,7 +36,6 @@ public class FriendlyLinkController {          //这里提供改和同意以及�
     @RequestMapping("/addFl")
     public String add(FriendlyLink fl,boolean agree)
     {
-        System.out.println(agree);
         friendLyLinkService.add(fl);
         return "redirect:/admin/flList?agree="+agree;
     }

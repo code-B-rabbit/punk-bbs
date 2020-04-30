@@ -4,6 +4,7 @@
     background-position: center center;
 }
 
+
 .sec2{
     background: url(../img/divider-bg.jpg);
     background-size: cover;
@@ -15,3 +16,16 @@
     background-size: cover;
     background-position: center center;
 }
+
+*{
+    font-family: "Playfair Display", serif!important;
+}
+
+.post:hover {
+    -webkit-transform: translateY(-5px);
+    -ms-transform: translateY(-5px) ;
+    transform: translateY(-5px);
+    -webkit-box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+

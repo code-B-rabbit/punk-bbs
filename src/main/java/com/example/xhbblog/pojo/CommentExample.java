@@ -312,146 +312,6 @@ public class CommentExample {
             return (Criteria) this;
         }
 
-        public Criteria andVisitor_nameIsNull() {
-            addCriterion("visitor_name is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_nameIsNotNull() {
-            addCriterion("visitor_name is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_nameEqualTo(String value) {
-            addCriterion("visitor_name =", value, "visitor_name");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_nameNotEqualTo(String value) {
-            addCriterion("visitor_name <>", value, "visitor_name");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_nameGreaterThan(String value) {
-            addCriterion("visitor_name >", value, "visitor_name");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_nameGreaterThanOrEqualTo(String value) {
-            addCriterion("visitor_name >=", value, "visitor_name");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_nameLessThan(String value) {
-            addCriterion("visitor_name <", value, "visitor_name");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_nameLessThanOrEqualTo(String value) {
-            addCriterion("visitor_name <=", value, "visitor_name");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_nameLike(String value) {
-            addCriterion("visitor_name like", value, "visitor_name");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_nameNotLike(String value) {
-            addCriterion("visitor_name not like", value, "visitor_name");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_nameIn(List<String> values) {
-            addCriterion("visitor_name in", values, "visitor_name");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_nameNotIn(List<String> values) {
-            addCriterion("visitor_name not in", values, "visitor_name");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_nameBetween(String value1, String value2) {
-            addCriterion("visitor_name between", value1, value2, "visitor_name");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_nameNotBetween(String value1, String value2) {
-            addCriterion("visitor_name not between", value1, value2, "visitor_name");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_emailIsNull() {
-            addCriterion("visitor_email is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_emailIsNotNull() {
-            addCriterion("visitor_email is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_emailEqualTo(String value) {
-            addCriterion("visitor_email =", value, "visitor_email");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_emailNotEqualTo(String value) {
-            addCriterion("visitor_email <>", value, "visitor_email");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_emailGreaterThan(String value) {
-            addCriterion("visitor_email >", value, "visitor_email");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_emailGreaterThanOrEqualTo(String value) {
-            addCriterion("visitor_email >=", value, "visitor_email");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_emailLessThan(String value) {
-            addCriterion("visitor_email <", value, "visitor_email");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_emailLessThanOrEqualTo(String value) {
-            addCriterion("visitor_email <=", value, "visitor_email");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_emailLike(String value) {
-            addCriterion("visitor_email like", value, "visitor_email");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_emailNotLike(String value) {
-            addCriterion("visitor_email not like", value, "visitor_email");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_emailIn(List<String> values) {
-            addCriterion("visitor_email in", values, "visitor_email");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_emailNotIn(List<String> values) {
-            addCriterion("visitor_email not in", values, "visitor_email");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_emailBetween(String value1, String value2) {
-            addCriterion("visitor_email between", value1, value2, "visitor_email");
-            return (Criteria) this;
-        }
-
-        public Criteria andVisitor_emailNotBetween(String value1, String value2) {
-            addCriterion("visitor_email not between", value1, value2, "visitor_email");
-            return (Criteria) this;
-        }
-
         public Criteria andParentIDIsNull() {
             addCriterion("parentID is null");
             return (Criteria) this;
@@ -509,6 +369,66 @@ public class CommentExample {
 
         public Criteria andParentIDNotBetween(Integer value1, Integer value2) {
             addCriterion("parentID not between", value1, value2, "parentID");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidIsNull() {
+            addCriterion("uid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidIsNotNull() {
+            addCriterion("uid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidEqualTo(Integer value) {
+            addCriterion("uid =", value, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidNotEqualTo(Integer value) {
+            addCriterion("uid <>", value, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidGreaterThan(Integer value) {
+            addCriterion("uid >", value, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("uid >=", value, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidLessThan(Integer value) {
+            addCriterion("uid <", value, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidLessThanOrEqualTo(Integer value) {
+            addCriterion("uid <=", value, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidIn(List<Integer> values) {
+            addCriterion("uid in", values, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidNotIn(List<Integer> values) {
+            addCriterion("uid not in", values, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidBetween(Integer value1, Integer value2) {
+            addCriterion("uid between", value1, value2, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidNotBetween(Integer value1, Integer value2) {
+            addCriterion("uid not between", value1, value2, "uid");
             return (Criteria) this;
         }
     }

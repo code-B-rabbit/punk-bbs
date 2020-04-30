@@ -26,9 +26,6 @@ public class MessageController {
     {
         PageHelper.offsetPage(start,count);
         List<Message> list = messageService.list();
-        for (Message message : list) {
-            System.out.println(message.getContent());
-        }
         model.addAttribute("page",new PageInfo<Message>(list));
         return "admin/messageList";
     }

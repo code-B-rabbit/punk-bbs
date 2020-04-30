@@ -5,9 +5,8 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="aid" property="aid" jdbcType="INTEGER" />
     <result column="createTime" property="createTime" jdbcType="DATE" />
-    <result column="visitor_name" property="visitor_name" jdbcType="VARCHAR" />
-    <result column="visitor_email" property="visitor_email" jdbcType="VARCHAR" />
     <result column="parentID" property="parentID" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.example.xhbblog.pojo.Comment" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
@@ -42,7 +41,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, aid, createTime, visitor_name, visitor_email, parentID
+    id, aid, createTime, parentID, uid
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -92,12 +91,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.example.xhbblog.pojo.Comment" useGeneratedKeys="true" keyProperty="id" >
-    insert into comment (aid, createTime, visitor_name, 
-      visitor_email, parentID, content
-      )
-    values (#{aid,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, #{visitor_name,jdbcType=VARCHAR}, 
-      #{visitor_email,jdbcType=VARCHAR}, #{parentID,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
-      )
+    insert into comment (aid, createTime, parentID, 
+      uid, content)
+    values (#{aid,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, #{parentID,jdbcType=INTEGER}, 
+      #{uid,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.xhbblog.pojo.Comment" useGeneratedKeys="true" keyProperty="id" >
     insert into comment
@@ -108,14 +105,11 @@
       <if test="createTime != null" >
         createTime,
       </if>
-      <if test="visitor_name != null" >
-        visitor_name,
-      </if>
-      <if test="visitor_email != null" >
-        visitor_email,
-      </if>
       <if test="parentID != null" >
         parentID,
+      </if>
+      <if test="uid != null" >
+        uid,
       </if>
       <if test="content != null" >
         content,
@@ -128,14 +122,11 @@
       <if test="createTime != null" >
         #{createTime,jdbcType=DATE},
       </if>
-      <if test="visitor_name != null" >
-        #{visitor_name,jdbcType=VARCHAR},
-      </if>
-      <if test="visitor_email != null" >
-        #{visitor_email,jdbcType=VARCHAR},
-      </if>
       <if test="parentID != null" >
         #{parentID,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
@@ -151,14 +142,11 @@
       <if test="createTime != null" >
         createTime = #{createTime,jdbcType=DATE},
       </if>
-      <if test="visitor_name != null" >
-        visitor_name = #{visitor_name,jdbcType=VARCHAR},
-      </if>
-      <if test="visitor_email != null" >
-        visitor_email = #{visitor_email,jdbcType=VARCHAR},
-      </if>
       <if test="parentID != null" >
         parentID = #{parentID,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
       </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
@@ -170,9 +158,8 @@
     update comment
     set aid = #{aid,jdbcType=INTEGER},
       createTime = #{createTime,jdbcType=DATE},
-      visitor_name = #{visitor_name,jdbcType=VARCHAR},
-      visitor_email = #{visitor_email,jdbcType=VARCHAR},
       parentID = #{parentID,jdbcType=INTEGER},
+      uid = #{uid,jdbcType=INTEGER},
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -180,9 +167,8 @@
     update comment
     set aid = #{aid,jdbcType=INTEGER},
       createTime = #{createTime,jdbcType=DATE},
-      visitor_name = #{visitor_name,jdbcType=VARCHAR},
-      visitor_email = #{visitor_email,jdbcType=VARCHAR},
-      parentID = #{parentID,jdbcType=INTEGER}
+      parentID = #{parentID,jdbcType=INTEGER},
+      uid = #{uid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

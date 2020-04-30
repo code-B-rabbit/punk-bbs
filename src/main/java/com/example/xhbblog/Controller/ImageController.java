@@ -20,6 +20,9 @@ import java.util.Map;
 public class ImageController {
 
     @Autowired
+    private QnUploadService qnUploadService;
+
+    @Autowired
     private QiniuUtil qiniuUtil;
 
     @Autowired
@@ -27,7 +30,7 @@ public class ImageController {
 
     @RequestMapping("/uploadImage")          //通过七牛云进行文件上传
     public Map upload(HttpServletRequest request, HttpServletResponse response,
-                         @RequestParam(value = "editormd-image-file", required = false) MultipartFile file) throws IOException {
+                         @RequestParam(value= "editormd-image-file",  required = true) MultipartFile file) throws IOException {
         FileInputStream fileInputStream = (FileInputStream) file.getInputStream();
         String originalFilename = file.getOriginalFilename();
         String fileExtend = originalFilename.substring(originalFilename.lastIndexOf("."));
@@ -47,6 +50,8 @@ public class ImageController {
         anw.put("message", "upload success!");
         return anw;
     }
+
+
 
 
 }

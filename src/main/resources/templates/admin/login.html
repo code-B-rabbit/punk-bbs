@@ -30,48 +30,55 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
 </head>
-<body>
+<body class="bg-info">
 <div class="container">
-    <script th:inline="javascript">
-        var msg=[[${message}]];
-        if(msg)
-        {
-            alert(msg);          //修改回显
-        }
-    </script>
-    <h1>后台管理登录</h1>
-<form method="post" action="/admin/checkUser">
-    <div class="form-group">
-        <label for="exampleInputEmail1">name</label>
-        <input type="name" name="name" class="form-control" id="exampleInputEmail1" placeholder="请输入您的用户名">
-    </div>
-    <div class="input-group mb-3">
-        <input type="password" id="exampleInputPassword1" name="password" class="form-control" placeholder="请输入密码" aria-label="Recipient's username" aria-describedby="button-addon2"/>
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" id="button-addon2">点我显示</button>
+    <div class="row justify-content-center" style="height: 500px">
+        <div class="align-self-center">
+            <script th:inline="javascript">
+                var msg=[[${message}]];
+                if(msg)
+                {
+                    alert(msg);          //修改回显
+                }
+            </script>
+            <div class="card">
+                <div class="card-header">后台管理登录</div>
+                <div class="card-body">
+                    <form method="post" action="/admin/checkUser">
+                        <div class="form-group">
+                            <input type="name" name="name" class="form-control" id="exampleInputEmail1" placeholder="请输入您的用户名">
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="password" id="exampleInputPassword1" name="password" class="form-control" placeholder="请输入密码" aria-label="Recipient's username" aria-describedby="button-addon2"/>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">显示密码</button>
+                            </div>
+                        </div>
+                        <button id="submit" type="submit" class="btn btn-block btn-info btn-default">登录</button>
+                        <script>
+                            $(function () {
+                                hide=true;        //全局的是否隐藏的变量
+                                $("#button-addon2").click(
+                                    function () {
+                                        hide=!hide;
+                                        if(hide==true)
+                                        {
+                                            $('#exampleInputPassword1').attr('type','password');
+                                            $(this).text("点我显示");
+                                        }else
+                                        {
+                                            $('#exampleInputPassword1').attr('type','text');
+                                            $(this).text("点我隐藏");
+                                        }
+                                    }
+                                );
+                            })
+                        </script>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-    <button id="submit" type="submit" class="btn btn-warning btn-default">Submit</button>
-    <script>
-        $(function () {
-            hide=true;        //全局的是否隐藏的变量
-            $("#button-addon2").click(
-                function () {
-                    hide=!hide;
-                    if(hide==true)
-                    {
-                        $('#exampleInputPassword1').attr('type','password');
-                        $(this).text("点我显示");
-                    }else
-                    {
-                        $('#exampleInputPassword1').attr('type','text');
-                        $(this).text("点我隐藏");
-                    }
-                }
-            );
-        })
-    </script>
-</form>
 </div>
 </body>
 </html>

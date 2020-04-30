@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
@@ -34,33 +35,37 @@ public class ForeController {
     private MessageService messageService;
 
 
-    @RequestMapping("/")
-    public String fore(Model model)         //主页访问
+
+    @RequestMapping("/aboutMe")
+    public String aboutMe(Model model)         //主页访问
     {
         model.addAttribute("articles", articleService.foreArticle());
         model.addAttribute("lastestArticles", articleService.getLastestArticle());
         model.addAttribute("fls", friendLyLinkService.ListOf(true));
-        return "index";
+        return "home";
     }
 
-    @RequestMapping("/articles")
-    public String articles(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "4") Integer count, Model model) {
+
+    @RequestMapping({"/","/articles"})
+    public String articles(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "6") Integer count, Model model) {
         PageHelper.offsetPage(start, count);
         List<ArticleWithBLOBs> all = articleService.findAll();
         model.addAttribute("page", new PageInfo<ArticleWithBLOBs>(all));
         model.addAttribute("lastestArticles", articleService.findLastestArticle());
         model.addAttribute("tags", tagService.list());
+        model.addAttribute("visitMoreArticles", articleService.foreArticle());
         model.addAttribute("fls", friendLyLinkService.ListOf(true));   //友链
-        model.addAttribute("title","博客列表");   //用于显示标题
+        model.addAttribute("title","XHB's Blog");   //用于显示标题
         return "blog";
     }
 
     @RequestMapping("/articlesByTag")
-    public String articles(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "4") Integer count, Model model, Integer tid) {
+    public String articles(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "6") Integer count, Model model, Integer tid) {
         PageHelper.offsetPage(start, count);
         List<ArticleWithBLOBs> all = articleService.findByTid(tid);
         model.addAttribute("page", new PageInfo<ArticleWithBLOBs>(all));
         model.addAttribute("lastestArticles", articleService.findLastestArticle());
+        model.addAttribute("visitMoreArticles", articleService.foreArticle());
         model.addAttribute("tags", tagService.list());
         model.addAttribute("fls", friendLyLinkService.ListOf(true));   //友链
         model.addAttribute("tid",tid);
@@ -93,7 +98,6 @@ public class ForeController {
     public String article(Integer id,Model model)
     {
         ArticleWithBLOBs article=articleService.findById(id);
-        //System.out.println(article);
         if(article.getVisit()==null)
         {
             article.setVisit(new Long(1));
@@ -102,9 +106,6 @@ public class ForeController {
             article.setVisit(article.getVisit()+1);           //访问量加1
         }
         model.addAttribute("art",articleService.findById(id));   //所查找到的文章
-        model.addAttribute("lastestArticles", articleService.findLastestArticle());
-        //model.addAttribute("comments",commentService.findByAid(id));
-        model.addAttribute("tags", tagService.list());
         model.addAttribute("fls", friendLyLinkService.ListOf(true));   //友链
         articleService.update(article);
         return "post";
@@ -123,7 +124,8 @@ public class ForeController {
     }
 
     @RequestMapping("/comments")
-    public String comments(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "5") Integer count, Model model,Integer aid)
+    public String comments(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "5") Integer count, Model model,Integer aid
+                           )
     {
         Integer total=commentService.countOfArticle(aid);
         Integer commentSize=commentService.countOfComment(aid);
@@ -136,8 +138,10 @@ public class ForeController {
     }
 
     @RequestMapping("/Addcomment")
-    public String comments(Model model,Integer aid,Comment comment)
+    public String comments(Model model,Integer aid,Comment comment,HttpSession session)
     {
+        User user= (User) session.getAttribute("user");
+        comment.setUid(user.getId());             //设置评论的用户ID
         comment.setCreateTime(new Date());
         commentService.add(comment);
         return "redirect:/comments?aid="+aid;
@@ -179,5 +183,11 @@ public class ForeController {
         message.setCreateTime(new Date());
         messageService.add(message);
         return "redirect:/messageList";
+    }
+
+    @RequestMapping("/searchAnswer")
+    public String search()
+    {
+        return "searchAnswer";
     }
 }

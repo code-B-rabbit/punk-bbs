@@ -8,11 +8,32 @@ public class Comment {
 
     private Integer aid;
 
-    private Article article;   //映射的文章
+    private Date createTime;
 
-    private String parentVisitorName;   //父评论的用户名
+    private Integer parentID;
 
-    private List<Comment> childs;     //该评论的回复
+    private Integer uid;
+
+    private String content;
+
+    //四个映射类属性
+    private Article article;        //多对一映射
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
+
+    private String visitor_name;
+
+    private String visitor_email;
+
+    private String parentVisitorName;
+
+    private List<Comment> childs;
 
     public String getParentVisitorName() {
         return parentVisitorName;
@@ -30,23 +51,21 @@ public class Comment {
         this.childs = childs;
     }
 
-    public Article getArticle() {
-        return article;
+    public String getVisitor_name() {
+        return visitor_name;
     }
 
-    public void setArticle(Article article) {
-        this.article = article;
+    public void setVisitor_name(String visitor_name) {
+        this.visitor_name = visitor_name;
     }
 
-    private Date createTime;
+    public String getVisitor_email() {
+        return visitor_email;
+    }
 
-    private String visitor_name;
-
-    private String visitor_email;
-
-    private Integer parentID;
-
-    private String content;
+    public void setVisitor_email(String visitor_email) {
+        this.visitor_email = visitor_email;
+    }
 
     public Integer getId() {
         return id;
@@ -72,28 +91,20 @@ public class Comment {
         this.createTime = createTime;
     }
 
-    public String getVisitor_name() {
-        return visitor_name;
-    }
-
-    public void setVisitor_name(String visitor_name) {
-        this.visitor_name = visitor_name == null ? null : visitor_name.trim();
-    }
-
-    public String getVisitor_email() {
-        return visitor_email;
-    }
-
-    public void setVisitor_email(String visitor_email) {
-        this.visitor_email = visitor_email == null ? null : visitor_email.trim();
-    }
-
     public Integer getParentID() {
         return parentID;
     }
 
     public void setParentID(Integer parentID) {
         this.parentID = parentID;
+    }
+
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
     }
 
     public String getContent() {

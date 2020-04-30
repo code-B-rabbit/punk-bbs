@@ -93,12 +93,12 @@
         </div>
     </div>
     <div class="jumbotron">
-        <h1 id='text' class="display-4">“留言板”</h1>
+        <h1 id='text' class="display-4"></h1>
         <script>
             let divTyping = document.getElementById('text')
             let i = 0,
                 timer = 0,
-                str = '“留言板”'
+                str = '留言板'
 
             function typing () {
                 if (i <= str.length) {
@@ -116,7 +116,7 @@
         <p class="lead">这是一个简易的留言板</p>
         <hr class="my-4">
         <p>你可以在下面匿名或者实名留下你对本站的意见(例如界面很丑啥的)</p>
-        <a class="btn btn-primary btn-lg" href="#" role="button">开始留言</a>
+        <a class="btn btn-primary btn-lg" id="start" href="#" role="button">开始留言</a>
     </div>
     <div  id="card">
     </div>
@@ -129,6 +129,12 @@
     </div>
     <script th:inline="javascript">
         $(function () {
+            $('a#start').click(
+                function () {
+                    $('html,body').animate({scrollTop:$('#card').offset().top}, 800);
+                }
+            );
+
             $('div#card').load(
                 '/messageList',function () {
                 }
@@ -227,6 +233,7 @@
     </div>
 </footer>
 <!-- JavaScript files-->
+<script src="../static/js/wordOut.js" th:src="@{/js/wordOut.js}"></script>
 <script src="../static/vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
 <script src="../static/vendor/popper.js/umd/popper.min.js" th:src="@{/vendor/popper.js/umd/popper.min.js}"> </script>
 <script src="../static/vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>

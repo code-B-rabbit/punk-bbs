@@ -7,19 +7,29 @@
 <body>
 <nav aria-label="Page navigation example" th:fragment="page">
     <ul class="pagination pagination-template d-flex justify-content-center">
-        <li class="page-item">
-            <a th:classappend="${page.hasPreviousPage}?'disabled'" th:href="|?start=${page.pageSize*(page.pageNum-2)}&${limit}|" class="page-link">
-                <i class="fa fa-angle-left"></i>
-            </a>
-        </li>
         <li class="page-item" th:if="${page.hasPreviousPage}"><a th:href="|?start=${page.pageSize*(page.pageNum-2)}&${limit}|" th:text="${page.pageNum-1}" href="#" class="page-link active">1</a></li>
         <li class="page-item  active"><a th:text="${page.pageNum}" href="#" class="page-link">2</a></li>
-        <li class="page-item" th:if="${page.hasNextPage}"><a th:href="|?start=${page.pageNum*page.pageSize}&${limit}|" th:text="${page.pageNum+1}" href="#" class="page-link">3</a></li>
-        <li class="page-item">
-            <a th:classappend="${page.hasNextPage}?'disabled'" href="#" th:href="|?start=${page.pageNum*page.pageSize}&${limit}|" class="page-link">
-                <i class="fa fa-angle-right"></i>
+        <li class="page-item" th:if="${page.pageNum+1<page.pages}">
+            <a th:text="${page.pageNum+1}" th:href="|?start=${page.pageNum*page.pageSize}&${limit}|" href="#" class="page-link">
             </a>
         </li>
+
+        <li class="page-item" th:if="${page.pageNum+2<page.pages}">
+            <a th:href="|?start=${(page.pageNum+1)*page.pageSize}&${limit}|" href="#" class="page-link">
+                <svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 512 512'>
+                    <title>ionicons-v5-f</title>
+                    <circle cx='256' cy='256' r='32' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px'/>
+                    <circle cx='416' cy='256' r='32' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px'/>
+                    <circle cx='96' cy='256' r='32' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px'/>
+                </svg>
+            </a>
+        </li>
+
+        <li class="page-item" th:if="${page.hasNextPage}">
+            <a th:text="${page.pages}" th:classappend="${page.hasNextPage}?'disabled'" href="#" th:href="|?start=${page.pages*page.pageSize}&${limit}|" class="page-link">
+            </a>
+        </li>
+
     </ul>
 </nav>
 </body>

@@ -131,7 +131,6 @@
               <strong>Look</strong>, if you had one shot, or one opportunity
               To seize everything you ever wanted, one moment
               Would you capture it or just let it slip?
-<!--              Place a nice <strong>introduction</strong> here <strong>to catch reader's attention</strong>. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderi.-->
             </p>
           </div>
         </div>
@@ -150,7 +149,7 @@
                     <h2 class="h4" th:text="${a.title}">Alberto Savoia Can Teach You About Interior</h2>
                   </a>
                 </header>
-                <p th:text="|${#strings.abbreviate(a.info,200)}.....|">
+                <p th:text="${a.info}">
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrude consectetur adipisicing elit, sed do eiusmod tempor incididunt.
                 </p>
                 <footer class="post-footer d-flex align-items-center">
@@ -181,14 +180,14 @@
             </div>
           </div>
           <div class="image col-lg-5">
-              <a th:href="@{/article(id=${a.id})}"><img th:src="@{${a.firstPicture}}"  src="../static/img/featured-pic-1.jpeg" alt="..."></a>
+              <a th:href="@{/article(id=${a.id})}"><img th:src="@{${a.firstPicture}}" class="images"  src="../static/img/featured-pic-1.jpeg" alt="..."></a>
           </div>
         </div>
 
         <div th:if="${!sts.odd}" class="row d-flex align-items-stretch">
             <div class="image col-lg-5">
                 <a th:href="@{/article(id=${a.id})}">
-                    <img  th:src="@{${a.firstPicture}}"  src="../static/img/featured-pic-1.jpeg" alt="..."/>
+                    <img  th:src="@{${a.firstPicture}}" class="images"  src="../static/img/featured-pic-1.jpeg" alt="..."/>
                 </a>
             </div>
             <div  class="text col-lg-7">
@@ -200,14 +199,10 @@
                     <h2 class="h4" th:text="${a.title}">Alberto Savoia Can Teach You About Interior</h2>
                   </a>
                 </header>
-                <p th:text="|${#strings.abbreviate(a.info,200)}.....|">
+                <p th:text="${a.info}">
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrude consectetur adipisicing elit, sed do eiusmod tempor incididunt.
                 </p>
                 <footer class="post-footer d-flex align-items-center">
-                  <!--                  <a href="#" class="author d-flex align-items-center flex-wrap">-->
-                  <!--                    <div class="avatar"><img src="../static/img/avatar-1.jpg" alt="..." class="img-fluid"></div>-->
-                  <!--                    <div class="title"><span>徐浩博</span></div>-->
-                  <!--                  </a>-->
                     <div class="date">
                         <svg class="bi bi-eye" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 001.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0014.828 8a13.133 13.133 0 00-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 001.172 8z" clip-rule="evenodd"/>
@@ -273,7 +268,7 @@
                 <a href="post.html" th:href="@{article(id=${a.id})}">
                 <h3 class="h4" th:text="${a.title}">Ways to remember your important ideas</h3>
                 </a>
-              <p class="text-muted" th:text="|${#strings.abbreviate(a.info,150)}.....|">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
+              <p class="text-muted" th:text="${a.info}">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
             </div>
           </div>
         </div>
@@ -386,6 +381,41 @@
 
     </footer>
     <!-- JavaScript files-->
+    <script src="../static/js/wordOut.js" th:src="@{/js/wordOut.js}"></script>
+    <script type="text/javascript" >
+
+      //缩放图片到合适大小
+      function ResizeImages()
+      {
+        var myimg,oldwidth,oldheight;
+        var maxwidth=450;
+        var maxheight=300;
+        var imgs = document.getElementsByClassName('images');   //如果你定义的id不是article，请修改此处
+
+        for(i=0;i<imgs.length;i++){
+          myimg = imgs[i];
+
+          if(myimg.width > myimg.height)
+          {
+            if(myimg.width > maxwidth)
+            {
+              oldwidth = myimg.width;
+              myimg.height = myimg.height * (maxwidth/oldwidth);
+              myimg.width = maxwidth;
+            }
+          }else{
+            if(myimg.height > maxheight)
+            {
+              oldheight = myimg.height;
+              myimg.width = myimg.width * (maxheight/oldheight);
+              myimg.height = maxheight;
+            }
+          }
+        }
+      }
+      //缩放图片到合适大小
+      ResizeImages();
+    </script>
     <script src="../static/vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
     <script src="../static/vendor/popper.js/umd/popper.min.js" th:src="@{/vendor/popper.js/umd/popper.min.js}"> </script>
     <script src="../static/vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>

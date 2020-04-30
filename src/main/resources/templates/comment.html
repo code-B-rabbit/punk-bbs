@@ -56,7 +56,7 @@
             </div>
             <button type="button" th:onclick="reply([[${comment.id}]],[[${comment.visitor_name}]])" class="btn btn-light float-right reply">回复</button>
                 </div>
-            <div class="comment-body">
+            <div class="comment-reply">
                 <p th:text="${comment.content}">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
             </div>
             </div>
@@ -81,6 +81,7 @@
         <script th:inline="javascript">
         $(function () {
             aid=[[${aid}]];
+            anw = [[${session.user}]];
             list=function (start) {
                 $('div.post-comments').load(
                     '/comments',{'aid':aid,'start':start},function () {
@@ -89,26 +90,29 @@
                 )
             };
             reply=function (id,name) {
-                $('#exampleModal').modal('show');
-                $('.modal-title').text("回复  "+name+" 的评论:");
-                $('input.parentId').val(id);
+                if(anw==null)
+                {
+                    alert("请先登录");
+                    window.location.href="/user/login";
+                }else
+                {
+                    $('#exampleModal').modal('show');
+                    $('.modal-title').text("回复  "+name+" 的评论:");
+                    $('input.parentId').val(id);
+                }
             };
             submit=function () {
-                visitor_name=$('input.visitor_name').val();
-                visitor_email=$('input.visitor_email').val();
                 content=$('textarea.content').val();
                 parentID=$('input.parentId').val();
-                if(visitor_name==""||visitor_email==""||content=="")
+                if(content=="")
                 {
                     alert("请将个人信息填写完整,谢谢");
                     return;
                 }
-                data={'visitor_name':visitor_name,'visitor_email':visitor_email,'content':content,'aid':aid,'parentID':parentID};
+                data={'content':content,'aid':aid,'parentID':parentID};
                 $('#exampleModal').on('hidden.bs.modal',function () {
                     $('div.post-comments').load(
                         '/Addcomment',data,function () {
-                            $('input.visitor_name').val("");
-                            $('input.visitor_email').val("");
                             $('input.parentId').val("");
                             $('textarea.content').val("");
                         }
@@ -118,8 +122,10 @@
             }
         })
         </script>
-        </div>
-            <div class="modal fade" id="exampleModal" tabindex="-999999" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-999999" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -129,15 +135,7 @@
         </button>
       </div>
       <div class="modal-body">
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label">您的姓名:</label>
-            <input type="text" class="form-control visitor_name" >
               <input type="hidden" class="parentId"/>
-          </div>
-            <div class="form-group">
-            <label for="recipient-name" class="col-form-label">您的电子邮箱:</label>
-            <input type="text" class="form-control visitor_email" id="recipient-name">
-          </div>
           <div class="form-group">
             <label for="message-text" class="col-form-label">您的回复信息:</label>
             <textarea class="form-control content" id="message-text"></textarea>

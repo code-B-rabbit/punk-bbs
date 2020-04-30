@@ -39,6 +39,7 @@ public interface ArticleMapper {
             @Result(property = "nextId",column = "id",one = @One(select = "com.example.xhbblog.mapper.ArticleMapper.findNextId")),
             @Result(property = "lastName",column = "id",one = @One(select = "com.example.xhbblog.mapper.ArticleMapper.findLastName")),
             @Result(property = "lastId",column = "id",one = @One(select = "com.example.xhbblog.mapper.ArticleMapper.findLastId")),
+            @Result(property = "commentSize",column = "id",one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment")),
     })
     ArticleWithBLOBs findById(Integer id);
 
@@ -134,7 +135,7 @@ public interface ArticleMapper {
     @Select("select count(*) from article where tid=#{tid}")
     Integer countOfTag(Integer tid);        //同样用于后台不需要考虑published
 
-    @Select("select * from article where published=true order by visit desc limit 2")     //最热门的访问文章
+    @Select("select * from article where published=true order by visit desc limit 3")     //最热门的访问文章
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),

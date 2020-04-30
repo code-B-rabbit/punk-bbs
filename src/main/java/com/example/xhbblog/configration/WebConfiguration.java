@@ -18,7 +18,4 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         .addPathPatterns("/admin/**").excludePathPatterns("/admin/adminLogin/**")
         .excludePathPatterns("/admin/checkUser");
     }
-
-    public static void main(String[] args) {
-    }
 }

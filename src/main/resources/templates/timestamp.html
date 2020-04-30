@@ -78,12 +78,12 @@
 </header>
 <div class="container">
     <div class="jumbotron">
-        <h1 id='text' class="display-4">“时间轴”</h1>
+        <h1 id='text' class="display-4"></h1>
         <script>
             let divTyping = document.getElementById('text')
             let i = 0,
                 timer = 0,
-                str = '“时间轴”'
+                str = '时间轴'
 
             function typing () {
                 if (i <= str.length) {
@@ -98,6 +98,7 @@
 
             typing()
         </script>
+        <script src="../static/js/wordOut.js" th:src="@{/js/wordOut.js}"></script>
         <p class="lead">仅仅是一个记录的地方</p>
         <hr class="my-4">
         <p>记录了本站的文章归档</p>
