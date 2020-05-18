@@ -1,9 +1,11 @@
 package com.example.xhbblog.pojo;
 
-public class ArticleWithBLOBs extends Article {
+import java.io.Serializable;
+
+public class ArticleWithBLOBs extends Article implements Serializable {
     private String content;
 
-    private String info;            //博客介绍
+    private String info;
 
     public String getContent() {
         return content;

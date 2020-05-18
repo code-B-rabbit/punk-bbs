@@ -46,7 +46,7 @@
         <tr th:each="msg:${page.list}">
             <th scope="row" th:text="${msg.id}">1</th>
             <td th:text="${msg.content}">数据结构与算法</td>
-            <td th:text="${msg.createTime}">数据结构与算法</td>
+            <td th:text="${#dates.format(msg.createTime,'yyyy-mm-dd hh:mm:ss')}" >数据结构与算法</td>
             <td><a type="button" th:href="@{deleteMessage(id=${msg.id})}" class="btn btn-danger">删除</a></td>
         </tr>
         </tbody>
@@ -57,4 +57,37 @@
 </div>
 </div>
 </body>
+<footer class="main-footer" th:replace="admin/foot::foot">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="logo">
+                    <h6 class="text-white">徐浩博的技术小站</h6>
+                </div>
+                <div class="contact-details">
+                    <p>Phone: 15690116825</p>
+                    <p>Email: 511928849@qq.com</a></p>
+                    <ul class="social-menu">
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-instagram"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-behance"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="menus d-flex">
+                    <ul class="list-unstyled">
+                        <li> <a>友链</a></li>
+                        <li> <a href="#" th:each="fl:${fls}" th:text="${fl.name}" th:href="${fl.link}">My Account</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+    </div>
+
+</footer>
 </html>

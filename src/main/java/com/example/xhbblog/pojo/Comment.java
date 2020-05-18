@@ -1,9 +1,10 @@
 package com.example.xhbblog.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Comment {
+public class Comment implements Serializable {
     private Integer id;
 
     private Integer aid;
@@ -17,7 +18,7 @@ public class Comment {
     private String content;
 
     //四个映射类属性
-    private Article article;        //多对一映射
+    private Article article;     //多对一映射
 
     public Article getArticle() {
         return article;

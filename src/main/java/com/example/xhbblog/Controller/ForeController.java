@@ -2,15 +2,13 @@ package com.example.xhbblog.Controller;
 
 import com.example.xhbblog.Service.*;
 import com.example.xhbblog.pojo.*;
+import com.example.xhbblog.util.PageInfoUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
@@ -36,30 +34,28 @@ public class ForeController {
 
 
 
-    @RequestMapping("/aboutMe")
+    @GetMapping("/aboutMe")
     public String aboutMe(Model model)         //主页访问
     {
         model.addAttribute("articles", articleService.foreArticle());
         model.addAttribute("lastestArticles", articleService.getLastestArticle());
-        model.addAttribute("fls", friendLyLinkService.ListOf(true));
         return "home";
     }
 
 
-    @RequestMapping({"/","/articles"})
+    @GetMapping({"/","/articles"})
     public String articles(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "6") Integer count, Model model) {
         PageHelper.offsetPage(start, count);
         List<ArticleWithBLOBs> all = articleService.findAll();
         model.addAttribute("page", new PageInfo<ArticleWithBLOBs>(all));
         model.addAttribute("lastestArticles", articleService.findLastestArticle());
         model.addAttribute("tags", tagService.list());
-        model.addAttribute("visitMoreArticles", articleService.foreArticle());
-        model.addAttribute("fls", friendLyLinkService.ListOf(true));   //友链
+        model.addAttribute("visitMoreArticles", articleService.foreArticle());   //最长访问的
         model.addAttribute("title","XHB's Blog");   //用于显示标题
         return "blog";
     }
 
-    @RequestMapping("/articlesByTag")
+    @GetMapping("/articlesByTag")
     public String articles(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "6") Integer count, Model model, Integer tid) {
         PageHelper.offsetPage(start, count);
         List<ArticleWithBLOBs> all = articleService.findByTid(tid);
@@ -67,47 +63,38 @@ public class ForeController {
         model.addAttribute("lastestArticles", articleService.findLastestArticle());
         model.addAttribute("visitMoreArticles", articleService.foreArticle());
         model.addAttribute("tags", tagService.list());
-        model.addAttribute("fls", friendLyLinkService.ListOf(true));   //友链
         model.addAttribute("tid",tid);
         model.addAttribute("limit","tid="+tid);
         model.addAttribute("title","标签:"+tagService.get(tid).getName());
         return "blog";
     }
 
-    @RequestMapping("/blogsearch")
-    public String articles(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "4") Integer count, Model model, String search) {
+    @GetMapping("/blogsearch")
+    public String articles(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "6") Integer count, Model model, String search) {
         PageHelper.offsetPage(start, count);
         List<ArticleWithBLOBs> all = articleService.findArticleLike(search);
         model.addAttribute("page", new PageInfo<ArticleWithBLOBs>(all));
         model.addAttribute("lastestArticles", articleService.findLastestArticle());
+        model.addAttribute("visitMoreArticles", articleService.foreArticle());
         model.addAttribute("tags", tagService.list());
-        model.addAttribute("fls", friendLyLinkService.ListOf(true));   //友链
         model.addAttribute("limit","search="+search);
         model.addAttribute("title",search+" 的搜索结果");
         return "blog";
     }
 
-    @RequestMapping("/addFriendLyLink")
+    @PostMapping("/addFriendLyLink")
     public @ResponseBody String addLink(@RequestBody FriendlyLink friendlyLink)
     {
         friendLyLinkService.add(friendlyLink);
         return "您的请求已经发出,请等待站主进行紧张地审核";
     }
 
-    @RequestMapping("/article")
+    @GetMapping("/article")
     public String article(Integer id,Model model)
     {
         ArticleWithBLOBs article=articleService.findById(id);
-        if(article.getVisit()==null)
-        {
-            article.setVisit(new Long(1));
-        }else
-        {
-            article.setVisit(article.getVisit()+1);           //访问量加1
-        }
-        model.addAttribute("art",articleService.findById(id));   //所查找到的文章
-        model.addAttribute("fls", friendLyLinkService.ListOf(true));   //友链
-        articleService.update(article);
+        articleService.incr(article);
+        model.addAttribute("art",article);   //所查找到的文章
         return "post";
     }
 
@@ -116,16 +103,12 @@ public class ForeController {
     {
         PageInfo<Comment> pageInfo=new PageInfo<Comment>(comments);
         pageInfo.setTotal(total);
-        pageInfo.setHasNextPage((start+count)<pageInfo.getTotal());
-        pageInfo.setHasPreviousPage(start-count>=0);
-        pageInfo.setPageNum(start/count+1);
-        pageInfo.setPageSize(count);
+        pageInfo= PageInfoUtil.get(pageInfo,start,count);
         return  pageInfo;
     }
 
-    @RequestMapping("/comments")
-    public String comments(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "5") Integer count, Model model,Integer aid
-                           )
+    @GetMapping("/comments")
+    public String comments(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "5") Integer count, Model model,Integer aid)
     {
         Integer total=commentService.countOfArticle(aid);
         Integer commentSize=commentService.countOfComment(aid);
@@ -137,7 +120,7 @@ public class ForeController {
         return "comment::comments";         //只返回分页后的列表
     }
 
-    @RequestMapping("/Addcomment")
+    @PostMapping("/Addcomment")
     public String comments(Model model,Integer aid,Comment comment,HttpSession session)
     {
         User user= (User) session.getAttribute("user");
@@ -147,10 +130,9 @@ public class ForeController {
         return "redirect:/comments?aid="+aid;
     }
 
-    @RequestMapping("timeLine")
+    @GetMapping("timeLine")
     public String timeLine(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "5") Integer count, Model model)
     {
-        model.addAttribute("fls", friendLyLinkService.ListOf(true));
         PageHelper.offsetPage(start,count);
         List<TimeLine> timeLines = articleService.timeLine();
         model.addAttribute("page",new PageInfo<TimeLine>(timeLines));
@@ -161,11 +143,10 @@ public class ForeController {
     @RequestMapping("/messages")
     public String messages(Model model)
     {
-        model.addAttribute("fls", friendLyLinkService.ListOf(true));
         return "messages";         //只返回分页后的列表
     }
 
-    @RequestMapping("/messageList")
+    @GetMapping("/messageList")
     public String messages(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "10") Integer count, Model model)
     {
         model.addAttribute("total",messageService.count());    //留言总数显示
@@ -177,7 +158,7 @@ public class ForeController {
     }
 
 
-    @RequestMapping("/Addmessage")
+    @PostMapping("/Addmessage")
     public String messages(Model model, Integer aid, Message message)
     {
         message.setCreateTime(new Date());
@@ -185,8 +166,8 @@ public class ForeController {
         return "redirect:/messageList";
     }
 
-    @RequestMapping("/searchAnswer")
-    public String search()
+    @GetMapping("/searchAnswer")
+    public String search(Model model)
     {
         return "searchAnswer";
     }

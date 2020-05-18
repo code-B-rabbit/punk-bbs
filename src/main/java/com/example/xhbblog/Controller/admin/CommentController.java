@@ -37,11 +37,17 @@ public class CommentController {   //后台评论只有查找和删除逻辑,添
     }
 
     @RequestMapping("/deleteComment")
-    public String delete(Integer id,Integer aid)
+    public String delete(Integer id,Integer aid,Integer uid)
     {
         commentService.delete(id);
+        if(aid!=null){
+            return "redirect:/admin/listByAid?aid="+aid;
+        }else if(uid!=null){
+            return "redirect:/admin/listByUid?uid="+uid;
+        }
         return "redirect:/admin/listByAid?aid="+aid;
     }
+
 
     @RequestMapping("/listByAid")
     public String listByAid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count,Integer aid,Model model)

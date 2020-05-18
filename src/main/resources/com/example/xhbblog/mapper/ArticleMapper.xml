@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.example.xhbblog.pojo.Article" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="tid" property="tid" jdbcType="INTEGER" />
-    <result column="createTime" property="createTime" jdbcType="DATE" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="firstPicture" property="firstPicture" jdbcType="VARCHAR" />
     <result column="visit" property="visit" jdbcType="BIGINT" />
@@ -97,7 +97,7 @@
     insert into article (tid, createTime, title, 
       firstPicture, visit, published, 
       content, info)
-    values (#{tid,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, #{title,jdbcType=VARCHAR}, 
+    values (#{tid,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, 
       #{firstPicture,jdbcType=VARCHAR}, #{visit,jdbcType=BIGINT}, #{published,jdbcType=BIT}, 
       #{content,jdbcType=LONGVARCHAR}, #{info,jdbcType=LONGVARCHAR})
   </insert>
@@ -134,7 +134,7 @@
         #{tid,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
-        #{createTime,jdbcType=DATE},
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="title != null" >
         #{title,jdbcType=VARCHAR},
@@ -163,7 +163,7 @@
         tid = #{tid,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
-        createTime = #{createTime,jdbcType=DATE},
+        createTime = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="title != null" >
         title = #{title,jdbcType=VARCHAR},
@@ -189,7 +189,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.xhbblog.pojo.ArticleWithBLOBs" >
     update article
     set tid = #{tid,jdbcType=INTEGER},
-      createTime = #{createTime,jdbcType=DATE},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
       title = #{title,jdbcType=VARCHAR},
       firstPicture = #{firstPicture,jdbcType=VARCHAR},
       visit = #{visit,jdbcType=BIGINT},
@@ -201,7 +201,7 @@
   <update id="updateByPrimaryKey" parameterType="com.example.xhbblog.pojo.Article" >
     update article
     set tid = #{tid,jdbcType=INTEGER},
-      createTime = #{createTime,jdbcType=DATE},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
       title = #{title,jdbcType=VARCHAR},
       firstPicture = #{firstPicture,jdbcType=VARCHAR},
       visit = #{visit,jdbcType=BIGINT},

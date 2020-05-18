@@ -103,9 +103,12 @@ public class ArticleController {
     }
 
     @RequestMapping("/deleteArticle")
-    public String delete(Integer id)
+    public String delete(Integer id,Integer tid)
     {
         service.remove(id);
+        if(tid!=null){
+            return "redirect:/admin/articleListByTag?tid="+tid;  //路由控制
+        }
         return "redirect:/admin/articleList";
     }
 

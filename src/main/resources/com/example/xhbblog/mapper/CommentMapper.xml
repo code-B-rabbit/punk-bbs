@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.example.xhbblog.pojo.Comment" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="aid" property="aid" jdbcType="INTEGER" />
-    <result column="createTime" property="createTime" jdbcType="DATE" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="parentID" property="parentID" jdbcType="INTEGER" />
     <result column="uid" property="uid" jdbcType="INTEGER" />
   </resultMap>
@@ -93,7 +93,7 @@
   <insert id="insert" parameterType="com.example.xhbblog.pojo.Comment" useGeneratedKeys="true" keyProperty="id" >
     insert into comment (aid, createTime, parentID, 
       uid, content)
-    values (#{aid,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, #{parentID,jdbcType=INTEGER}, 
+    values (#{aid,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{parentID,jdbcType=INTEGER}, 
       #{uid,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.xhbblog.pojo.Comment" useGeneratedKeys="true" keyProperty="id" >
@@ -120,7 +120,7 @@
         #{aid,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
-        #{createTime,jdbcType=DATE},
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="parentID != null" >
         #{parentID,jdbcType=INTEGER},
@@ -140,7 +140,7 @@
         aid = #{aid,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
-        createTime = #{createTime,jdbcType=DATE},
+        createTime = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="parentID != null" >
         parentID = #{parentID,jdbcType=INTEGER},
@@ -157,7 +157,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.xhbblog.pojo.Comment" >
     update comment
     set aid = #{aid,jdbcType=INTEGER},
-      createTime = #{createTime,jdbcType=DATE},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
       parentID = #{parentID,jdbcType=INTEGER},
       uid = #{uid,jdbcType=INTEGER},
       content = #{content,jdbcType=LONGVARCHAR}
@@ -166,7 +166,7 @@
   <update id="updateByPrimaryKey" parameterType="com.example.xhbblog.pojo.Comment" >
     update comment
     set aid = #{aid,jdbcType=INTEGER},
-      createTime = #{createTime,jdbcType=DATE},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
       parentID = #{parentID,jdbcType=INTEGER},
       uid = #{uid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}

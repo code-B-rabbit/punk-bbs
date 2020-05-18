@@ -1,6 +1,8 @@
 package com.example.xhbblog.pojo;
 
-public class Tag {
+import java.io.Serializable;
+
+public class Tag implements Serializable {
     private Integer id;
 
     private String name;
@@ -13,6 +15,15 @@ public class Tag {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", numbersOfBlog=" + numbersOfBlog +
+                '}';
     }
 
     public Integer getNumbersOfBlog() {

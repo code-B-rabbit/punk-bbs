@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
-<nav aria-label="Page navigation example" th:fragment="page">
+<body >
+<nav  aria-label="Page navigation example" th:fragment="page">
     <ul class="pagination pagination-template d-flex justify-content-center">
         <li class="page-item" th:if="${page.hasPreviousPage}"><a th:href="|?start=${page.pageSize*(page.pageNum-2)}&${limit}|" th:text="${page.pageNum-1}" href="#" class="page-link active">1</a></li>
         <li class="page-item  active"><a th:text="${page.pageNum}" href="#" class="page-link">2</a></li>

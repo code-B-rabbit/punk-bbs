@@ -3,7 +3,7 @@
 <mapper namespace="com.example.xhbblog.mapper.MessageMapper" >
   <resultMap id="BaseResultMap" type="com.example.xhbblog.pojo.Message" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="createTime" property="createTime" jdbcType="DATE" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.example.xhbblog.pojo.Message" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
@@ -89,7 +89,7 @@
   </delete>
   <insert id="insert" parameterType="com.example.xhbblog.pojo.Message" useGeneratedKeys="true" keyProperty="id" >
     insert into message (createTime, content)
-    values (#{createTime,jdbcType=DATE}, #{content,jdbcType=LONGVARCHAR})
+    values (#{createTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.xhbblog.pojo.Message" useGeneratedKeys="true" keyProperty="id" >
     insert into message
@@ -103,7 +103,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="createTime != null" >
-        #{createTime,jdbcType=DATE},
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
@@ -114,7 +114,7 @@
     update message
     <set >
       <if test="createTime != null" >
-        createTime = #{createTime,jdbcType=DATE},
+        createTime = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
@@ -124,13 +124,13 @@
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.xhbblog.pojo.Message" >
     update message
-    set createTime = #{createTime,jdbcType=DATE},
+    set createTime = #{createTime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.xhbblog.pojo.Message" >
     update message
-    set createTime = #{createTime,jdbcType=DATE}
+    set createTime = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

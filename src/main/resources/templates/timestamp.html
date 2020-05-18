@@ -32,7 +32,6 @@
 <!--  <link rel="stylesheet" href="../static/editor/examples/css/timestyle.css" th:href="@{/editor/examples/css/timestyle.css}" />-->
 <!--这里如果实在兼容不了再改回去....  -->
 <!--引入js文件-->
-<script src="../static/editor/examples/js/jquery.min.js" th:src="@{/editor/examples/js/jquery.min.js}"></script>
 <header class="header" th:replace="header::header(4)">
     <!-- Main Navbar-->
     <nav class="navbar navbar-expand-lg">
@@ -80,6 +79,8 @@
     <div class="jumbotron">
         <h1 id='text' class="display-4"></h1>
         <script>
+            $('window').preloader({'fadeDuration':750});
+
             let divTyping = document.getElementById('text')
             let i = 0,
                 timer = 0,
@@ -124,6 +125,7 @@
             </div>
         </div>
     </div>
+    <br>
     <nav aria-label="Page navigation example" th:replace="page">
         <ul class="pagination pagination-template d-flex justify-content-center">
             <li class="page-item">

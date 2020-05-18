@@ -1,6 +1,8 @@
 package com.example.xhbblog.pojo;
 
-public class FriendlyLink {
+import java.io.Serializable;
+
+public class FriendlyLink implements Serializable {
     private Integer id;
 
     private String name;

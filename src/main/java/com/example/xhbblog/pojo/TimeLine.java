@@ -1,9 +1,10 @@
 package com.example.xhbblog.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class TimeLine {
+public class TimeLine implements Serializable {
     private Date time;         //哪一天
     private List<Article> articleList;
 

@@ -1,8 +1,9 @@
 .sec{
-    background: url(../img/壁纸_2.jpg);
     background-size: cover;
     background-position: center center;
 }
+
+
 
 
 .sec2{
@@ -20,6 +21,16 @@
 *{
     font-family: "Playfair Display", serif!important;
 }
+#test-editormd{
+    font-family: "微软雅黑"!important;
+}
+
+body{
+    background-color: rgb(236, 239, 241)!important;
+    z-index: 999!important;
+    position :relative!important;
+}
+
 
 .post:hover {
     -webkit-transform: translateY(-5px);

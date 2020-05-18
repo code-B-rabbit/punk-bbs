@@ -65,8 +65,12 @@
         <tbody>
         <tr th:each="comment:${page.list}">
             <th scope="row" th:text="${comment.id}">1</th>
-            <td th:text="${comment.article.title}">单表增删改查</td>
-            <td th:text="${#dates.format(comment.createTime,'yyyy-MM-dd')}"></td>
+            <td>
+                <a th:text="${comment.article.title}" th:href="@{/admin/listByAid(aid=${comment.aid})}">
+                    单表增删改查
+                </a>
+            </td>
+            <td th:text="${#dates.format(comment.createTime,'yyyy-mm-dd hh:mm:ss')}"></td>
             <td>
                 <a th:text="${comment.visitor_name}" th:href="@{/admin/listByUid(uid=${comment.uid})}">徐浩博</a>
             </td>
@@ -77,12 +81,48 @@
             </td>
             <td th:text="${comment.visitor_email}">511928849@qq.com</td>
             <td th:text="${comment.content}" colspan="3">511928849@qq.com.........................</td>
-            <td><a type="button" th:href="@{deleteComment(id=${comment.id},aid=${comment.article.id})}" class="btn btn-danger">删除</a></td>
+            <td>
+                <a type="button" th:if="${article}" th:href="@{deleteComment(id=${comment.id},aid=${comment.article.id})}" class="btn btn-danger">删除</a>
+                <a type="button" th:if="${user}" th:href="@{deleteComment(id=${comment.id},uid=${user.id})}" class="btn btn-danger">删除</a>
+            </td>
         </tr>
         </tbody>
     </table>
     <nav th:replace="admin/page::page"></nav>
 
 </div>
+<footer class="main-footer" th:replace="admin/foot::foot">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="logo">
+                    <h6 class="text-white">徐浩博的技术小站</h6>
+                </div>
+                <div class="contact-details">
+                    <p>Phone: 15690116825</p>
+                    <p>Email: 511928849@qq.com</a></p>
+                    <ul class="social-menu">
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-instagram"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-behance"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="menus d-flex">
+                    <ul class="list-unstyled">
+                        <li> <a>友链</a></li>
+                        <li> <a href="#" th:each="fl:${fls}" th:text="${fl.name}" th:href="${fl.link}">My Account</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+    </div>
+
+</footer>
 </body>
 </html>

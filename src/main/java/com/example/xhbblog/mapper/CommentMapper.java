@@ -96,6 +96,8 @@ public interface CommentMapper {
     List<Comment> listByUid(Integer uid);
 
 
+
+
     @Select("select count(*) from comment where aid=#{aid} and parentID is null")
     Integer countOfArticle(Integer aid);               //计算一篇文章的评论个数(不能包含回复)
 

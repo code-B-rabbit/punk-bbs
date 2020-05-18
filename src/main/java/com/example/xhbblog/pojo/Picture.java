@@ -1,6 +1,8 @@
 package com.example.xhbblog.pojo;
 
-public class Picture {
+import java.io.Serializable;
+
+public class Picture implements Serializable {
     private Integer id;
 
     private String filekey;

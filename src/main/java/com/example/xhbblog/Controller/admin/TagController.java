@@ -2,6 +2,7 @@ package com.example.xhbblog.Controller.admin;
 
 import com.example.xhbblog.Service.TagService;
 import com.example.xhbblog.pojo.Tag;
+import com.example.xhbblog.util.PageInfoUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,9 @@ public class TagController {
     @RequestMapping("/tagList")
     public String list(@RequestParam(name = "start",defaultValue = "0") Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count, Model model)
     {
-        PageHelper.offsetPage(start,count);
-        List<Tag> tags=tagService.list();
-        model.addAttribute("page",new PageInfo<Tag>(tags));
+        List<Tag> tags=tagService.listBySort();
+        PageInfo<Tag> tagPageInfo = new PageInfo<>(tags);
+        model.addAttribute("page", PageInfoUtil.get(tagPageInfo,start,count));
         return "admin/tagList";
     }
 

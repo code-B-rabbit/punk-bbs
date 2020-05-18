@@ -45,7 +45,6 @@
 
   <!--引入js文件-->
 <script src="../static/js/wordOut.js" th:src="@{/js/wordOut.js}"></script>
-  <script src="../static/editor/examples/js/jquery.min.js" th:src="@{/editor/examples/js/jquery.min.js}"></script>
   <script src="../static/editor/lib/marked.min.js" th:src="@{/editor/lib/marked.min.js}"></script>
   <script src="../static/editor/lib/prettify.min.js" th:src="@{/editor/lib/prettify.min.js}"></script>
   <script src="../static/editor/lib/raphael.min.js" th:src="@{/editor/lib/raphael.min.js}"></script>
@@ -97,7 +96,7 @@
         </div>
       </nav>
     </header>
-    <div class="text-center container">
+    <div class="text-center ph-col-12 container">
       <div class="modal" tabindex="-1" id="modal1" role="dialog">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -115,8 +114,8 @@
       </div>
 
         <!-- Latest Posts -->
-        <main class="post blog-post ">
-          <div class="widget container">
+        <main class="post blog-post">
+          <div class="widget container" style="background-color: white">
             <div class="post-single">
               <div class="post-details">
 
@@ -124,14 +123,14 @@
                 <div class="post-footer d-flex align-items-center flex-column flex-sm-row">
                   <div class="d-flex align-items-center flex-wrap">
                     <div class="date">
-                      <svg class="bi bi-eye" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <svg class="bi bi-eye text-info" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 001.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0014.828 8a13.133 13.133 0 00-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 001.172 8z" clip-rule="evenodd"/>
                         <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0z" clip-rule="evenodd"/>
                       </svg>
                       <span th:text="${art.visit}">2 months ago</span>
                     </div>
                     <div class="date">
-                      <svg class="bi bi-stopwatch" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <svg class="bi bi-stopwatch text-info" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M8 15A6 6 0 108 3a6 6 0 000 12zm0 1A7 7 0 108 2a7 7 0 000 14z" clip-rule="evenodd"/>
                         <path fill-rule="evenodd" d="M8 4.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4.5a.5.5 0 010-1h3V5a.5.5 0 01.5-.5zM5.5.5A.5.5 0 016 0h4a.5.5 0 010 1H6a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
                         <path d="M7 1h2v2H7V1z"/>
@@ -139,7 +138,7 @@
                       <span th:text="${#dates.format(art.createTime,'yyyy-MM-dd')}">2 months ago</span>
                     </div>
                     <div class="comments">
-                      <svg class="bi bi-chat-square-dots" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <svg class="bi bi-chat-square-dots text-info" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v8a1 1 0 001 1h2.5a2 2 0 011.6.8L8 14.333 9.9 11.8a2 2 0 011.6-.8H14a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v8a2 2 0 002 2h2.5a1 1 0 01.8.4l1.9 2.533a1 1 0 001.6 0l1.9-2.533a1 1 0 01.8-.4H14a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"/>
                         <path d="M5 6a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0z"/>
                       </svg>
@@ -149,8 +148,8 @@
                 </div>
                 <div class="post-body">
                   <div id="layout"  class="editor">
-                    <div id="test-editormd" >
-                      <textarea th:text="${art.content}"></textarea>
+                    <div id="test-editormd" style="font-family: 微软雅黑!important;">
+                      <textarea  id="text" th:text="${art.content}"></textarea>
                     </div>
                   </div>
                 </div>
@@ -236,11 +235,11 @@
                   </header>
                   <div  class="commenting-form">
                     <div class="row">
-                      <div class="form-group col-md-12">
+                      <div class="form-group ph-col-12 col-md-12">
                         <textarea name="content" id="content" placeholder="Type your comment" class="form-control"></textarea>
                       </div>
                       <input name="aid" id="aid" th:value="${art.id}" type="hidden" />
-                      <div class="form-group col-md-12">
+                      <div class="form-group ph-col-12 col-md-12">
                         <button id="submit" type="submit" class="btn btn-warning">发送评论</button>
                       </div>
                     </div>
@@ -325,6 +324,8 @@
     </footer>
     <!-- JavaScript files-->
 
+
+
   <script src="../static/vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
   <script src="../static/vendor/popper.js/umd/popper.min.js" th:src="@{/vendor/popper.js/umd/popper.min.js}"> </script>
   <script src="../static/vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
@@ -332,6 +333,7 @@
   <script src="../static/vendor/@fancyapps/fancybox/jquery.fancybox.min.js" th:src="@{/vendor/@fancyapps/fancybox/jquery.fancybox.min.js}"></script>
   <script src="../static/js/front.js" th:src="@{/js/front.js}"></script>
   <script th:inline="javascript">
+
 
     $(function () {
       //先向服务器请求cookie

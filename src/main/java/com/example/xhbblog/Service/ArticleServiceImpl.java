@@ -1,17 +1,25 @@
 package com.example.xhbblog.Service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.xhbblog.mapper.ArticleMapper;
 import com.example.xhbblog.pojo.Article;
 import com.example.xhbblog.pojo.ArticleWithBLOBs;
 import com.example.xhbblog.pojo.TimeLine;
+import com.example.xhbblog.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.sql.Time;
+import java.util.*;
 
 @Service
 @Transactional
+@CacheConfig(cacheNames = "article")
 public class ArticleServiceImpl implements ArticleService{
 
     @Autowired
@@ -42,6 +50,8 @@ public class ArticleServiceImpl implements ArticleService{
         return articleMapper.findById(id);
     }
 
+
+
     @Override
     public List<ArticleWithBLOBs> findByTid(Integer tid) {
         return articleMapper.findByTid(tid);
@@ -58,19 +68,16 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public List<ArticleWithBLOBs> getLastestArticle() {
+    public List<Article> getLastestArticle() {
         return articleMapper.getLastestArticle();
     }
+
 
     @Override
     public List<ArticleWithBLOBs> findAll() {
         return articleMapper.findAll();       //前台只向用户展示已经出版的
     }
 
-    @Override
-    public List<ArticleWithBLOBs> findByVisit() {
-        return articleMapper.findByVisit();
-    }
 
     @Override
     public List<ArticleWithBLOBs> findArticleLike(String s) {
@@ -83,13 +90,24 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public List<ArticleWithBLOBs> foreArticle() {
-        return articleMapper.findForeArticle();
-    }
-
-    @Override
-    public List<ArticleWithBLOBs> findLastestArticle() {
+    public List<Article> findLastestArticle() {
         return articleMapper.findLastestArticle();
     }
+
+    //访问量最大的三篇文章
+    @Override
+    public List<Article> foreArticle() {
+       return articleMapper.findForeArticle();
+    }
+
+
+    @Override
+    public void incr(ArticleWithBLOBs article) {
+        article.setVisit(article.getVisit()+1);
+        articleMapper.updateByPrimaryKeySelective(article);
+    }
+
+//排行榜相关业务
+
 
 }

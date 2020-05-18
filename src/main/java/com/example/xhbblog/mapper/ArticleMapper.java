@@ -73,11 +73,11 @@ public interface ArticleMapper {
             @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
             @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment"))
     })
-    List<Article> listByTid(Integer tid,Boolean published);       //用于后台
+    List<Article> listByTid(Integer tid, Boolean published);       //用于后台
 
 
     @Select("<script>" +
-            "select * from article where id IN(select id from article where content like #{string} or title like #{string})" +
+            "select * from article where id IN(select id from article where info like #{string} or title like #{string})" +
             "<when test='published!=null'>"+
             "and published=#{published}"+
             "</when>"+
@@ -89,10 +89,10 @@ public interface ArticleMapper {
             @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
             @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment"))
     })
-    List<Article> listArticleLike(String string,Boolean published);         //给后台用
+    List<Article> listArticleLike(String string, Boolean published);         //给后台用
 
 
-    @Select("select * from article where published=true and id IN (select id from article where content like #{string} or title like #{string}) " +
+    @Select("select * from article where published=true and id IN (select id from article where info like #{string} or title like #{string}) " +
             "order by id desc")
     @Results({
             @Result(property = "id",column = "id"),
@@ -123,26 +123,17 @@ public interface ArticleMapper {
     })
     List<ArticleWithBLOBs> findByTid(Integer tid);
 
-    @Select("select * from article where published=true order by visit desc limit 5")
-    @Results({
-            @Result(property = "id",column = "id"),
-            @Result(property = "tid", column = "tid"),
-            @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
-            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment"))
-    })
-    List<ArticleWithBLOBs> findByVisit();
+
 
     @Select("select count(*) from article where tid=#{tid}")
     Integer countOfTag(Integer tid);        //同样用于后台不需要考虑published
 
-    @Select("select * from article where published=true order by visit desc limit 3")     //最热门的访问文章
+    @Select("select id,visit,title,firstPicture from article where published=true order by visit desc limit 3")     //最热门的访问文章
     @Results({
             @Result(property = "id",column = "id"),
-            @Result(property = "tid", column = "tid"),
-            @Result(property = "tag", column = "tid", one = @One(select = "com.example.xhbblog.mapper.TagMapper.selectByPrimaryKey")),
             @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment"))
     })
-    List<ArticleWithBLOBs> findForeArticle();
+    List<Article> findForeArticle();
 
     @Select("select title from article where id<#{aid} and published=true order by id desc limit 1")
     String findLastName(Integer aid);
@@ -164,7 +155,7 @@ public interface ArticleMapper {
             @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfComment")),
             @Result(property = "createTime",column = "createTime"),
     })
-    List<ArticleWithBLOBs> getLastestArticle();    //用于首页查询
+    List<Article> getLastestArticle();    //用于首页查询
 
     @Select("select title,id,tid,createTime,visit,firstPicture from article where published=true order by id desc limit 3")     //最新的三篇访问文章
     @Results({
@@ -177,7 +168,7 @@ public interface ArticleMapper {
             @Result(property = "visit",column = "visit"),
             @Result(property = "firstPicture",column = "firstPicture"),
     })
-    List<ArticleWithBLOBs> findLastestArticle();      //用于博客页查询
+    List<Article> findLastestArticle();      //用于博客页查询
 
 
     //这里发现mybatis一对多查询分页时如果要以那个"1"为标准进行分页必须要使用子查询

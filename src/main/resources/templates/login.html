@@ -169,11 +169,12 @@
     }
     function getOrderList() {
         //orderForm即是表单的ID
-        var data=$("form").serialize();
-        if(data.name||data.password){
-            alert("用户名或密码不能为空!");
-            return ;
-        }
+        return false;
+    }
+    function request(data)
+    {
+
+        var defer = $.Deferred();
         $.ajax({
             url:"/user/check",
             method:"post",
@@ -188,13 +189,20 @@
                 }
             }
         });
-        return false;
+        return defer.promise();
     }
     $(function () {
         init();           //初始化cookie
         $('form').submit(function () {
-            getOrderList();
-            return false;
+            var data=$("form").serialize();
+            if(data.name||data.password){
+                alert("用户名或密码不能为空!");
+                return false;
+            }else
+            {
+                request(data);
+                return false;
+            }
         })
     })
 </script>
@@ -231,5 +239,12 @@
     </div>
 
 </footer>
+<script src="../static/js/wordOut.js" th:src="@{/js/wordOut.js}"></script>
+<script src="../static/vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script src="../static/vendor/popper.js/umd/popper.min.js" th:src="@{/vendor/popper.js/umd/popper.min.js}"> </script>
+<script src="../static/vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../static/vendor/jquery.cookie/jquery.cookie.js" th:src="@{/vendor/jquery.cookie/jquery.cookie.js}"> </script>
+<script src="../static/vendor/@fancyapps/fancybox/jquery.fancybox.min.js" th:src="@{/vendor/@fancyapps/fancybox/jquery.fancybox.min.js}"></script>
+<script src="../static/js/front.js" th:src="@{/js/front.js}"></script>
 </body>
 </html>

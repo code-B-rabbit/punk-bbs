@@ -235,7 +235,7 @@ i[class*="icon-"] {
 }
 
 .text-violet {
-  color: #796AEE;
+  color: #796AEE!important;
 }
 
 .text-violet:hover {

@@ -20,9 +20,6 @@ import java.util.Map;
 public class ImageController {
 
     @Autowired
-    private QnUploadService qnUploadService;
-
-    @Autowired
     private QiniuUtil qiniuUtil;
 
     @Autowired

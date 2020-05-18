@@ -2,26 +2,47 @@ package com.example.xhbblog.Service;
 
 import com.example.xhbblog.mapper.CommentMapper;
 import com.example.xhbblog.pojo.Comment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
 
 @Service
 @Transactional
+@CacheConfig(cacheNames = "comment")
+@EnableScheduling           //开启定时器
 public class CommentServiceImpl implements CommentService{
-
+    
     @Autowired
     private CommentMapper mapper;
 
+    private static final Logger LOG = LoggerFactory.getLogger(CommentServiceImpl.class);
+
+
     @Override
+    @Caching(evict = {
+            @CacheEvict(key = "#comment.getAid()"),
+            @CacheEvict(key = "'countOfArticle'+#comment.getAid()"),
+            @CacheEvict(key = "'countOfComment'+#comment.getAid()"),
+    })
     public void add(Comment comment) {
         mapper.insert(comment);
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     public void delete(Integer id) {
         mapper.deleteByPrimaryKey(id);
     }
@@ -42,7 +63,9 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Cacheable(key = "#aid")
     public List<Comment> findByAid(Integer aid,Integer start,Integer count) {
+        LOG.info("文章{}评论缓存未命中",aid);
         List<Comment> comments=mapper.findByAid(aid,start,count);
         return getComments(comments);
     }
@@ -80,12 +103,16 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Cacheable(key = "'countOfArticle'+#aid")
     public Integer countOfArticle(Integer aid) {
+        LOG.info("文章{}评论数缓存未命中",aid);
         return mapper.countOfArticle(aid);
     }
 
     @Override
+    @Cacheable(key = "'countOfComment'+#aid")
     public Integer countOfComment(Integer aid) {
+        LOG.info("文章{}评论加回复数缓存未命中",aid);
         return mapper.countOfComment(aid);
     }
 
@@ -93,4 +120,12 @@ public class CommentServiceImpl implements CommentService{
     public List<Comment> listByUid(Integer aid) {
         return mapper.listByUid(aid);       //给后台查看评论使用的接口
     }
+
+    @Scheduled(cron = "0 0 10,14,16 * * ?")  //每天上午10点，下午2点，4点
+    @CacheEvict(allEntries = true)
+    public void evit()
+    {
+        LOG.info(new Date()+"定时清除所有评论缓存");
+    }
+
 }
