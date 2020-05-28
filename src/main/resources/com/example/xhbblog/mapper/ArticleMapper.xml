@@ -9,6 +9,7 @@
     <result column="firstPicture" property="firstPicture" jdbcType="VARCHAR" />
     <result column="visit" property="visit" jdbcType="BIGINT" />
     <result column="published" property="published" jdbcType="BIT" />
+    <result column="top" property="top" jdbcType="BIT" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.example.xhbblog.pojo.ArticleWithBLOBs" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
@@ -44,7 +45,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, tid, createTime, title, firstPicture, visit, published
+    id, tid, createTime, title, firstPicture, visit, published, top
   </sql>
   <sql id="Blob_Column_List" >
     content, info
@@ -96,10 +97,12 @@
   <insert id="insert" parameterType="com.example.xhbblog.pojo.ArticleWithBLOBs" useGeneratedKeys="true" keyProperty="id" >
     insert into article (tid, createTime, title, 
       firstPicture, visit, published, 
-      content, info)
+      top, content, info
+      )
     values (#{tid,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, 
       #{firstPicture,jdbcType=VARCHAR}, #{visit,jdbcType=BIGINT}, #{published,jdbcType=BIT}, 
-      #{content,jdbcType=LONGVARCHAR}, #{info,jdbcType=LONGVARCHAR})
+      #{top,jdbcType=BIT}, #{content,jdbcType=LONGVARCHAR}, #{info,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.example.xhbblog.pojo.ArticleWithBLOBs" useGeneratedKeys="true" keyProperty="id" >
     insert into article
@@ -121,6 +124,9 @@
       </if>
       <if test="published != null" >
         published,
+      </if>
+      <if test="top != null" >
+        top,
       </if>
       <if test="content != null" >
         content,
@@ -147,6 +153,9 @@
       </if>
       <if test="published != null" >
         #{published,jdbcType=BIT},
+      </if>
+      <if test="top != null" >
+        #{top,jdbcType=BIT},
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
@@ -177,6 +186,9 @@
       <if test="published != null" >
         published = #{published,jdbcType=BIT},
       </if>
+      <if test="top != null" >
+        top = #{top,jdbcType=BIT},
+      </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -194,6 +206,7 @@
       firstPicture = #{firstPicture,jdbcType=VARCHAR},
       visit = #{visit,jdbcType=BIGINT},
       published = #{published,jdbcType=BIT},
+      top = #{top,jdbcType=BIT},
       content = #{content,jdbcType=LONGVARCHAR},
       info = #{info,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
@@ -205,7 +218,8 @@
       title = #{title,jdbcType=VARCHAR},
       firstPicture = #{firstPicture,jdbcType=VARCHAR},
       visit = #{visit,jdbcType=BIGINT},
-      published = #{published,jdbcType=BIT}
+      published = #{published,jdbcType=BIT},
+      top = #{top,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

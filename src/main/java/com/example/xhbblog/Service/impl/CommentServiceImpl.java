@@ -1,5 +1,6 @@
-package com.example.xhbblog.Service;
+package com.example.xhbblog.Service.impl;
 
+import com.example.xhbblog.Service.CommentService;
 import com.example.xhbblog.mapper.CommentMapper;
 import com.example.xhbblog.pojo.Comment;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,28 +19,32 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
 @Transactional
 @CacheConfig(cacheNames = "comment")
 @EnableScheduling           //开启定时器
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
     
     @Autowired
     private CommentMapper mapper;
 
     private static final Logger LOG = LoggerFactory.getLogger(CommentServiceImpl.class);
 
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     @Caching(evict = {
-            @CacheEvict(key = "#comment.getAid()"),
             @CacheEvict(key = "'countOfArticle'+#comment.getAid()"),
             @CacheEvict(key = "'countOfComment'+#comment.getAid()"),
     })
     public void add(Comment comment) {
         mapper.insert(comment);
+        Set<String> keys = redisTemplate.keys("comment::" + comment.getAid() + "*");
+        redisTemplate.delete(keys);
     }
 
     @Override
@@ -63,7 +69,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    @Cacheable(key = "#aid")
+    @Cacheable(key = "#aid+','+#start")
     public List<Comment> findByAid(Integer aid,Integer start,Integer count) {
         LOG.info("文章{}评论缓存未命中",aid);
         List<Comment> comments=mapper.findByAid(aid,start,count);

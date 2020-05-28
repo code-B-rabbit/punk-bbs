@@ -1,10 +1,9 @@
-package com.example.xhbblog.Service;
+package com.example.xhbblog.Service.impl;
 
 
+import com.example.xhbblog.Service.TagService;
 import com.example.xhbblog.mapper.TagMapper;
 import com.example.xhbblog.pojo.Tag;
-import com.example.xhbblog.pojo.TagExample;
-import com.example.xhbblog.util.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +25,7 @@ public class TagServiceImpl implements TagService {
     @Autowired
     private TagMapper tagMapper;
 
-    private static final Logger LOG = LoggerFactory.getLogger(CommentServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TagServiceImpl.class);
 
 
     @Override
@@ -51,7 +49,9 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Cacheable(key = "#id")
     public Tag get(Integer id) {
+        LOG.info(id+"标签缓存未命中");
         return tagMapper.selectByPrimaryKey(id);
     }
 

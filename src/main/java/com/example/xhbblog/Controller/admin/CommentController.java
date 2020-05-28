@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -50,10 +51,11 @@ public class CommentController {   //后台评论只有查找和删除逻辑,添
 
 
     @RequestMapping("/listByAid")
-    public String listByAid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count,Integer aid,Model model)
+    public String listByAid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count, Integer aid, Model model,
+                            HttpServletRequest request)
     {
         model.addAttribute("limit","aid="+aid);
-        model.addAttribute("article",articleService.findById(aid));
+        model.addAttribute("article",articleService.findById(aid,request.getRemoteAddr()));
         PageHelper.offsetPage(start,count);
         List<Comment> comments=commentService.listByAid(aid);
         model.addAttribute("page",new PageInfo<Comment>(comments));

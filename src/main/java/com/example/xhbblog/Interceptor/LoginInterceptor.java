@@ -1,7 +1,6 @@
 package com.example.xhbblog.Interceptor;
 
 import com.example.xhbblog.pojo.User;
-import org.slf4j.Logger;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 
 public class LoginInterceptor implements HandlerInterceptor {
-
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

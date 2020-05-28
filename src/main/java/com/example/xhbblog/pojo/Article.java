@@ -28,6 +28,28 @@ public class Article implements Serializable {
 
     private Integer commentSize;
 
+    private Integer thumbsCount=0;   //默认为零
+
+    private Boolean thumb;
+
+    private Boolean top=false;      //默认为不置顶
+
+    public Boolean getThumb() {
+        return thumb;
+    }
+
+    public void setThumb(Boolean thumb) {
+        this.thumb = thumb;
+    }
+
+    public Integer getThumbsCount() {
+        return thumbsCount;
+    }
+
+    public void setThumbsCount(Integer thumbsCount) {
+        this.thumbsCount = thumbsCount;
+    }
+
     public Integer getCommentSize() {
         return commentSize;
     }
@@ -132,5 +154,13 @@ public class Article implements Serializable {
 
     public void setPublished(Boolean published) {
         this.published = published;
+    }
+
+    public Boolean getTop() {
+        return top;
+    }
+
+    public void setTop(Boolean top) {
+        this.top = top;
     }
 }

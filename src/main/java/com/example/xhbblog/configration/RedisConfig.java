@@ -14,7 +14,9 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -27,6 +29,20 @@ public class RedisConfig extends CachingConfigurerSupport {
     @Autowired
     private RedisConnectionFactory redisConnectionFactory;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Bean
+    public ZSetOperations zSet()
+    {
+        return redisTemplate.opsForZSet();
+    }
+
+    @Bean
+    public ListOperations list()
+    {
+        return redisTemplate.opsForList();
+    }
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {

@@ -4,22 +4,15 @@ import com.example.xhbblog.Service.*;
 import com.example.xhbblog.XhbBlogApplication;
 import com.example.xhbblog.configration.BlogConfig;
 import com.example.xhbblog.mapper.ArticleMapper;
-import com.example.xhbblog.pojo.Article;
-import com.example.xhbblog.pojo.ArticleWithBLOBs;
 import com.example.xhbblog.util.QiniuUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.util.List;
 import java.util.Set;
 
 @RunWith(SpringRunner.class)
@@ -57,6 +50,15 @@ public class TestTmall {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Test
+    public  void incr()
+    {
+        Set<ZSetOperations.TypedTuple<Object>> typedTupleSet = redisTemplate.opsForZSet().rangeWithScores("visits",0,-1);
+        for (ZSetOperations.TypedTuple<Object> objectTypedTuple : typedTupleSet) {
+            System.out.println(objectTypedTuple.getValue().toString().substring(9));
+            System.out.println(objectTypedTuple.getScore());
+        }
+    }
 
 
 

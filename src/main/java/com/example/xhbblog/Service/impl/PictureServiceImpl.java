@@ -1,5 +1,6 @@
-package com.example.xhbblog.Service;
+package com.example.xhbblog.Service.impl;
 
+import com.example.xhbblog.Service.PictureService;
 import com.example.xhbblog.mapper.PictureMapper;
 import com.example.xhbblog.pojo.Picture;
 import com.example.xhbblog.pojo.PictureExample;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class PictureServiceImpl implements PictureService{
+public class PictureServiceImpl implements PictureService {
 
     @Autowired
     private PictureMapper pictureMapper;

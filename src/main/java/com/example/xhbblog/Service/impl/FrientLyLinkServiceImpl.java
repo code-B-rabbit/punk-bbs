@@ -1,5 +1,7 @@
-package com.example.xhbblog.Service;
+package com.example.xhbblog.Service.impl;
 
+import com.example.xhbblog.Service.FriendLyLinkService;
+import com.example.xhbblog.Service.impl.CommentServiceImpl;
 import com.example.xhbblog.mapper.FriendlyLinkMapper;
 import com.example.xhbblog.pojo.FriendlyLink;
 import com.example.xhbblog.pojo.FriendlyLinkExample;
@@ -21,7 +23,7 @@ import java.util.List;
 @Transactional
 @CacheConfig(cacheNames = "fls")
 @EnableScheduling
-public class FrientLyLinkServiceImpl implements FriendLyLinkService{
+public class FrientLyLinkServiceImpl implements FriendLyLinkService {
 
     @Autowired
     private FriendlyLinkMapper mapper;

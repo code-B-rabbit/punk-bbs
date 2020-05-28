@@ -41,6 +41,10 @@ public class ArticleController {
     @RequestMapping("/articleListByTag")
     private String list(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count, Model model,Integer tid,Boolean published)
     {
+        if(start==0)
+        {
+            model.addAttribute("tops",service.topArts("....",null));
+        }
         model.addAttribute("tag",tagService.get(tid));
         PageHelper.offsetPage(start,count);
         List<Article> articles=service.listByTid(tid,published);   //后台调用标签的管理方法
@@ -82,7 +86,7 @@ public class ArticleController {
     public String edit(Integer id,Model model)
     {
         model.addAttribute("tags",tagService.list());
-        model.addAttribute("article",service.findById(id));
+        model.addAttribute("article",service.findById(id,"dddddd"));
         return "admin/articleEdit";
     }
     //修改

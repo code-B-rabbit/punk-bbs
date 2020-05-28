@@ -1,5 +1,6 @@
-package com.example.xhbblog.Service;
+package com.example.xhbblog.Service.impl;
 
+import com.example.xhbblog.Service.MessageService;
 import com.example.xhbblog.mapper.MessageMapper;
 import com.example.xhbblog.pojo.Message;
 import com.example.xhbblog.pojo.MessageExample;
@@ -16,7 +17,7 @@ import java.util.List;
 @Service
 @Transactional
 @CacheConfig(cacheNames = "message")
-public class MessageServiceImpl implements MessageService{
+public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private MessageMapper mapper;

@@ -49,7 +49,7 @@
         <!-- 指定数据库表  多个表示,可用多个table标签-->
 
 
-<!--        <table tableName="message" domainObjectName="Message" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">-->
+<!--        <table tableName="article" domainObjectName="Article" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">-->
 <!--            <property name="my.isgen.usekeys" value="true"/>-->
 <!--            <property name="useActualColumnNames" value="true"/>-->
 <!--            <generatedKey column="id" sqlStatement="JDBC"/>-->

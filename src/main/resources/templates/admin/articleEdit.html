@@ -80,6 +80,13 @@
     <textarea name="content" th:text="*{content}"></textarea>
         </div>
 
+        <div class="input-group-prepend">
+            置顶:
+            <div class="input-group-text">
+                <input name="top" type="checkbox" aria-label="Checkbox for following text input" th:checked="${article.top eq true}">
+            </div>
+        </div>
+
 
         <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
         <script src="../../static/editor-master/editormd.min.js" th:src="@{/editor/editormd.min.js}"></script>

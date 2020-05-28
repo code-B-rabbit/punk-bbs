@@ -1,5 +1,6 @@
-package com.example.xhbblog.Service;
+package com.example.xhbblog.Service.impl;
 
+import com.example.xhbblog.Service.UserService;
 import com.example.xhbblog.mapper.UserMapper;
 import com.example.xhbblog.pojo.User;
 import com.example.xhbblog.pojo.UserExample;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
