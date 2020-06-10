@@ -2,8 +2,7 @@ package com.example.xhbblog.Controller.admin;
 
 import com.example.xhbblog.Service.TagService;
 import com.example.xhbblog.pojo.Tag;
-import com.example.xhbblog.util.PageInfoUtil;
-import com.github.pagehelper.PageHelper;
+import com.example.xhbblog.utils.PageInfoUtil;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Controller

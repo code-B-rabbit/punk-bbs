@@ -1,13 +1,20 @@
 package com.example.xhbblog.Interceptor;
 
+import com.example.xhbblog.annotation.AccessLimit;
 import com.example.xhbblog.pojo.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
+import java.util.concurrent.TimeUnit;
 
+@Component
 public class LoginInterceptor implements HandlerInterceptor {
 
     @Override

@@ -2,7 +2,7 @@ package com.example.xhbblog.Controller;
 
 import com.example.xhbblog.Service.PictureService;
 import com.example.xhbblog.pojo.Picture;
-import com.example.xhbblog.util.QiniuUtil;
+import com.example.xhbblog.utils.QiniuUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

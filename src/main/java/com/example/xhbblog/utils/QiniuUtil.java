@@ -1,4 +1,4 @@
-package com.example.xhbblog.util;
+package com.example.xhbblog.utils;
 
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;

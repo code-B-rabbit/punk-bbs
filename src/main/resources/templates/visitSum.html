@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="header::head(访问统计)">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts.common.min.js"></script>
+
+<header th:replace="header::header(7)">
+    <!-- Main Navbar-->
+    <nav class="navbar navbar-expand-lg">
+        <div class="search-area">
+            <div class="search-area-inner d-flex align-items-center justify-content-center">
+                <div class="close-btn">
+                    <svg class="bi bi-reply-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.079 11.9l4.568-3.281a.719.719 0 000-1.238L9.079 4.1A.716.716 0 008 4.719V6c-1.5 0-6 0-7 8 2.5-4.5 7-4 7-4v1.281c0 .56.606.898 1.079.62z"/>
+                    </svg>
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <div class="col-md-8">
+                        <form action="/blogsearch" method="get">
+                            <div class="form-group">
+                                <input type="search" name="search" id="search" placeholder="请输入你要寻找的博客文章或文章内容.......">
+                                <button type="submit" class="submit">
+                                    <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clip-rule="evenodd"/>
+                                        <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <!-- Navbar Brand -->
+            <div class="navbar-header d-flex align-items-center justify-content-between">
+                <!-- Navbar Brand --><a href="index.html" class="navbar-brand">XHB's Blog</a>
+                <!-- Toggle Button-->
+                <button type="button" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"><span></span><span></span><span></span></button>
+            </div>
+            <!-- Navbar Menu -->
+            <div id="navbarcollapse" class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="index.html" class="nav-link active ">Home</a>
+                    </li>
+                    <li class="nav-item"><a href="blog.html" class="nav-link ">Blog</a>
+                    </li>
+                    <li class="nav-item"><a href="post.html" class="nav-link ">Post</a>
+                    </li>
+                    <li class="nav-item"><a href="#" class="nav-link ">Contact</a>
+                    </li>
+                </ul>
+                <div class="navbar-text"><a href="#" class="search-btn">
+                    <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clip-rule="evenodd"/>
+                        <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clip-rule="evenodd"/>
+                    </svg></a>
+                </div>
+                <ul class="langs navbar-text"><a href="#" class="active">EN</a><span>           </span><a href="#">ES</a></ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container justify-content-center"  style="width: 600px;height:400px;">
+
+    <div id="main" class="container" style="width: 600px;height:400px;"></div>
+
+</div>
+
+<script type="text/javascript" th:inline="javascript">
+
+    var logs=[[${logs}]];
+
+
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    var times=[];
+
+    for(i=0;i<logs.length;i++)
+    {
+        times.push(logs[i].createTime);
+    }
+
+    console.log(times);
+
+    var visits=[];
+
+    for(i=0;i<logs.length;i++)
+    {
+        visits.push(logs[i].visit);
+    }
+
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '最近七天访客变化'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+
+        xAxis:  {
+            type: 'category',
+            data: times
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {  //坐标轴刻度标签的相关设置。
+                formatter: '{value} 次'  // 使用字符串模板，模板变量为刻度默认标签 {value}
+            }
+        },
+        series: [
+            {
+                name:'访客数',
+                type:'line',
+                data:visits,
+            }
+        ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+
+</script>
+
+
+<footer th:replace="foot::foot" class="main-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="logo">
+                    <h6 class="text-white">Bootstrap Blog</h6>
+                </div>
+                <div class="contact-details">
+                    <p>53 Broadway, Broklyn, NY 11249</p>
+                    <p>Phone: (020) 123 456 789</p>
+                    <p>Email: <a href="mailto:info@company.com">Info@Company.com</a></p>
+                    <ul class="social-menu">
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-instagram"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-behance"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="menus d-flex">
+                    <ul class="list-unstyled">
+                        <li> <a href="#">My Account</a></li>
+                        <li> <a href="#">Add Listing</a></li>
+                        <li> <a href="#">Pricing</a></li>
+                        <li> <a href="#">Privacy &amp; Policy</a></li>
+                    </ul>
+                    <ul class="list-unstyled">
+                        <li> <a href="#">Our Partners</a></li>
+                        <li> <a href="#">FAQ</a></li>
+                        <li> <a href="#">How It Works</a></li>
+                        <li> <a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="latest-posts"><a href="#">
+                    <div class="post d-flex align-items-center">
+                        <div class="image"><img src="../static/img/small-thumbnail-1.jpg" alt="..." class="img-fluid"></div>
+                        <div class="title"><strong>Hotels for all budgets</strong><span class="date last-meta">October 26, 2016</span></div>
+                    </div></a><a href="#">
+                    <div class="post d-flex align-items-center">
+                        <div class="image"><img src="../static/img/small-thumbnail-2.jpg" alt="..." class="img-fluid"></div>
+                        <div class="title"><strong>Great street atrs in London</strong><span class="date last-meta">October 26, 2016</span></div>
+                    </div></a><a href="#">
+                    <div class="post d-flex align-items-center">
+                        <div class="image"><img src="../static/img/small-thumbnail-3.jpg" alt="..." class="img-fluid"></div>
+                        <div class="title"><strong>Best coffee shops in Sydney</strong><span class="date last-meta">October 26, 2016</span></div>
+                    </div></a></div>
+            </div>
+        </div>
+    </div>
+    <div class="copyrights">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2017. Bootstrapious All rights reserved. Your great site.</p>
+                </div>
+                <div class="col-md-6 text-right">
+                    More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
+
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="../static/js/wordOut.js" th:src="@{/js/wordOut.js}"></script>
+<script src="../static/vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script src="../static/vendor/popper.js/umd/popper.min.js" th:src="@{/vendor/popper.js/umd/popper.min.js}"> </script>
+<script src="../static/vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../static/vendor/jquery.cookie/jquery.cookie.js" th:src="@{/vendor/jquery.cookie/jquery.cookie.js}"> </script>
+<script src="../static/vendor/@fancyapps/fancybox/jquery.fancybox.min.js" th:src="@{/vendor/@fancyapps/fancybox/jquery.fancybox.min.js}"></script>
+<script src="../static/js/front.js" th:src="@{/js/front.js}"></script>
+</body>
+</html>

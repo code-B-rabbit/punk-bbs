@@ -1,9 +1,11 @@
 package com.example.xhbblog.pojo;
 
+
 import java.io.Serializable;
 import java.util.Date;
 
 public class Article implements Serializable {
+
     private Integer id;
 
     private Integer tid;
@@ -33,6 +35,8 @@ public class Article implements Serializable {
     private Boolean thumb;
 
     private Boolean top=false;      //默认为不置顶
+
+    private Boolean published;
 
     public Boolean getThumb() {
         return thumb;
@@ -98,7 +102,6 @@ public class Article implements Serializable {
         this.lastId = lastId;
     }
 
-    private Boolean published;
 
     public Integer getId() {
         return id;

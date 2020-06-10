@@ -1,4 +1,4 @@
-package com.example.xhbblog.util;
+package com.example.xhbblog.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

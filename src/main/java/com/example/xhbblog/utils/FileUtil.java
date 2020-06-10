@@ -1,4 +1,4 @@
-package com.example.xhbblog.util;
+package com.example.xhbblog.utils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

@@ -90,12 +90,87 @@
                     </li>
                     <li class="nav-item"><a th:href="@{/aboutMe}" href="post.html" th:classappend="${index==5?'active':''}" class="nav-link text-white">关于我</a>
                     </li>
+                    <li class="nav-item">
+                        <a th:href="@{/visitSum}" href="post.html" th:classappend="${index==7?'active':''}" class="nav-link text-white">
+                            访问统计
+                        </a>
+                    </li>
                     <li class="nav-item"><a th:href="@{/searchAnswer}" href="post.html" th:classappend="${index==6?'active':''}" class="nav-link text-white">查 题</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#"  data-toggle="modal" data-target="#exampleModal3" data-whatever="@mdo"  class="nav-link text-white">友链申请</a>
                     </li>
                     <li class="nav-item">
                         <a style="font-weight: bold" th:unless="${session.user}" th:href="@{/user/login}" href="post.html" th:classappend="${index==7?'active':''}" class="nav-link text-white">登录</a>
                     </li>
                 </ul>
+                <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="link" class="col-form-label">网址:</label>
+                                        <input type="text" id="link" class="link form-control" name="link"  placeholder="请填写您的完整网站地址 例如:http://www.xuhaobo.site"/>                                    </div>
+                                    <div class="form-group">
+                                        <label for="name" class="col-form-label">网站名:</label>
+                                        <input type="text" class="name form-control" name="name"  placeholder="请填写您的网站名" id="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name" class="col-form-label">电子邮箱:</label>
+                                        <input type="text" class="email form-control" name="email" id="email" placeholder="请填写您的邮箱名" />
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                <button type="button" id="submit" class="btn btn-primary">提交</button>
+                                <script>
+                                    $(
+                                        function () {
+                                            $('button#submit').click(function()
+                                                {
+                                                    allowed=$('input.allowed').val();
+                                                    link=$('input.link').val();
+                                                    nam=$('input.name').val();
+                                                    email=$('input.email').val();
+                                                    if(allowed==""||link==""||nam==""||email=="")
+                                                    {
+                                                        alert("请将您的个人信息填写完整");
+                                                    }else
+                                                    {
+                                                        $.ajax({
+                                                            //请求方式
+                                                            type : "POST",
+                                                            //请求的媒体类型
+                                                            contentType: "application/json;charset=UTF-8",
+                                                            //请求地址
+                                                            url : "/addFriendLyLink",
+                                                            //数据，json字符串
+                                                            data : JSON.stringify({'allowed':allowed,'link':link,'name':nam,'email':email}),
+                                                            //请求成功
+                                                            success : function(result) {
+                                                                alert(result);
+                                                                $('#exampleModal3').modal('hide');
+                                                            },
+                                                            //请求失败，包含具体的错误信息
+                                                            error : function(e){
+                                                                console.log(e.status);
+                                                                console.log(e.responseText);
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            );
+                                        }
+                                    )
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="navbar-text">
                     <a href="#" class="text-white search-btn">
                     <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -108,6 +183,20 @@
                     <span>您好,</span>
                     <span th:text="${session.user.name}" style="font-weight: bold"></span>
                 </div>
+                <a th:if="${session.user}" href="#" onclick="exit()">退出登录</a>
+                <script>
+                    function exit() {
+                        $.ajax({
+                            url:"/user/exit",
+                            method:"post",
+                            dataType: "json",
+                            success:function (dataStr) {
+                                alert(dataStr.message);
+                                location.reload();
+                            }
+                        });
+                    }
+                </script>
             </div>
         </div>
     </nav>

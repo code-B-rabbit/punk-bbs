@@ -41,4 +41,6 @@ public interface UserMapper {
     @Select("select email from user where id=#{uid} limit 1")       //查询姓名
     String findEmail(Integer uid);
 
+    @Select("select id from user where name=#{name} limit 1")       //查询匿名用户的uid
+    Integer  getUid(String name);
 }

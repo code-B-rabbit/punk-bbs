@@ -14,4 +14,5 @@ public interface UserService {
     public List<User> list();
     public void delete(Integer id);
     public User get(Integer id);
+    public Integer uid(String name);
 }

@@ -1,7 +1,6 @@
 package com.example.xhbblog.Service;
 
 import com.example.xhbblog.pojo.Message;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 

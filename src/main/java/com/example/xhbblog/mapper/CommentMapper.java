@@ -103,4 +103,14 @@ public interface CommentMapper {
 
     @Select("select count(*) from comment where aid=#{aid}")
     Integer countOfComment(Integer aid);              //显示的总数
+
+    @Select("SELECT * FROM comment ORDER BY ID DESC LIMIT 5")
+    @Results(
+            {
+                    @Result(property = "id",column = "id"),
+                    @Result(property = "aid", column = "aid"),
+                    @Result(property = "visitor_name", column = "uid",one = @One(select = "com.example.xhbblog.mapper.UserMapper.findName")),
+            })
+    List<Comment> lastComment();         //最新评论
+
 }

@@ -14,7 +14,7 @@ public interface CommentService {
     public List<Comment> listByAid(Integer aid);
     public Integer countOfArticle(Integer aid);
     public Integer countOfComment(Integer aid);              //显示的总数
-
+    List<Comment> lastComment();
     public List<Comment> listByUid(Integer aid);
 
 }

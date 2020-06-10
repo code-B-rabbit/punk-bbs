@@ -1,7 +1,6 @@
 package com.example.xhbblog.Controller.admin;
 
 import com.example.xhbblog.Service.MessageService;
-import com.example.xhbblog.pojo.FriendlyLink;
 import com.example.xhbblog.pojo.Message;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

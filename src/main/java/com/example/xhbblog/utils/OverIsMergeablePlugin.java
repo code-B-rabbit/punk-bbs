@@ -1,4 +1,4 @@
-package com.example.xhbblog.util;
+package com.example.xhbblog.utils;
 
 import org.mybatis.generator.api.GeneratedXmlFile;
 import org.mybatis.generator.api.IntrospectedTable;

@@ -82,7 +82,11 @@
             <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clip-rule="evenodd"/>
           </svg></a>
         </div>
-        <ul class="langs navbar-text"><a href="#" class="active">EN</a><span>           </span><a href="#">ES</a></ul>
+        <ul class="langs navbar-text">
+          <a href="#" class="active">EN</a>
+          <span>           </span>
+          <a href="#">ES</a>
+        </ul>
       </div>
     </div>
   </nav>
@@ -94,48 +98,6 @@
         <main class="posts-listing ph-col-8 col-lg-8"  th:fragment="articles">
           <div class=" container">
             <div class="row">
-              <!--
-              <div class="post ph-col-6 col-xl-6" th:each="a:${page.list}">
-                <div class="post-thumbnail"><a th:href="@{article(id=${a.id})}" href="post.html"><img th:src="@{${a.firstPicture}}" style="width: 350px!important;height: 262.5px!important;" src="../static/img/blog-post-1.jpeg" alt="..." class="img-fluid"></a></div>
-                <div class="post-details">
-                  <div class="post-meta d-flex justify-content-between">
-                    <div class="date meta-last" th:text="${#dates.format(a.createTime,'yyyy-MM-dd')}">20 May | 2016</div>
-                    <div class="category"><a th:href="@{/articlesByTag(tid=${a.tag.id})}" th:text="${a.tag.name}" href="#">Business</a></div>
-                  </div>
-                    <a class="h4" th:href="@{article(id=${a.id})}" th:text="${a.title}">
-                      Alberto Savoia Can Teach You About Interior
-                    </a>
-                  <p class="text-muted">
-                    <span th:text="${a.info}">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</span>
-                  </p>
-                  <footer class="post-footer d-flex align-items-center">
-
-                    <div class="views">
-                      <svg class="bi bi-eye text-info" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 001.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0014.828 8a13.133 13.133 0 00-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 001.172 8z" clip-rule="evenodd"/>
-                        <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0z" clip-rule="evenodd"/>
-                      </svg>
-                      <span th:text="${a.visit}">2 months ago</span>
-                    </div>
-                    <div class="date">
-                      <svg class="bi bi-stopwatch text-info" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" d="M8 15A6 6 0 108 3a6 6 0 000 12zm0 1A7 7 0 108 2a7 7 0 000 14z" clip-rule="evenodd"/>
-                      <path fill-rule="evenodd" d="M8 4.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4.5a.5.5 0 010-1h3V5a.5.5 0 01.5-.5zM5.5.5A.5.5 0 016 0h4a.5.5 0 010 1H6a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
-                      <path d="M7 1h2v2H7V1z"/>
-                    </svg>
-                      <span th:text="${#dates.format(a.createTime,'yyyy-MM-dd')}">2 months ago</span>
-                    </div>
-                    <div class="comments meta-last">
-                      <svg class="bi bi-chat-square-dots text-info" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v8a1 1 0 001 1h2.5a2 2 0 011.6.8L8 14.333 9.9 11.8a2 2 0 011.6-.8H14a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v8a2 2 0 002 2h2.5a1 1 0 01.8.4l1.9 2.533a1 1 0 001.6 0l1.9-2.533a1 1 0 01.8-.4H14a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"/>
-                        <path d="M5 6a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0z"/>
-                      </svg>
-                      <span th:text="${a.commentSize}">12</span>
-                    </div>
-                  </footer>
-                </div>
-              </div>
-              -->
               <div class="card mb-3" th:each="a:${tops}">
                 <div class="row no-gutters">
                   <div class="col-md-4">
@@ -432,7 +394,7 @@
           <!-- Widget [Search Bar Widget]-->
           <div class="widget search" style="background-color: white;!important;">
             <header>
-              <h3 class="h6" style="font-family: Playfair Display, serif">搜索博客内容</h3>
+              <h3 class="h6" >搜索博客内容</h3>
             </header>
             <form action="/blogsearch" class="search-form">
               <div class="form-group">
@@ -449,7 +411,7 @@
 
           <div class="widget tags" style="background-color: white;!important;">
             <header>
-              <h3 class="h6" style="font-family: Playfair Display, serif">
+              <h3 class="h6" >
                 标签云
               </h3>
             </header>
@@ -500,7 +462,7 @@
 
           <div style="background-color: white;!important;" class="widget latest-posts" >
             <header>
-              <h3 class="h6" style="font-family: Playfair Display, serif">最多访问</h3>
+              <h3 class="h6">最多访问</h3>
             </header>
             <hr class="bg-info">
             <div class="blog-posts">
@@ -532,7 +494,7 @@
 
           <div style="background-color: white;!important;" class="widget latest-posts" >
             <header>
-              <h3 class="h6" style="font-family: Playfair Display, serif">最新文章</h3>
+              <h3 class="h6" >最新文章</h3>
             </header>
             <hr class="bg-info">
             <div class="blog-posts">
@@ -562,9 +524,25 @@
             </div>
           </div>
 
+          <div style="background-color: white;!important;" class="widget latest-posts" >
+            <header>
+              <h3 class="h6" >最新评论</h3>
+            </header>
+            <hr class="bg-info">
+            <div class="blog-posts">
+              <ul class="list-group">
+                <a th:href="@{article(id=${c.aid})}" class="list-group-item d-flex justify-content-between align-items-center" th:each="c:${lastComments}">
+                    [[${c.content}]]
+                  <span th:text="${c.visitor_name}" class="badge badge-primary badge-pill">14</span>
+                </a>
+              </ul>
+            </div>
+          </div>
+
+
           <div class="widget latest-posts" style="background-color: white;!important;">
             <header>
-              <h3 class="h6" style="font-family: Playfair Display, serif">本站错误访问页面</h3>
+              <h3 class="h6" >本站错误访问页面</h3>
             </header>
             <hr class="bg-info">
             <div class="blog-posts">

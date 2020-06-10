@@ -1,7 +1,6 @@
 package com.example.xhbblog.Service.impl;
 
 import com.example.xhbblog.Service.FriendLyLinkService;
-import com.example.xhbblog.Service.impl.CommentServiceImpl;
 import com.example.xhbblog.mapper.FriendlyLinkMapper;
 import com.example.xhbblog.pojo.FriendlyLink;
 import com.example.xhbblog.pojo.FriendlyLinkExample;
@@ -31,6 +30,7 @@ public class FrientLyLinkServiceImpl implements FriendLyLinkService {
     private static final Logger LOG = LoggerFactory.getLogger(CommentServiceImpl.class);
 
     @Override
+    @CacheEvict(allEntries = true)
     public void add(FriendlyLink friendlyLink) {
         mapper.insert(friendlyLink);
     }

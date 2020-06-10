@@ -40,6 +40,7 @@ public class CommentServiceImpl implements CommentService {
     @Caching(evict = {
             @CacheEvict(key = "'countOfArticle'+#comment.getAid()"),
             @CacheEvict(key = "'countOfComment'+#comment.getAid()"),
+            @CacheEvict(key = "'lastComment'"),
     })
     public void add(Comment comment) {
         mapper.insert(comment);
@@ -120,6 +121,13 @@ public class CommentServiceImpl implements CommentService {
     public Integer countOfComment(Integer aid) {
         LOG.info("文章{}评论加回复数缓存未命中",aid);
         return mapper.countOfComment(aid);
+    }
+
+    @Override
+    @Cacheable(key = "'lastComment'")
+    public List<Comment> lastComment() {
+        LOG.info("最新评论缓存未命中");
+        return mapper.lastComment();
     }
 
     @Override

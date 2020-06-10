@@ -120,76 +120,76 @@
       typing.start();
     </script>
 </div>
-    <section class="newsletter no-padding-top">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <h2>友链链接</h2>
-            <p class="text-big">如果您觉得本站不错的话,可以在下面填写申请与本站成为友站</p>
-          </div>
-          <div class="col-md-8">
-            <div class="form-holder">
-              <div>
-                <div class="form-group">
-                  <input type="hidden" class="allowed" name="allowed" value="false"/>
-                  <input type="text" class="link" name="link"  placeholder="请填写您的完整网站地址 例如:http://www.xuhaobo.site"/>
-                  <br>
-                  <input type="text" class="name" name="name"  placeholder="请填写您的网站名"/>
-                  <br>
-                  <div class="input-group mb-3">
-                    <input type="email" class="email" name="email" id="email" placeholder="请填写您的电子邮箱地址"/>
-                    <div class="input-group-append">
-                      <button id="link" type="submit" class="submit">提交</button>
-                    </div>
-                  </div>
-                  <br>
-                </div>
-              </div>
-              <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-              <script>
-                $(
-                        function () {
-                          $('button#link').click(function()
-                                  {
-                                    allowed=$('input.allowed').val();
-                                    link=$('input.link').val();
-                                    nam=$('input.name').val();
-                                    email=$('input.email').val();
-                                    if(allowed==""||link==""||nam==""||email=="")
-                                    {
-                                      alert("请将您的个人信息填写完整");
-                                    }else
-                                    {
-                                      $.ajax({
-                                        //请求方式
-                                        type : "POST",
-                                        //请求的媒体类型
-                                        contentType: "application/json;charset=UTF-8",
-                                        //请求地址
-                                        url : "/addFriendLyLink",
-                                        //数据，json字符串
-                                        data : JSON.stringify({'allowed':allowed,'link':link,'name':nam,'email':email}),
-                                        //请求成功
-                                        success : function(result) {
-                                          alert(result);
-                                        },
-                                        //请求失败，包含具体的错误信息
-                                        error : function(e){
-                                          console.log(e.status);
-                                          console.log(e.responseText);
-                                        }
-                                      });
-                                    }
-                                  }
-                          )
-                        }
-                )
-              </script>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+<!--    <section class="newsletter no-padding-top">-->
+<!--      <div class="container">-->
+<!--        <div class="row">-->
+<!--          <div class="col-md-6">-->
+<!--            <h2>友链链接</h2>-->
+<!--            <p class="text-big">如果您觉得本站不错的话,可以在下面填写申请与本站成为友站</p>-->
+<!--          </div>-->
+<!--          <div class="col-md-8">-->
+<!--            <div class="form-holder">-->
+<!--              <div>-->
+<!--                <div class="form-group">-->
+<!--                  <input type="hidden" class="allowed" name="allowed" value="false"/>-->
+<!--                  <input type="text" class="link" name="link"  placeholder="请填写您的完整网站地址 例如:http://www.xuhaobo.site"/>-->
+<!--                  <br>-->
+<!--                  <input type="text" class="name" name="name"  placeholder="请填写您的网站名"/>-->
+<!--                  <br>-->
+<!--                  <div class="input-group mb-3">-->
+<!--                    <input type="email" class="email" name="email" id="email" placeholder="请填写您的电子邮箱地址"/>-->
+<!--                    <div class="input-group-append">-->
+<!--                      <button id="link" type="submit" class="submit">提交</button>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <br>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>-->
+<!--              <script>-->
+<!--                $(-->
+<!--                        function () {-->
+<!--                          $('button#link').click(function()-->
+<!--                                  {-->
+<!--                                    allowed=$('input.allowed').val();-->
+<!--                                    link=$('input.link').val();-->
+<!--                                    nam=$('input.name').val();-->
+<!--                                    email=$('input.email').val();-->
+<!--                                    if(allowed==""||link==""||nam==""||email=="")-->
+<!--                                    {-->
+<!--                                      alert("请将您的个人信息填写完整");-->
+<!--                                    }else-->
+<!--                                    {-->
+<!--                                      $.ajax({-->
+<!--                                        //请求方式-->
+<!--                                        type : "POST",-->
+<!--                                        //请求的媒体类型-->
+<!--                                        contentType: "application/json;charset=UTF-8",-->
+<!--                                        //请求地址-->
+<!--                                        url : "/addFriendLyLink",-->
+<!--                                        //数据，json字符串-->
+<!--                                        data : JSON.stringify({'allowed':allowed,'link':link,'name':nam,'email':email}),-->
+<!--                                        //请求成功-->
+<!--                                        success : function(result) {-->
+<!--                                          alert(result);-->
+<!--                                        },-->
+<!--                                        //请求失败，包含具体的错误信息-->
+<!--                                        error : function(e){-->
+<!--                                          console.log(e.status);-->
+<!--                                          console.log(e.responseText);-->
+<!--                                        }-->
+<!--                                      });-->
+<!--                                    }-->
+<!--                                  }-->
+<!--                          )-->
+<!--                        }-->
+<!--                )-->
+<!--              </script>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </section>-->
     <!-- Gallery Section-->
     <!-- Page Footer-->
     <footer class="main-footer" th:replace="foot::foot">

@@ -1,8 +1,6 @@
-package com.example.xhbblog.util;
+package com.example.xhbblog.utils;
 
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.constraints.NotEmpty;
 
 public class UploadedImageFile {
 

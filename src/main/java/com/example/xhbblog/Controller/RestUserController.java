@@ -1,17 +1,15 @@
 package com.example.xhbblog.Controller;
 
 import com.example.xhbblog.Service.UserService;
+import com.example.xhbblog.annotation.AccessLimit;
 import com.example.xhbblog.pojo.User;
-import com.example.xhbblog.util.CookieUtil;
+import com.example.xhbblog.utils.CookieUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -30,6 +28,7 @@ public class RestUserController {
     @PostMapping("/check")        //验证用户
     public Map<String,Boolean> checkUser(User user, HttpSession session, HttpServletRequest request,HttpServletResponse response)
     {
+        System.out.println(user);
         String password=user.getPassword();        //暂时存储一下旧的密码
         Map<String,Boolean> anw=new HashMap<>();
         User u=userService.check(user);
@@ -80,11 +79,18 @@ public class RestUserController {
         return anw;
     }
 
+    /**
+     * 限刷方式:十秒限刷十次,每秒限刷一次
+     * @param email
+     * @return
+     */
+
+    @AccessLimit(maxCount = 10,seconds = 10)
     @GetMapping("/checkEmail")        //查看是否有重邮箱
     public Map checkEmail(String email)
     {
         Map<String,Boolean> anw=new HashMap<>();
-        anw.put("exists",userService.checkEmail(email));
+        anw.put("exist",userService.checkEmail(email));
         return anw;
     }
 
@@ -103,12 +109,13 @@ public class RestUserController {
     }
 
 
-    @RequestMapping("/deleteUser")      //注销
-    public Map delete(HttpSession session)
+    @PostMapping("/exit")      //注销
+    public Map<String,String> delete(HttpSession session)
     {
         Map<String,String> anw=new HashMap<>();
         if(session.getAttribute("user")!=null)
         {
+            session.removeAttribute("user");
             anw.put("message","注销成功!");
         }else{
             anw.put("message","您尚未登录");

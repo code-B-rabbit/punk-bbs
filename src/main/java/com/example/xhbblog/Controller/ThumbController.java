@@ -2,11 +2,10 @@ package com.example.xhbblog.Controller;
 
 import com.example.xhbblog.Service.ThumbsService;
 import com.example.xhbblog.pojo.Thumbs;
-import com.example.xhbblog.util.IpUtil;
+import com.example.xhbblog.utils.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;

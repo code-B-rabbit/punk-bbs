@@ -14,8 +14,6 @@
     <name>xhb_blog</name>
     <description>Demo project for Spring Boot</description>
 
-
-
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -25,24 +23,6 @@
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
             <version>4.1.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch</artifactId>
-            <version>6.2.2</version>
-        </dependency>
-
-        <!-- Java High Level REST Client -->
-        <dependency>
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>elasticsearch-rest-high-level-client</artifactId>
-            <version>6.2.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
 
         <dependency>
@@ -92,13 +72,6 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -124,10 +97,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-test</artifactId>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
@@ -144,17 +119,17 @@
             </artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-           <version>1.2.49</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.penggle</groupId>
+            <artifactId>kaptcha</artifactId>
+            <version>2.3.2</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -162,14 +137,17 @@
         </dependency>
     </dependencies>
 
-
-
     <repositories>
+
         <repository>
-            <id>aliyun</id>
-            <name>aliyun</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+            <id>spring-libs-release</id>
+            <name>Spring Releases</name>
+            <url>https://repo.spring.io/libs-release</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
+
     </repositories>
 
     <build>

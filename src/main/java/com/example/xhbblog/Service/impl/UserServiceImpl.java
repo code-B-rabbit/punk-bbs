@@ -4,7 +4,7 @@ import com.example.xhbblog.Service.UserService;
 import com.example.xhbblog.mapper.UserMapper;
 import com.example.xhbblog.pojo.User;
 import com.example.xhbblog.pojo.UserExample;
-import com.example.xhbblog.util.MD5Utils;
+import com.example.xhbblog.utils.MD5Utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,5 +64,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User get(Integer id) {
         return userMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public Integer uid(String name) {
+        return userMapper.getUid(name);
     }
 }

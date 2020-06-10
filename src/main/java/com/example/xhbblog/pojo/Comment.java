@@ -20,14 +20,6 @@ public class Comment implements Serializable {
     //四个映射类属性
     private Article article;     //多对一映射
 
-    public Article getArticle() {
-        return article;
-    }
-
-    public void setArticle(Article article) {
-        this.article = article;
-    }
-
     private String visitor_name;
 
     private String visitor_email;
@@ -35,6 +27,16 @@ public class Comment implements Serializable {
     private String parentVisitorName;
 
     private List<Comment> childs;
+
+
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
 
     public String getParentVisitorName() {
         return parentVisitorName;

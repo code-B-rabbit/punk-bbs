@@ -2,7 +2,6 @@ package com.example.xhbblog.Controller.admin;
 
 import com.example.xhbblog.Service.ArticleService;
 import com.example.xhbblog.Service.TagService;
-import com.example.xhbblog.pojo.Article;
 import com.example.xhbblog.pojo.ArticleWithBLOBs;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -29,8 +28,8 @@ public class ArticleController {
     private String list(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count, Model model,Boolean published)
     {
         PageHelper.offsetPage(start,count);
-        List<Article> articles=service.listAll(published);
-        model.addAttribute("page",new PageInfo<Article>(articles));
+        List<ArticleWithBLOBs> articles=service.listAll(published);
+        model.addAttribute("page",new PageInfo<ArticleWithBLOBs>(articles));
         if(published!=null)
         {
             model.addAttribute("limit","published="+published);           //若存在筛选则进入添加筛选项
@@ -47,8 +46,8 @@ public class ArticleController {
         }
         model.addAttribute("tag",tagService.get(tid));
         PageHelper.offsetPage(start,count);
-        List<Article> articles=service.listByTid(tid,published);   //后台调用标签的管理方法
-        model.addAttribute("page",new PageInfo<Article>(articles));
+        List<ArticleWithBLOBs> articles=service.listByTid(tid,published);   //后台调用标签的管理方法
+        model.addAttribute("page",new PageInfo<ArticleWithBLOBs>(articles));
         String limit="tid="+tid;
         if(published!=null)
         {
@@ -63,8 +62,8 @@ public class ArticleController {
     ,Boolean published)
     {
         PageHelper.offsetPage(start,count);
-        List<Article> articles=service.listArticleLike(key,published);
-        model.addAttribute("page",new PageInfo<Article>(articles));
+        List<ArticleWithBLOBs> articles=service.listArticleLike(key,published);
+        model.addAttribute("page",new PageInfo<ArticleWithBLOBs>(articles));
         String limit="key="+key;
         if(published!=null)
         {

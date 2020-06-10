@@ -81,13 +81,16 @@ $(
                     async : false,        //不设置异步
                     //请求成功
                     success : function(result) {
-                        if(result.exists==true)
+                        if(result.exist==true)
                         {
                             $('div#email').text("邮箱地址不能重复");
                             $('div#email').show();
-                        }else{
+                        }else if(result.exist==false){
                             anw=true;
                             $('div#email').hide();
+                        }else{
+                            $('div#email').text("服务器繁忙,请等待稍后再试");
+                            $('div#email').show();
                         }
                     }
                 });

@@ -1,4 +1,4 @@
-package com.example.xhbblog.util;
+package com.example.xhbblog.utils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

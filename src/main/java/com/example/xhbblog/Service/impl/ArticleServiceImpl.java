@@ -3,6 +3,7 @@ package com.example.xhbblog.Service.impl;
 import com.example.xhbblog.Service.ArticleService;
 import com.example.xhbblog.Service.CommentService;
 import com.example.xhbblog.Service.TagService;
+import com.example.xhbblog.Service.ThumbsService;
 import com.example.xhbblog.mapper.ArticleMapper;
 import com.example.xhbblog.mapper.ThumbsMapper;
 import com.example.xhbblog.pojo.Article;
@@ -40,12 +41,14 @@ public class ArticleServiceImpl implements ArticleService {
     private static final Logger LOG = LoggerFactory.getLogger(ArticleServiceImpl.class);
 
 
-
     @Autowired
     private ThumbsMapper thumbsMapper;
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private ThumbsService thumbsService;
 
     @Autowired
     private TagService tagService;
@@ -62,13 +65,13 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void remove(Integer id) {
-        thumbsMapper.deleteThumbByAid(id);            //级联删除
-        articleMapper.deleteByPrimaryKey(id);
-        redisTemplate.delete("article::"+id);
         if(articleMapper.get(id).getTop()==true)
         {
             redisTemplate.delete("top");
         }
+        thumbsMapper.deleteThumbByAid(id);            //级联删除
+        articleMapper.deleteByPrimaryKey(id);
+        redisTemplate.delete("article::"+id);
     }
 
     @Override
@@ -94,20 +97,29 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
 
-    private void setCount(Article article)
+    private void setThumbCount(Article article)
     {
         article.setThumbsCount(thumbsMapper.countOf(article.getId()));
     }
 
+    private void setCount(Article article)
+    {
+        article.setThumbsCount(thumbsService.countOf(article.getId()));
+    }
+
     private void setThumb(Article item,String address)
     {
-        item.setThumb(thumbsMapper.isThumb(item.getId(),address));
+        item.setThumb(thumbsService.isThumb(item.getId(),address));
     }
+
+
 
     private void setTag(Article article)
     {
         article.setTag(tagService.get(article.getTid()));
     }
+
+
 
     private void setVisit(Article article)
     {
@@ -118,18 +130,22 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
 
+
     private void setCommentSize(Article article)
     {
         article.setCommentSize(commentService.countOfComment(article.getId()));
     }
 
+
+
     @Override
-    public List<Article> listByTid(Integer tid,Boolean published) {
-        List<Article> articles = articleMapper.listByTid(tid, published);
+    public List<ArticleWithBLOBs> listByTid(Integer tid,Boolean published) {
+        List<ArticleWithBLOBs> articles = articleMapper.findByTid(tid, published);
         for (Article article : articles) {
             setVisit(article);
             setCommentSize(article);
             setTag(article);
+            setThumbCount(article);
         }
         return articles;
     }
@@ -138,10 +154,11 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleWithBLOBs findById(Integer id,String address)
     {
         ArticleWithBLOBs article = articleMapper.findById(id);
-        setThumb(article,address);
         setVisit(article);
         setCommentSize(article);
         setTag(article);
+        setCount(article);
+        setThumb(article,address);
         return article;
     }
 
@@ -149,17 +166,18 @@ public class ArticleServiceImpl implements ArticleService {
     public List<ArticleWithBLOBs> findByTid(Integer tid,String address,Boolean published) {
         List<ArticleWithBLOBs> all = articleMapper.findByTid(tid,published);
         for (ArticleWithBLOBs item : all) {
-            setThumb(item,address);
             setVisit(item);
             setCommentSize(item);
             setTag(item);
+            setCount(item);
+            setThumb(item,address);
         }
         return all;       //前台只向用户展示已经出版的
     }
 
     @Override
-    public List<Article> listAll(Boolean published) {
-        List<Article> articles = articleMapper.listAll(published);
+    public List<ArticleWithBLOBs> listAll(Boolean published) {
+        List<ArticleWithBLOBs> articles = articleMapper.findAll(published);
         for (Article article : articles) {
             setCommentSize(article);
             setVisit(article);
@@ -174,16 +192,15 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
 
-
-
     @Override
     public List<ArticleWithBLOBs> findAll(String address) {
-        List<ArticleWithBLOBs> all = articleMapper.findAll();
+        List<ArticleWithBLOBs> all = articleMapper.findAll(true);
         for (ArticleWithBLOBs item : all) {
             setThumb(item,address);
             setVisit(item);
             setCommentSize(item);
             setTag(item);
+            setCount(item);
         }
         return all;       //前台只向用户展示已经出版的
     }
@@ -191,23 +208,26 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleWithBLOBs> findArticleLike(String s,String address) {
-        List<ArticleWithBLOBs> all = articleMapper.findArticleLike("%"+s+"%");
+        List<ArticleWithBLOBs> all = articleMapper.findArticleLike("%"+s+"%",true);
+        //es:post查询bllog
         for (ArticleWithBLOBs item : all) {
-            setThumb(item,address);
             setVisit(item);
             setCommentSize(item);
             setTag(item);
+            setCount(item);
+            setThumb(item,address);
         }
         return all;
     }
 
     @Override
-    public List<Article> listArticleLike(String s,Boolean published) {
-        List<Article> articles = articleMapper.listArticleLike("%" + s + "%", published);
+    public List<ArticleWithBLOBs> listArticleLike(String s,Boolean published) {
+        List<ArticleWithBLOBs> articles = articleMapper.findArticleLike("%" + s + "%", published);
         for (Article article : articles) {
             setTag(article);
             setCommentSize(article);
             setVisit(article);
+            setCount(article);
         }
         return articles;
     }
@@ -281,11 +301,11 @@ public class ArticleServiceImpl implements ArticleService {
         }
         List<ArticleWithBLOBs> anw = (List<ArticleWithBLOBs>) redisTemplate.opsForValue().get("top");
         for (ArticleWithBLOBs item : anw) {
-            setThumb(item,address);
             setVisit(item);
             setCommentSize(item);
             setTag(item);
             setCount(item);        //点赞数
+            setThumb(item,address);
         }
         return anw;
     }

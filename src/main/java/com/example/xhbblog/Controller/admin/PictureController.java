@@ -2,7 +2,7 @@ package com.example.xhbblog.Controller.admin;
 
 import com.example.xhbblog.Service.PictureService;
 import com.example.xhbblog.pojo.Picture;
-import com.example.xhbblog.util.QiniuUtil;
+import com.example.xhbblog.utils.QiniuUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.qiniu.common.QiniuException;

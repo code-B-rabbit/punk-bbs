@@ -37,6 +37,7 @@
     }
   </style>
 
+<div class="bar"></div>
   <body>
 
 <!--  <link rel="stylesheet" href="../static/editor/examples/css/timestyle.css" th:href="@{/editor/examples/css/timestyle.css}" />-->
@@ -222,9 +223,8 @@
                     <div id="test-editormd" style="font-size: 16px;!important;
     font-weight: 300;!important;
     line-height: 1.8;!important;
-    text-align: justify;!important;
-    font-family: 黑体!important;
-    font-weight: bold!important;">
+    font-family: 微软雅黑!important;
+    ">
                       <textarea  id="text" th:text="${art.content}"></textarea>
                     </div>
                   </div>
@@ -317,6 +317,7 @@
                       <input name="aid" id="aid" th:value="${art.id}" type="hidden" />
                       <div class="form-group ph-col-12 col-md-12">
                         <button id="submit" type="submit" class="btn btn-warning">发送评论</button>
+                        <button id="noNameSubmit" type="submit" class="btn btn-success">匿名评论</button>
                       </div>
                     </div>
                   </div>
@@ -421,13 +422,31 @@
               }
       );
 
+        $('button#noNameSubmit').click(
+            function () {
+                    content=$('textarea#content').val();
+                    if(content=="")
+                    {
+                        $('#modal1').modal('show');
+                        return;
+                    }
+                    aid=$('input#aid').val();
+                    data={'content':content,'aid':aid};
+                    $('div.post-comments').load(
+                        '/AddcommentNoName',data,function () {
+                            $('textarea#content').val("");
+                        }
+                    );
+                    $('html,body').animate({scrollTop:$('.post-comments').offset().top});
+                }
+        )
 
       $('button#submit').click(
               function () {
                 anw=[[${session.user}]];
                 if(anw==null)
                 {
-                 alert("请先登录");
+                  alert("请先登录");
                   window.location.href="/user/login";
                 }else
                 {
@@ -451,4 +470,11 @@
     })
   </script>
   </body>
+<script th:src="@{/js/headBand.min.js}" src="headBand.min.js"></script>
+<script>
+  $('div.bar').headBand({
+    'background':'#008aff',
+    'height':"3"
+  });
+</script>
 </html>

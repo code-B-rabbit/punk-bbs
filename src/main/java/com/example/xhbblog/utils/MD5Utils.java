@@ -1,4 +1,4 @@
-package com.example.xhbblog.util;
+package com.example.xhbblog.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

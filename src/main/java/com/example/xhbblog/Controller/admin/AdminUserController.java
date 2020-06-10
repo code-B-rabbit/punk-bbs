@@ -2,7 +2,7 @@ package com.example.xhbblog.Controller.admin;
 
 import com.example.xhbblog.Service.UserService;
 import com.example.xhbblog.pojo.User;
-import com.example.xhbblog.util.MD5Utils;
+import com.example.xhbblog.utils.MD5Utils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;

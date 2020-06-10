@@ -26,11 +26,15 @@ import org.springframework.util.StringUtils;
 @Configuration
 public class RedisConfig extends CachingConfigurerSupport {
 
-    @Autowired
-    private RedisConnectionFactory redisConnectionFactory;
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Bean
+    public ListOperations list()
+    {
+        return redisTemplate.opsForList();
+    }
 
     @Bean
     public ZSetOperations zSet()
@@ -38,11 +42,6 @@ public class RedisConfig extends CachingConfigurerSupport {
         return redisTemplate.opsForZSet();
     }
 
-    @Bean
-    public ListOperations list()
-    {
-        return redisTemplate.opsForList();
-    }
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {

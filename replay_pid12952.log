@@ -1,0 +1,65 @@
+JvmtiExport can_access_local_variables 0
+JvmtiExport can_hotswap_or_post_breakpoint 0
+JvmtiExport can_post_on_exceptions 0
+# 137 ciObject found
+ciMethod java/lang/Object <init> ()V 3005 13 1 0 -1
+ciMethod java/lang/Object equals (Ljava/lang/Object;)Z 3005 13 1 0 -1
+ciMethod java/lang/Object toString ()Ljava/lang/String; 41 1 1 0 -1
+instanceKlass io/lettuce/core/resource/Futures$$Lambda$692
+instanceKlass io/lettuce/core/resource/Futures
+instanceKlass io/lettuce/core/resource/Futures$PromiseAggregator
+instanceKlass ch/qos/logback/classic/spi/ClassPackagingData
+instanceKlass ch/qos/logback/classic/spi/STEUtil
+instanceKlass ch/qos/logback/classic/spi/PackagingDataCalculator
+instanceKlass ch/qos/logback/classic/spi/StackTraceElementProxy
+instanceKlass ch/qos/logback/classic/spi/ThrowableProxyUtil
+instanceKlass ch/qos/logback/classic/spi/ThrowableProxy
+instanceKlass ch/qos/logback/classic/spi/IThrowableProxy
+instanceKlass io/netty/util/concurrent/GlobalEventExecutor$2
+instanceKlass java/lang/invoke/LambdaForm$MH
+instanceKlass java/lang/invoke/LambdaForm$DMH
+instanceKlass io/lettuce/core/AbstractRedisClient$$Lambda$691
+instanceKlass java/lang/invoke/LambdaForm$DMH
+instanceKlass io/netty/channel/group/DefaultChannelGroupFuture$1
+instanceKlass io/netty/channel/group/ChannelMatchers$InvertMatcher
+instanceKlass io/netty/channel/group/ChannelMatchers$ClassMatcher
+instanceKlass io/netty/channel/group/ChannelMatchers$1
+instanceKlass io/netty/channel/group/ChannelMatcher
+instanceKlass io/netty/channel/group/ChannelMatchers
+instanceKlass io/netty/channel/group/CombinedIterator
+instanceKlass org/springframework/data/redis/connection/lettuce/LettucePoolingConnectionProvider$$Lambda$690
+instanceKlass org/springframework/data/redis/connection/lettuce/LettucePoolingConnectionProvider$$Lambda$689
+instanceKlass org/springframework/data/redis/connection/lettuce/LettucePoolingConnectionProvider$$Lambda$688
+instanceKlass org/springframework/data/redis/connection/lettuce/LettucePoolingConnectionProvider$$Lambda$687
+instanceKlass io/netty/buffer/PoolArena$1
+instanceKlass io/lettuce/core/support/AsyncPool
+instanceKlass org/springframework/data/redis/connection/lettuce/LettucePoolingConnectionProvider$$Lambda$686
+instanceKlass io/lettuce/core/protocol/DefaultEndpoint$$Lambda$685
+instanceKlass org/springframework/data/redis/connection/lettuce/LettucePoolingConnectionProvider$$Lambda$684
+instanceKlass io/lettuce/core/protocol/DefaultEndpoint$$Lambda$683
+instanceKlass org/springframework/data/redis/connection/lettuce/LettucePoolingConnectionProvider$$Lambda$682
+instanceKlass io/lettuce/core/protocol/DefaultEndpoint$$Lambda$681
+instanceKlass io/lettuce/core/protocol/DefaultEndpoint$$Lambda$680
+instanceKlass io/lettuce/core/RedisChannelHandler$$Lambda$679
+instanceKlass io/netty/util/concurrent/DefaultPromise$1
+instanceKlass io/netty/channel/AbstractChannel$AbstractUnsafe$8
+instanceKlass io/lettuce/core/internal/Futures$$Lambda$678
+instanceKlass io/lettuce/core/internal/Futures
+instanceKlass io/netty/channel/AbstractChannelHandlerContext$11
+instanceKlass io/lettuce/core/protocol/DefaultEndpoint$$Lambda$677
+instanceKlass java/lang/invoke/LambdaForm$DMH
+instanceKlass io/lettuce/core/protocol/DefaultEndpoint$$Lambda$676
+instanceKlass org/springframework/data/redis/connection/lettuce/LettucePoolingConnectionProvider$$Lambda$675
+instanceKlass org/apache/commons/pool2/impl/LinkedBlockingDeque$Node
+instanceKlass org/springframework/data/util/Optionals$$Lambda$674
+instanceKlass java/util/stream/Streams$AbstractStreamBuilderImpl
+instanceKlass java/util/stream/Stream$Builder
+instanceKlass org/springframework/data/util/Optionals$$Lambda$673
+instanceKlass org/springframework/data/redis/connection/lettuce/LettuceConnectionFactory$$Lambda$672
+instanceKlass java/lang/invoke/LambdaForm$DMH
+instanceKlass org/springframework/data/util/Optionals$$Lambda$671
+instanceKlass org/springframework/data/util/Optionals
+instanceKlass com/zaxxer/hikari/pool/HikariPool$$Lambda$670
+instanceKlass com/zaxxer/hikari/pool/HikariPool$$Lambda$669
+instanceKlass java/lang/invoke/LambdaForm$MH
+in
