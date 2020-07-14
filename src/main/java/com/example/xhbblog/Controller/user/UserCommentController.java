@@ -4,6 +4,7 @@ import com.example.xhbblog.Service.ArticleService;
 import com.example.xhbblog.Service.CommentService;
 import com.example.xhbblog.Service.UserService;
 import com.example.xhbblog.annotation.NoRepeatSubmit;
+import com.example.xhbblog.pojo.Article;
 import com.example.xhbblog.pojo.Comment;
 import com.example.xhbblog.pojo.User;
 import com.example.xhbblog.utils.PageInfoUtil;
@@ -52,7 +53,7 @@ public class UserCommentController {   //后台评论只有查找和删除逻辑
         User u=userService.get(uid);
         PageHelper.offsetPage(start, count);
         List<Comment> comments=commentService.listByUid(uid);
-        model.addAttribute("user",u);
+        model.addAttribute("mine",true);
         model.addAttribute("page",new PageInfo<Comment>(comments));
         return "admin/commentList";
     }
@@ -60,24 +61,24 @@ public class UserCommentController {   //后台评论只有查找和删除逻辑
 
     /**
      * 某文章的全部回复
-     * 这里出现一个bug:根据cid查询之后不知道为什么下一次分页就出bug,无法查询到回复者
+     * 这里如果该文章属于该用户,那么该用户可以删除该文章所有评论,否则则没有权限删除
      * @param start
      * @param count
      * @param aid
      * @param model
-     * @param request
      * @return
      */
     @RequestMapping("/listByAid")
-    public String listByAid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count, Integer aid, Model model,
-                            HttpServletRequest request)
+    public String listByAid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count, Integer aid, Model model,@SessionAttribute("uid")Integer uid)
     {
-        model.addAttribute("article",articleService.getTitle(aid));
-        model.addAttribute("limit","aid="+aid);
+        Article article=articleService.get(aid);
         PageHelper.startPage(start, count);
         List<Comment> comments=commentService.listByAid(aid);
         PageInfo<Comment> pageInfo=new PageInfo<Comment>(comments);
         model.addAttribute("page",pageInfo);
+        model.addAttribute("mine",uid==article.getUid());
+        model.addAttribute("article",article);
+        model.addAttribute("limit","aid="+aid);
         return "admin/commentList";
     }
 
@@ -85,15 +86,19 @@ public class UserCommentController {   //后台评论只有查找和删除逻辑
      * 某评论的全部回复
      */
     @RequestMapping("/listByCid")
-    public String listByCid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count,Integer cid,Model model)
+    public String listByCid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count,Integer cid,Model model,@SessionAttribute("uid")Integer uid)
     {
-        model.addAttribute("limit","cid="+cid);
-        model.addAttribute("cmt",commentService.get(cid));
+        Comment c=commentService.get(cid);
         PageHelper.offsetPage(start,count);
         List<Comment> comments=commentService.findChilds(cid);
         model.addAttribute("page",new PageInfo<>(comments));
+        model.addAttribute("limit","cid="+cid);
+        model.addAttribute("cmt",c);
+        model.addAttribute("mine",uid==c.getUid());
         return "admin/commentList";
     }
+
+
 
     /**
      * 后台回复评论
@@ -102,12 +107,42 @@ public class UserCommentController {   //后台评论只有查找和删除逻辑
      */
     @NoRepeatSubmit
     @RequestMapping(value = "/replyComment",method = RequestMethod.POST)//防止接口重复提交
-    public @ResponseBody Object reply(@RequestBody Comment comment, HttpSession session) throws IOException {
+    public @ResponseBody Object reply(@RequestBody Comment comment) throws IOException {
         comment.setCreateTime(new Date());
         commentService.add(comment);   //这里是自己的回复所以不显示在websocket上了
         commentService.sendComment(comment,userService.get(comment.getUid()));
         return "success";
     }
+
+    /**
+     * 查询某用户下的全部评论
+     * @param start
+     * @param count
+     * @param uid
+     * @param model
+     * @return
+     */
+    @RequestMapping("/listByUid")
+    public String listByUid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count,Integer uid,Model model,@SessionAttribute("uid")Integer myUid)
+    {
+        PageHelper.offsetPage(start,count);
+        List<Comment> comments=commentService.listByUid(uid);
+        model.addAttribute("page",new PageInfo<Comment>(comments));
+        model.addAttribute("limit","uid="+uid);
+        model.addAttribute("user",userService.get(uid));
+        model.addAttribute("mine",uid==myUid);
+        return "admin/commentList";
+    }
+
+    /**
+     * 单个删除
+     * @param cid
+     */
+    @RequestMapping(value = "/deleteComment/{cid}",method = RequestMethod.POST)
+    public @ResponseBody void deleteCids(@PathVariable("cid") Integer cid){
+        commentService.delete(cid);
+    }
+
 
     /**
      * 评论批量删除
@@ -123,51 +158,6 @@ public class UserCommentController {   //后台评论只有查找和删除逻辑
             res.put("msg","请检查批量删除的评论项中是否有评论含有未删除子评论");
         }
         return res;
-    }
-
-
-    /**
-     * 根据属性值判断跳转地址
-     * @param id
-     * @param aid
-     * @param uid
-     * @return
-     */
-    @RequestMapping("/deleteComment")
-    public String delete(Integer id,Integer aid,Integer uid,Integer cid)
-    {
-        LOG.info("删除评论ID:{}",id);
-        commentService.delete(id);
-        if(aid!=null){
-            return "redirect:/userAdmin/listByAid?aid="+aid;
-        }else if(uid!=null){
-            return "redirect:/userAdmin/listByUid?uid="+uid;
-        }
-        else if(cid!=null){
-            return "redirect:/userAdmin/listByCid?cid="+cid;
-        }
-        return "redirect:/userAdmin/commentList";
-    }
-
-    /**
-     * 查询某用户下的全部评论
-     * @param start
-     * @param count
-     * @param uid
-     * @param model
-     * @return
-     */
-    @RequestMapping("/listByUid")
-    public String listByUid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count,Integer uid,Model model)
-    {
-        //Integer total=commentService.countOfUser(uid);
-        PageHelper.offsetPage(start,count);
-        List<Comment> comments=commentService.listByUid(uid);
-        model.addAttribute("page",new PageInfo<Comment>(comments));
-        //model.addAttribute("count",total);
-        model.addAttribute("limit","uid="+uid);
-        model.addAttribute("user",userService.get(uid));
-        return "admin/commentList";
     }
 
 }

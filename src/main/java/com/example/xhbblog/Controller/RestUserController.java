@@ -145,6 +145,7 @@ public class RestUserController {
             u.setPassword(password);
             session.setAttribute("user",u);
             session.setAttribute("uid",u.getId());
+            session.setAttribute("admin",u.getRole().equals("admin"));
             redirectAttributes.addFlashAttribute("message","账户注册成功!!!");
             response.sendRedirect("/userAdmin/articleList");       //restController下正常重定向无效
         }

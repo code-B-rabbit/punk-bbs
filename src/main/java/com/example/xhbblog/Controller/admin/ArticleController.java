@@ -14,10 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
@@ -201,40 +198,6 @@ public class ArticleController {
         return "redirect:/admin/articleList";
     }
 
-    @RequestMapping("/deleteArticle")
-    public String delete(Integer id,Integer tid,Integer uid,Integer order,Boolean published,String key)
-    {
-        articleService.deleteArticle(id,uid);
-        String url="redirect:/admin/articleList?";   //默认查所有
-        if(tid!=null){               //按标签查
-            url="redirect:/admin/articleListByTag?tid="+tid;  //路由控制
-        }
-        if(key!=null){
-            url="redirect:/admin/articleLike?key="+key;
-        }
-        if(order!=null){
-            url+="&order="+order;
-        }
-        if(published!=null){
-            url+="&published="+published;
-        }
-        if(uid!=null){       //是否用用户uid约束
-            url+="&uid="+uid;
-        }
-        return url;
-    }
-
-    @RequestMapping("/getArticle")
-    public String get(Integer id)
-    {
-        return "redirect:/article?id="+id; //重定向到fore路径下
-    }
-
-    /**
-     * 将博客内容置顶
-     * @param id
-     * @return
-     */
     @RequestMapping("/TopArticle")
     public String topArticle(Integer id)
     {
@@ -252,5 +215,12 @@ public class ArticleController {
     {
         articleService.downArticle(id);
         return "redirect:/admin/articleList";
+    }
+
+
+    @RequestMapping(value = "/deleteArticle",method = RequestMethod.POST)
+    public @ResponseBody void delete(@RequestParam(value="id", required=true) Integer id,@RequestParam(value="uid", required=true)Integer uid)
+    {
+        articleService.deleteArticle(id,uid);
     }
 }

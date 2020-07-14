@@ -70,43 +70,6 @@ public class CommentController {   //后台评论只有查找和删除逻辑,添
         return "success";
     }
 
-    /**
-     * 评论批量删除
-     * @param cids
-     */
-    @RequestMapping(value = "/deleteComments",method = RequestMethod.POST)
-    public @ResponseBody Object deleteCids(@RequestBody List<Integer> cids){
-        Map<String,String> res=new HashMap<>();
-        try{
-            commentService.deleteCids(cids);
-            res.put("msg","success");
-        }catch (Exception e){
-            res.put("msg","请检查批量删除的评论项中是否有评论含有未删除子评论");
-        }
-        return res;
-    }
-
-
-    /**
-     * 根据属性值判断跳转地址
-     * @param id
-     * @param aid
-     * @param uid
-     * @return
-     */
-    @RequestMapping("/deleteComment")
-    public String delete(Integer id,Integer aid,Integer uid)
-    {
-        LOG.info("删除评论ID:{}",id);
-        commentService.delete(id);
-        if(aid!=null){
-            return "redirect:/admin/listByAid?aid="+aid;
-        }else if(uid!=null){
-            return "redirect:/admin/listByUid?uid="+uid;
-        }
-        return "redirect:/admin/commentList";
-    }
-
     @RequestMapping("/listByAid")
     public String listByAid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count, Integer aid, Model model,
                             HttpServletRequest request)
@@ -115,7 +78,6 @@ public class CommentController {   //后台评论只有查找和删除逻辑,添
         List<Comment> comments=commentService.listByAid(aid);
         model.addAttribute("page",new PageInfo<Comment>(comments));
         model.addAttribute("article",articleService.getTitle(aid));
-       // model.addAttribute("count",commentService.countOfComment(aid));
         model.addAttribute("limit","aid="+aid);
         return "admin/commentList";
     }
@@ -131,11 +93,9 @@ public class CommentController {   //后台评论只有查找和删除逻辑,添
     @RequestMapping("/listByUid")
     public String listByUid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count,Integer uid,Model model)
     {
-        //Integer total=commentService.countOfUser(uid);
         PageHelper.offsetPage(start,count);
         List<Comment> comments=commentService.listByUid(uid);
         model.addAttribute("page",new PageInfo<Comment>(comments));
-        //model.addAttribute("count",total);
         model.addAttribute("limit","uid="+uid);
         model.addAttribute("user",userService.get(uid));
         return "admin/commentList";
@@ -147,13 +107,36 @@ public class CommentController {   //后台评论只有查找和删除逻辑,添
     @RequestMapping("/listByCid")
     public String listByCid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count,Integer cid,Model model)
     {
-       // Integer total=commentService.countOfPar(cid);
         PageHelper.offsetPage(start,count);
         List<Comment> comments=commentService.findChilds(cid);
         model.addAttribute("page",new PageInfo<Comment>(comments));
-        //model.addAttribute("count",total);
         model.addAttribute("limit","cid="+cid);
         model.addAttribute("cmt",commentService.get(cid));
         return "admin/commentList";
+    }
+
+    /**
+     * 单个删除
+     * @param cid
+     */
+    @RequestMapping(value = "/deleteComment/{cid}",method = RequestMethod.POST)
+    public @ResponseBody void deleteCids(@PathVariable("cid") Integer cid){
+        commentService.delete(cid);
+    }
+
+    /**
+     * 评论批量删除
+     * @param cids
+     */
+    @RequestMapping(value = "/deleteComments",method = RequestMethod.POST)
+    public @ResponseBody Object deleteCids(@RequestBody List<Integer> cids){
+        Map<String,String> res=new HashMap<>();
+        try{
+            commentService.deleteCids(cids);
+            res.put("msg","success");
+        }catch (Exception e){
+            res.put("msg","请检查批量删除的评论项中是否有评论含有未删除子评论");
+        }
+        return res;
     }
 }

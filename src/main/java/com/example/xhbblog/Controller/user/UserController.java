@@ -138,7 +138,7 @@ public class UserController {
     @RequestMapping("/changeAccount")
     public String update(@Valid User user, RedirectAttributes attributes, BindingResult result,HttpSession session)      //同时进行表单校验
     {
-        String password=user.getPassword();            //先保存这个密码的值
+        //String password=user.getPassword();            //先保存这个密码的值
         if(result.hasErrors())
         {
             attributes.addFlashAttribute("message",result.getFieldError().getDefaultMessage());

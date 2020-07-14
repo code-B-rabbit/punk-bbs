@@ -80,8 +80,7 @@
     <textarea name="content" th:text="*{content}"></textarea>
         </div>
 
-        <input name="uid" type="hidden" th:value="${session.user.id}">
-
+        <input name="uid" type="hidden" th:value="*{uid}">
         <input name="top" value="false" type="hidden" aria-label="Checkbox for following text input">
         <!--默认不置顶    -->
 

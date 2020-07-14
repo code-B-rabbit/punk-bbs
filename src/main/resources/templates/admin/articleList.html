@@ -154,7 +154,7 @@
                     <a th:unless="${article.top}" type="button" th:if="${session.admin}" th:href="@{TopArticle(id=${article.id})}" class="btn btn-success">置顶</a>
                     <a th:if="${article.top and session.admin}" type="button" th:href="@{DownArticle(id=${article.id})}" class="btn btn-light">取消</a>
                     <a type="button" th:href="@{editArticle(id=${article.id})}" class="btn btn-warning">修改</a>
-                    <a type="button" th:href="|deleteArticle?id=${article.id}&${limit}|" onclick="return confirmAct();" class="btn btn-danger">删除</a>
+                    <a type="button" href="#" th:onclick="delArt([[${article.id}]],[[${article.uid}]])" class="btn btn-danger">删除</a>
                 </div>
             </td>
         </tr>
@@ -182,8 +182,7 @@
                     <a th:if="${article.top and session.admin}" type="button" th:href="@{DownArticle(id=${article.id})}" class="btn btn-light">取消</a>
                     <a th:unless="${article.top}" th:if="${session.admin}" type="button" th:href="@{TopArticle(id=${article.id})}" class="btn btn-success">置顶</a>
                 <a type="button" th:href="@{editArticle(id=${article.id})}" class="btn btn-warning">修改</a>
-                <a type="button" th:href="|deleteArticle?id=${article.id}&${limit}|" onclick="return confirmAct();" class="btn btn-danger">删除</a>
-<!--                    <a th:if="${tag}" type="button" th:href="@{deleteArticle(id=${article.id}&${limit})}" class="btn btn-danger">删除</a>-->
+                <a type="button" href="#" th:onclick="delArt([[${article.id}]],[[${article.uid}]])" class="btn btn-danger">删除</a>
                 </div>
             </td>
         </tr>
@@ -209,13 +208,29 @@
         </button>
     </a>
 </div>
-<script>
+<script th:inline="javascript">
     confirmAct=function () {
         if(confirm('确定要删除该文章吗?'))
         {
             return true;
         }
         return false;
+    }
+    delArt=function (aid,uid) {
+        $.ajax({
+            //请求方式
+            type : "POST",
+            //请求的媒体类型
+            //contentType: "application/json;charset=UTF-8",
+
+            url : "deleteArticle",
+
+            data:{'id':aid,'uid':uid},
+            //请求成功
+            success : function() {
+                window.location.reload();
+            }
+        })
     }
 </script>
 <br>

@@ -11,10 +11,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
@@ -189,21 +186,10 @@ public class UserArticleController {
         return "redirect:/userAdmin/articleList";
     }
 
-    @RequestMapping("/deleteArticle")
-    public String delete(Integer id,Integer tid,Integer order,Boolean published,@SessionAttribute(value = "uid")Integer uid)
+    @RequestMapping(value = "/deleteArticle",method = RequestMethod.POST)
+    public @ResponseBody void delete(@RequestParam(value="id", required=true) Integer id,@RequestParam(value="uid", required=true)Integer uid)
     {
         service.deleteArticle(id,uid);
-        String url="redirect:/userAdmin/articleList?";
-        if(tid!=null){
-            url="redirect:/userAdmin/articleListByTag?tid="+tid;  //路由控制
-        }
-        if(order!=null){
-            url+="&order="+order;
-        }
-        if(published!=null){
-            url+="&published="+published;
-        }
-        return url;
     }
 
     @RequestMapping("/getArticle")
