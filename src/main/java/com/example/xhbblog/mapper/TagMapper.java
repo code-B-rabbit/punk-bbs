@@ -28,4 +28,7 @@ public interface TagMapper {
             @Result(property = "numbersOfBlog",column = "id",one = @One(select = "com.example.xhbblog.mapper.ArticleMapper.countOfTag")) //查询该标签下的博客数
     })
     List<Tag> list();
+
+    @Select("SELECT COUNT(*) FROM tag")
+    public Integer count();
 }

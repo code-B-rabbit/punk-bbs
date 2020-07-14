@@ -278,7 +278,7 @@
     <div class="input-group mb-3">
         <textarea name="content" id="content" type="text" class="form-control" placeholder="请在此留下你的宝贵留言....." aria-label="Recipient's username" aria-describedby="button-addon2"></textarea>
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" id="submit">发表留言</button>
+            <button class="btn btn-outline-secondary" type="button" id="messagesubmit">发表留言</button>
         </div>
     </div>
     <script th:inline="javascript">
@@ -294,7 +294,7 @@
                 }
             );
 
-            $('button#submit').click(
+            $('button#messagesubmit').click(
                 function () {
                     content=$('textarea#content').val();
                     if(content==""||content==null)

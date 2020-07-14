@@ -137,6 +137,12 @@
                       </svg>
                       <span th:text="${#dates.format(art.createTime,'yyyy-MM-dd')}">2 months ago</span>
                     </div>
+                    <div class="date">
+                      <svg class="bi bi-person text-info" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M13 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM3.022 13h9.956a.274.274 0 0 0 .014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 0 0 .022.004zm9.974.056v-.002.002zM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                      </svg>
+                      <span  th:text="${art.user.name}" ></span>
+                    </div>
                     <div class="comments">
                       <svg class="bi bi-chat-square-dots text-info" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v8a1 1 0 001 1h2.5a2 2 0 011.6.8L8 14.333 9.9 11.8a2 2 0 011.6-.8H14a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v8a2 2 0 002 2h2.5a1 1 0 01.8.4l1.9 2.533a1 1 0 001.6 0l1.9-2.533a1 1 0 01.8-.4H14a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"/>
@@ -316,7 +322,7 @@
                       </div>
                       <input name="aid" id="aid" th:value="${art.id}" type="hidden" />
                       <div class="form-group ph-col-12 col-md-12">
-                        <button id="submit" type="submit" class="btn btn-warning">发送评论</button>
+                        <button id="submitComment" type="submit" class="btn btn-warning">发送评论</button>
                         <button id="noNameSubmit" type="submit" class="btn btn-success">匿名评论</button>
                       </div>
                     </div>
@@ -441,7 +447,7 @@
                 }
         )
 
-      $('button#submit').click(
+      $('button#submitComment').click(
               function () {
                 anw=[[${session.user}]];
                 if(anw==null)

@@ -10,6 +10,8 @@ public class Article implements Serializable {
 
     private Integer tid;
 
+    private Integer uid;
+
     private Date createTime;
 
     private String title;
@@ -28,6 +30,8 @@ public class Article implements Serializable {
 
     private Tag tag;
 
+    private User user;
+
     private Integer commentSize;
 
     private Integer thumbsCount=0;   //默认为零
@@ -37,6 +41,15 @@ public class Article implements Serializable {
     private Boolean top=false;      //默认为不置顶
 
     private Boolean published;
+
+
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
+    }
 
     public Boolean getThumb() {
         return thumb;
@@ -165,5 +178,13 @@ public class Article implements Serializable {
 
     public void setTop(Boolean top) {
         this.top = top;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

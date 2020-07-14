@@ -31,7 +31,17 @@
 </head>
 <nav th:replace="admin/nav::admin_nav(6)"></nav>
 <body>
-<div class="container">
+<div class="container" style="text-align: center;font-size: 11px!important;">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+                图片列表
+                <span>共</span>
+                <span style="color: red" th:text="${count}"></span>
+                <span>个</span>
+            </li>
+        </ol>
+    </nav>
     <table class="table">
         <thead>
         <tr>

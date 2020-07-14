@@ -31,7 +31,17 @@
 </head>
 <nav th:replace="admin/nav::admin_nav(4)"></nav>
 <body>
-<div class="container">
+<div class="container" style="text-align: center;font-size: 11px!important;">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+                友链列表
+                <span>共</span>
+                <span style="color: red" th:text="${count}"></span>
+                <span>个</span>
+            </li>
+        </ol>
+    </nav>
     <table class="table">
         <thead>
         <tr>
@@ -44,8 +54,14 @@
             </th>
             <th scope="col">
                 操作
-                <a href="/admin/flList?agree=false" role="button" class="btn btn-sm btn-outline-info">只显示未同意</a>
-                <a href="/admin/flList?agree=true" role="button" class="btn btn-sm btn-outline-dark">只显示同意</a>
+                <a href="/admin/flList?agree=false" role="button" class="btn btn-sm btn-outline-info">
+                    <span th:unless="${agree}">√</span>
+                    只显示未同意
+                </a>
+                <a href="/admin/flList?agree=true" role="button" class="btn btn-sm btn-outline-dark">
+                    <span th:if="${agree} and ${#strings.contains(limit,'true')}">√</span>
+                    只显示同意
+                </a>
             </th>
         </tr>
         </thead>
@@ -67,35 +83,55 @@
     <nav th:replace="admin/page::page"></nav>
 
 
-    <form method="get" th:action="@{addFl}">
+    <form id="addFl" method="get" th:action="@{addFl}">
 
         <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-sm">友链名称</span>
+                <span class="input-group-text" >友链名称</span>
             </div>
-            <input type="text" class="form-control" name="name" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            <input type="text" id="flName" class="form-control" name="name" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
         </div>
 
-        <input type="hidden" name="agree" th:value="${agree}"/>
 
         <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-sm">友链邮箱</span>
+                <span class="input-group-text">友链邮箱</span>
             </div>
-            <input type="text" class="form-control" name="email" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            <input type="email" id="flEmail" class="form-control" name="email" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
         </div>
 
         <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-sm">友链地址</span>
+                <span class="input-group-text">友链地址</span>
             </div>
-            <input type="text" class="form-control" name="link" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            <input type="text" id="flAddress" class="form-control" name="link" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
         </div>
 
         <input type="hidden" class="form-control" name="allowed" value="true" aria-label="Text input with radio button"/>
 
         <button class="btn btn-warning" type="submit">添加友链</button>
 <!--这里由于是站主主动添加的操作,所以无需审核        -->
+        <script>
+            check=function(str){
+                if(str == '' || str == undefined || str == null){
+                    return false;
+                }
+                return true;
+            };
+            $('form#addFl').submit(
+                function () {
+                    var name=$('#flName').val();
+                    var email=$('#flEmail').val();
+                    var address=$('#flAddress').val();
+                    if(check(name)&&check(email)&&check(address)){
+                        return true;
+                    }else{
+                        alert("请将个人信息填写完整");
+                        return false;
+                    }
+                }
+            )
+        </script>
     </form>
 </div>
 </body>

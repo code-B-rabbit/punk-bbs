@@ -41,20 +41,93 @@
                     alert(msg);          //修改回显
                 }
             </script>
-            <div class="card">
+            <script>
+                function getOrderList() {
+                    //orderForm即是表单的ID
+                    return false;
+                }
+                function request(data)
+                {
+                    var defer = $.Deferred();
+                    $.ajax({
+                        url:"checkUser",
+                        method:"post",
+                        data:data,
+                        success:function (dataStr) {
+                            if(dataStr.message==true){
+                                if(dataStr.admin==true){
+                                    location.href="/admin/articleList";
+                                }else{
+                                    location.href="/userAdmin/articleList";
+                                }
+                            }else{
+                                alert("用户名或密码错误");
+                            }
+                        }
+                    });
+                    return defer.promise();
+                }
+
+                function refresh(){
+                    $('img#imgs').trigger("click");
+                }
+
+                $(function () {
+                    $('form#login').submit(function () {
+
+                        $.post("/valid",{
+                                tryCode:$("#verCode").val()
+                            },
+                            function(data) {
+                                if(data.error)
+                                {
+                                    alert(data.info);
+                                    $('img#imgs').trigger("click");
+                                    return false;
+                                }else{
+                                    var data=$("form#login").serialize();
+                                    if(data.name||data.password){
+                                        alert("用户名或密码不能为空!");
+                                        return false;
+                                    }else
+                                    {
+                                        request(data);
+                                        return false;
+                                    }
+                                }
+                            }
+                        );
+                        return false;
+                    })
+                })
+            </script>
+            <div class="card" target="iframe">
                 <div class="card-header">后台管理登录</div>
                 <div class="card-body">
-                    <form method="post" action="/admin/checkUser">
+                    <span class="font-weight-bold">(部分手机自带浏览器可能会无法正常登录,换成其他浏览器即可)</span>
+                    <form method="post" id="login" target="_blank" action="#">
                         <div class="form-group">
-                            <input type="name" name="name" class="form-control" id="exampleInputEmail1" placeholder="请输入您的用户名">
+                            <input type="name" name="name" class="form-control username1" id="exampleInputEmail1" placeholder="请输入您的用户名">
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" id="exampleInputPassword1" name="password" class="form-control" placeholder="请输入密码" aria-label="Recipient's username" aria-describedby="button-addon2"/>
+                            <input type="password" id="exampleInputPassword1" name="password" class="form-control userPassword1" placeholder="请输入密码" aria-label="Recipient's username" aria-describedby="button-addon2"/>
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" type="button" id="button-addon2">显示密码</button>
                             </div>
                         </div>
-                        <button id="submit" type="submit" class="btn btn-block btn-info btn-default">登录</button>
+                        <div class="input-group mb-3">
+                            <input type="password" id="verCode"  class="form-control userPassword1" placeholder="请输入验证码" aria-label="Recipient's username" aria-describedby="button-addon2"/>
+                            <div class="input-group-append" >
+                                <img id="imgs" onclick="this.src='/defaultKaptcha?d=' + new Date()*1" src="/defaultKaptcha"   aria-label="Recipient's username" aria-describedby="button-addon2"/>
+                            </div>
+                        </div>
+                        <div class="form-check">
+                            <btn onclick="refresh()" class="btn-link float-right">验证码看不清楚?换一张</btn>
+                        </div>
+                        <br>
+                        <button  type="submit" class="btn btn-block btn-info btn-default">登录</button>
+                        <a type="button" href="/articles" class="btn btn-block btn-light btn-default">返回首页</a>
+                        <iframe id="iframe" name="iframe" style="display:none;"></iframe>
                         <script>
                             $(function () {
                                 hide=true;        //全局的是否隐藏的变量

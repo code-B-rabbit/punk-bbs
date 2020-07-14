@@ -24,8 +24,6 @@ public class MyGlobalHandler {
     @Autowired
     private LogService logService;
 
-    private static final Logger LOG = LoggerFactory.getLogger(MyGlobalHandler.class);
-
 
     @ModelAttribute("fls")
     public List<FriendlyLink> friendlyLinks() {

@@ -38,4 +38,9 @@ public class PictureServiceImpl implements PictureService {
     public Integer getId() {
         return pictureMapper.getId();
     }
+
+    @Override
+    public Integer count() {
+        return pictureMapper.count();
+    }
 }

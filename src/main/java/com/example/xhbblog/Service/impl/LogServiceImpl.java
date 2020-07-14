@@ -3,6 +3,7 @@ package com.example.xhbblog.Service.impl;
 import com.example.xhbblog.Service.LogService;
 import com.example.xhbblog.mapper.LogMapper;
 import com.example.xhbblog.pojo.Log;
+import com.example.xhbblog.utils.RedisKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -28,21 +29,22 @@ public class LogServiceImpl implements LogService {
     @Autowired
     private LogMapper logMapper;
 
+
     @Scheduled(cron = "0 0 23 * * ?")
     @CacheEvict(allEntries = true)
     @Override
     public void writeDate() {   //将每日的访问量持久化到数据库中
-        Long size = redisTemplate.opsForHyperLogLog().size("VisitOfToday");
+        Long size = redisTemplate.opsForHyperLogLog().size(RedisKey.VISITOFTODAY);
         Log log = new Log();
         log.setCreateTime(new Date());
         log.setVisit(size);
         logMapper.insert(log);
-        redisTemplate.delete("VisitOfToday");
+        redisTemplate.delete(RedisKey.VISITOFTODAY);
     }
 
     @Override
     public void checkAndAdd(String ipAddr) {
-        redisTemplate.opsForHyperLogLog().add("VisitOfToday",ipAddr);
+        redisTemplate.opsForHyperLogLog().add(RedisKey.VISITOFTODAY,ipAddr);
     }
 
     @Override
@@ -50,4 +52,5 @@ public class LogServiceImpl implements LogService {
     public List<Log> findLastLogs() {
         return logMapper.findLastLogs();
     }
+
 }

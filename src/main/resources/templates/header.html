@@ -88,7 +88,8 @@
                     </li>
                     <li class="nav-item"><a th:href="@{/timeLine}" href="post.html" th:classappend="${index==4?'active':''}" class="nav-link text-white">时间轴</a>
                     </li>
-                    <li class="nav-item"><a th:href="@{/aboutMe}" href="post.html" th:classappend="${index==5?'active':''}" class="nav-link text-white">关于我</a>
+                    <li class="nav-item">
+<!--                        <a th:href="@{/aboutMe}" href="post.html" th:classappend="${index==5?'active':''}" class="nav-link text-white">关于我</a>-->
                     </li>
                     <li class="nav-item">
                         <a th:href="@{/visitSum}" href="post.html" th:classappend="${index==7?'active':''}" class="nav-link text-white">
@@ -182,6 +183,8 @@
                 <div style="margin:0px 5px" class="navbar-text" th:if="${session.user}">
                     <span>您好,</span>
                     <span th:text="${session.user.name}" style="font-weight: bold"></span>
+                    <a th:unless="${session.admin}" href="/userAdmin/articleList">写个文章</a>
+                    <a th:if="${session.admin}" href="/admin/articleList">写个文章</a>
                 </div>
                 <a th:if="${session.user}" href="#" onclick="exit()">退出登录</a>
                 <script>
@@ -192,7 +195,7 @@
                             dataType: "json",
                             success:function (dataStr) {
                                 alert(dataStr.message);
-                                location.reload();
+                                window.location.reload();  //刷新页面
                             }
                         });
                     }

@@ -1,19 +1,15 @@
 package com.example.xhbblog.Service.impl;
 
-import com.example.xhbblog.Service.ArticleService;
-import com.example.xhbblog.Service.CommentService;
-import com.example.xhbblog.Service.TagService;
-import com.example.xhbblog.Service.ThumbsService;
+
+import com.example.xhbblog.manager.*;
+import com.example.xhbblog.Service.*;
 import com.example.xhbblog.mapper.ArticleMapper;
-import com.example.xhbblog.mapper.ThumbsMapper;
-import com.example.xhbblog.pojo.Article;
-import com.example.xhbblog.pojo.ArticleWithBLOBs;
-import com.example.xhbblog.pojo.TimeLine;
+import com.example.xhbblog.pojo.*;
+import com.example.xhbblog.utils.RedisKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -29,123 +25,130 @@ import java.util.*;
 @EnableScheduling
 public class ArticleServiceImpl implements ArticleService {
 
-    @Autowired
-    private ArticleMapper articleMapper;
-
-    @Autowired
-    private RedisTemplate redisTemplate;
-
-    @Autowired
-    private ZSetOperations zSet;
 
     private static final Logger LOG = LoggerFactory.getLogger(ArticleServiceImpl.class);
 
 
     @Autowired
-    private ThumbsMapper thumbsMapper;
+    private ArticleMapper articleMapper;
+
 
     @Autowired
-    private CommentService commentService;
+    private RedisUserManager redisUserManager;
 
     @Autowired
-    private ThumbsService thumbsService;
+    private RedisTagManager redisTagManager;
 
     @Autowired
-    private TagService tagService;
+    private RedisArticleManager redisArticleManager;
+
+    @Autowired
+    private RedisThumbManager redisThumbManager;
+
+    @Autowired
+    private RedisCommentManager redisCommentManager;
 
     @Override
     public void add(ArticleWithBLOBs article) {
         articleMapper.insert(article);
-        redisTemplate.delete("LastArticle");
-        if(article.getTop()==true)
-        {
-            redisTemplate.delete("top");   //更新首页展示
-        }
+        redisArticleManager.deleteKey(RedisKey.LAST_ARTICLE);
     }
 
+
+    /**
+     * 删除文章思路:删除对应的文章点赞,删除对应的文章,删除对应的文章点赞以及其对应缓存
+     * 若为置顶项删除置顶
+     * 更新最新访问和访问最多
+     * 删除对应的评论
+     * @param id
+     * @param uid
+     */
     @Override
-    public void remove(Integer id) {
-        if(articleMapper.get(id).getTop()==true)
-        {
-            redisTemplate.delete("top");
-        }
-        thumbsMapper.deleteThumbByAid(id);            //级联删除
-        articleMapper.deleteByPrimaryKey(id);
-        redisTemplate.delete("article::"+id);
+    public void deleteArticle(Integer id, Integer uid) {
+        redisArticleManager.deleteArticle(id,uid);     //从缓存/数据库中删除
     }
+
 
     @Override
     public void update(ArticleWithBLOBs article) {
         articleMapper.updateByPrimaryKeySelective(article);     //若为更改则不更新时间
-        zSet.add("visits","article::"+article.getId(),0);
-        if(article.getTop()==true)
-        {
-            redisTemplate.delete("top");   //更新首页展示
-        }
-        writeOut();
-        readIn();
+        redisArticleManager.updateArt(article);
     }
 
-    private void setVisit(List<? extends Article> articles)
-    {
-        for (int i=0;i<articles.size();i++) {
-            Article article=articles.get(i);
-            if(redisTemplate.hasKey("article::"+article.getId()))
-            {
-                article.setVisit(getVisit(zSet.score("visits","article::"+article.getId())));
-            }
-        }
-    }
-
-    private void setThumbCount(Article article)
-    {
-        article.setThumbsCount(thumbsMapper.countOf(article.getId()));
+    @Override
+    public ArticleWithBLOBs get(Integer id) {
+        return articleMapper.selectByPrimaryKey(id);
     }
 
     private void setCount(Article article)
     {
-        article.setThumbsCount(thumbsService.countOf(article.getId()));
+        article.setThumbsCount(redisThumbManager.thumbCountOf(article.getId()));
     }
 
     private void setThumb(Article item,String address)
     {
-        item.setThumb(thumbsService.isThumb(item.getId(),address));
+        item.setThumb(redisThumbManager.artIsThumb(item.getId(),address));
     }
-
-
 
     private void setTag(Article article)
     {
-        article.setTag(tagService.get(article.getTid()));
+        article.setTag(redisTagManager.get(article.getTid()));
     }
-
-
 
     private void setVisit(Article article)
     {
-        Double visits =zSet.score("visits", "article::" + article.getId());
-        if(visits!=null)
-        {
-            article.setVisit(visits.longValue());
-        }
+        redisArticleManager.setVisit(article);
     }
 
+    private void setUser(Article article){
+        article.setUser(redisUserManager.get(article.getUid()));
+    }
 
     private void setCommentSize(Article article)
     {
-        article.setCommentSize(commentService.countOfComment(article.getId()));
+        article.setCommentSize(redisCommentManager.countOfComment(article.getId()));
     }
 
+    /**
+     * 若为条件所有则将相关的浏览,点赞缓存先持久化
+     */
+    private void checkOrder(Order order){
+        if(order==null){
+            return;
+        }else if (order.getBy().equals("visit")){
+            redisArticleManager.writeOut();
+        }
+    }
 
+    /**
+     * 查询相关的映射类
+     * @param article
+     */
+    private void setUp(Article article,String address){
+        setVisit(article);
+        setCommentSize(article);
+        setTag(article);
+        setCount(article);
+        setThumb(article,address);
+        setUser(article);
+    }
+
+    private void setUp(Article article){
+        setVisit(article);
+        setCommentSize(article);
+        setTag(article);
+        setCount(article);
+        setUser(article);
+    }
 
     @Override
-    public List<ArticleWithBLOBs> listByTid(Integer tid,Boolean published) {
-        List<ArticleWithBLOBs> articles = articleMapper.findByTid(tid, published);
+    public List<ArticleWithBLOBs> listByTid(Integer tid,Boolean published,Integer rank,Integer uid) {
+        LOG.info("查询标签为{},是否发表为{}的文章内容",tid,published);
+        Order order=Order.getOrder(rank);
+        checkOrder(order);
+        List<ArticleWithBLOBs> articles = articleMapper.findByTid(tid, published,order,uid);
         for (Article article : articles) {
-            setVisit(article);
-            setCommentSize(article);
-            setTag(article);
-            setThumbCount(article);
+            setUp(article);
         }
         return articles;
     }
@@ -153,35 +156,30 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleWithBLOBs findById(Integer id,String address)
     {
+        LOG.info("查询文章{}",id);
         ArticleWithBLOBs article = articleMapper.findById(id);
-        setVisit(article);
-        setCommentSize(article);
-        setTag(article);
-        setCount(article);
-        setThumb(article,address);
+        setUp(article,address);
         return article;
     }
 
     @Override
     public List<ArticleWithBLOBs> findByTid(Integer tid,String address,Boolean published) {
-        List<ArticleWithBLOBs> all = articleMapper.findByTid(tid,published);
+        LOG.info("查询标签为{},是否发表为{}的文章内容",tid,published);
+        List<ArticleWithBLOBs> all = articleMapper.findByTid(tid,published,null,null);
         for (ArticleWithBLOBs item : all) {
-            setVisit(item);
-            setCommentSize(item);
-            setTag(item);
-            setCount(item);
-            setThumb(item,address);
+            setUp(item,address);
         }
         return all;       //前台只向用户展示已经出版的
     }
 
     @Override
-    public List<ArticleWithBLOBs> listAll(Boolean published) {
-        List<ArticleWithBLOBs> articles = articleMapper.findAll(published);
+    public List<ArticleWithBLOBs> listAll(Boolean published,Integer rank,Integer uid) {
+        LOG.info("查询是否发表为{}的全部文章",published);
+        Order order=Order.getOrder(rank);
+        checkOrder(order);
+        List<ArticleWithBLOBs> articles = articleMapper.findAll(published,order,uid);
         for (Article article : articles) {
-            setCommentSize(article);
-            setVisit(article);
-            setTag(article);
+            setUp(article);
         }
         return articles;
     }
@@ -194,60 +192,50 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleWithBLOBs> findAll(String address) {
-        List<ArticleWithBLOBs> all = articleMapper.findAll(true);
+        LOG.info("查询全部文章");
+        List<ArticleWithBLOBs> all = articleMapper.findAll(true,null,null);
         for (ArticleWithBLOBs item : all) {
-            setThumb(item,address);
-            setVisit(item);
-            setCommentSize(item);
-            setTag(item);
-            setCount(item);
+            setUp(item,address);
         }
         return all;       //前台只向用户展示已经出版的
     }
 
 
     @Override
-    public List<ArticleWithBLOBs> findArticleLike(String s,String address) {
-        List<ArticleWithBLOBs> all = articleMapper.findArticleLike("%"+s+"%",true);
-        //es:post查询bllog
-        for (ArticleWithBLOBs item : all) {
-            setVisit(item);
-            setCommentSize(item);
-            setTag(item);
-            setCount(item);
-            setThumb(item,address);
+    public List<ArticleWithBLOBs> findArticleLike(String key,String address) {
+        LOG.info("以关键字{}搜索文章",key);
+        List<ArticleWithBLOBs> articles=articleMapper.findArticleLike("%"+key+"%",true,null,null);
+        for (ArticleWithBLOBs item: articles) {
+            setUp(item,address);
         }
-        return all;
+        return articles;
     }
 
     @Override
-    public List<ArticleWithBLOBs> listArticleLike(String s,Boolean published) {
-        List<ArticleWithBLOBs> articles = articleMapper.findArticleLike("%" + s + "%", published);
+    public List<ArticleWithBLOBs> listArticleLike(String s,Boolean published,Integer rank,Integer uid) {
+        LOG.info("以关键字{}搜索是否发表为{}的文章",s,published);
+        Order order=Order.getOrder(rank);
+        checkOrder(order);
+        List<ArticleWithBLOBs> articles = articleMapper.findArticleLike("%" + s + "%", published,order,uid);
         for (Article article : articles) {
-            setTag(article);
-            setCommentSize(article);
-            setVisit(article);
-            setCount(article);
+            setUp(article);
         }
         return articles;
     }
 
     @Override
     public List<Article> findLastestArticle() {
-        List<Article> lastestArticle=null;
-        if(redisTemplate.hasKey("LastArticle")==false)            //缓存未命中
-        {
-            LOG.info("最近更新文章缓存未命中");
-            lastestArticle = articleMapper.findLastestArticle();
-            redisTemplate.opsForValue().set("LastArticle",lastestArticle);
-        }
-        lastestArticle= (List<Article>) redisTemplate.opsForValue().get("LastArticle");
+        LOG.info("查询最新发布文章");
+        List<Article> lastestArticle=redisArticleManager.lastestArticle();
         for (Article article : lastestArticle) {
-            setVisit(article);
-            setCommentSize(article);
-            setTag(article);
+           setUp(article);
         }
         return lastestArticle;
+    }
+
+    @Override
+    public Article getTitle(Integer id) {
+        return articleMapper.getTitle(id);
     }
 
     private Integer getId(Object s)
@@ -265,17 +253,14 @@ public class ArticleServiceImpl implements ArticleService {
     //访问量最大的三篇文章
     @Override
     public List<Article> foreArticle() {
+        LOG.info("查询访问量最大的三篇文章");
         List<Article> articles=new LinkedList<>();
-        if(redisTemplate.hasKey("visits")==false)   //缓存未命中,只能去数据库查找三次
-        {
-            LOG.info("缓存未命中,将从数据库中查找三次");
-            readIn();
-        }                                        //缓存命中,按照缓存里的数据去进行数据拼接
-        Set<ZSetOperations.TypedTuple<Object>> visits = zSet.reverseRangeWithScores("visits",0,2);
+        Set<ZSetOperations.TypedTuple<Object>> visits=redisArticleManager.foreArticle();
         for (ZSetOperations.TypedTuple<Object> visit : visits) {
                 Article article = articleMapper.get(getId(visit.getValue()));
                 article.setVisit(getVisit(visit.getScore()));
                 setCommentSize(article);
+                setUser(article);
                 articles.add(article);
             }
         return articles;
@@ -284,63 +269,55 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void incr(ArticleWithBLOBs article) {
-        if(zSet.score("visits","article::"+article.getId())==null)
-        {
-            zSet.add("visits","article::"+article.getId(),article.getVisit());
-        }
-        zSet.incrementScore("visits","article::"+article.getId(),1);
-        article.setVisit(getVisit(zSet.score("visits","article::"+article.getId())));   //文章本身访问量加一
+        redisArticleManager.incr(article);
     }
 
     @Override
-    public List<ArticleWithBLOBs> topArts(String address,Boolean top) {
-        if(redisTemplate.hasKey("top")==false)
-        {
-            List<ArticleWithBLOBs> all = articleMapper.findByTop(top);
-            redisTemplate.opsForValue().set("top",all);
-        }
-        List<ArticleWithBLOBs> anw = (List<ArticleWithBLOBs>) redisTemplate.opsForValue().get("top");
+    public List<ArticleWithBLOBs> topArts(String address,Boolean top,Integer uid) {
+        List<ArticleWithBLOBs> anw=redisArticleManager.topArts(top,uid);
         for (ArticleWithBLOBs item : anw) {
-            setVisit(item);
-            setCommentSize(item);
-            setTag(item);
-            setCount(item);        //点赞数
-            setThumb(item,address);
+            setUp(item,address);
         }
         return anw;
     }
 
+    /**
+     * 设为置顶
+     * @param id
+     */
+    @Override
+    public void topArticle(Integer id) {
+        LOG.info("将文章{}设为置顶",id);
+        articleMapper.topArticle(id);
+        redisArticleManager.delTop();
+    }
 
-    public void readIn()         //将数据库查询出的点击量最大的文章全部存入zset缓存中
-    {
-        List<Article> foreArticle = articleMapper.findForeArticle();
-        for (Article article : foreArticle) {
-            zSet.add("visits","article::"+article.getId(),article.getVisit());
-        }
+    /**
+     * 取消置顶
+     * @param id
+     */
+    @Override
+    public void downArticle(Integer id) {
+        LOG.info("将文章{}取消置顶",id);
+        articleMapper.downArticle(id);
+        redisArticleManager.delTop();
+    }
+
+    @Override
+    public Integer count() {
+        return articleMapper.count();
     }
 
 
-    public void writeOut()  //将zset中初始化的数据全都存入数据库中
-    {
-        if(redisTemplate.hasKey("visits")){
-            Set<ZSetOperations.TypedTuple<Object>> typedTupleSet = zSet.rangeWithScores("visits",0,-1);
-            for (ZSetOperations.TypedTuple<Object> objectTypedTuple : typedTupleSet) {
-                Integer id=getId(objectTypedTuple.getValue());
-                Long visit=getVisit(objectTypedTuple.getScore());
-                articleMapper.updateArticleVisit(visit,id);
-            }
-            redisTemplate.delete("visits");
-        }
-        redisTemplate.delete("LastArticle");
-        redisTemplate.delete("top");        //删除首页推送的缓存
-    }
 
     //排行榜相关业务
     @PostConstruct        //启动后初始化会执行一次
     @Scheduled(cron = "0 0 1 * * ?")  //每天的凌晨一点执行一次
     public void initCache(){
-        writeOut();
-        readIn();
+        LOG.info("对文章访问量进行定时写入");
+        redisArticleManager.writeOut();
+        redisArticleManager.readIn();
     }
+
 
 }

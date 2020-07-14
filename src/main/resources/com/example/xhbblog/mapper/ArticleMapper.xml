@@ -10,6 +10,7 @@
     <result column="visit" property="visit" jdbcType="BIGINT" />
     <result column="published" property="published" jdbcType="BIT" />
     <result column="top" property="top" jdbcType="BIT" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.example.xhbblog.pojo.ArticleWithBLOBs" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
@@ -45,7 +46,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, tid, createTime, title, firstPicture, visit, published, top
+    id, tid, createTime, title, firstPicture, visit, published, top, uid
   </sql>
   <sql id="Blob_Column_List" >
     content, info
@@ -83,7 +84,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
@@ -95,14 +96,14 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.example.xhbblog.pojo.ArticleWithBLOBs" useGeneratedKeys="true" keyProperty="id" >
-    insert into article (tid, createTime, title, 
-      firstPicture, visit, published, 
-      top, content, info
-      )
-    values (#{tid,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, 
-      #{firstPicture,jdbcType=VARCHAR}, #{visit,jdbcType=BIGINT}, #{published,jdbcType=BIT}, 
-      #{top,jdbcType=BIT}, #{content,jdbcType=LONGVARCHAR}, #{info,jdbcType=LONGVARCHAR}
-      )
+    insert into article (tid, createTime, title,
+      firstPicture, visit, published,
+      top, uid, content,
+      info)
+    values (#{tid,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR},
+      #{firstPicture,jdbcType=VARCHAR}, #{visit,jdbcType=BIGINT}, #{published,jdbcType=BIT},
+      #{top,jdbcType=BIT}, #{uid,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR},
+      #{info,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.xhbblog.pojo.ArticleWithBLOBs" useGeneratedKeys="true" keyProperty="id" >
     insert into article
@@ -127,6 +128,9 @@
       </if>
       <if test="top != null" >
         top,
+      </if>
+      <if test="uid != null" >
+        uid,
       </if>
       <if test="content != null" >
         content,
@@ -156,6 +160,9 @@
       </if>
       <if test="top != null" >
         #{top,jdbcType=BIT},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
@@ -189,6 +196,9 @@
       <if test="top != null" >
         top = #{top,jdbcType=BIT},
       </if>
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -207,6 +217,7 @@
       visit = #{visit,jdbcType=BIGINT},
       published = #{published,jdbcType=BIT},
       top = #{top,jdbcType=BIT},
+      uid = #{uid,jdbcType=INTEGER},
       content = #{content,jdbcType=LONGVARCHAR},
       info = #{info,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
@@ -219,7 +230,181 @@
       firstPicture = #{firstPicture,jdbcType=VARCHAR},
       visit = #{visit,jdbcType=BIGINT},
       published = #{published,jdbcType=BIT},
-      top = #{top,jdbcType=BIT}
+      top = #{top,jdbcType=BIT},
+      uid = #{uid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="findByTid" resultMap="ResultMapWithBLOBs">
+    SELECT a.* FROM article a
+    <if test="order!=null">
+      <if test="order.by=='comment'">
+        LEFT JOIN comment c
+        ON c.aid=a.id
+        where a.tid=#{tid}
+        <if test='uid!=null'>
+          AND a.uid=#{uid}
+        </if>
+        <if test='published!=null'>
+          AND published=#{published}
+        </if>
+        GROUP BY a.id
+        ORDER BY COUNT(c.id)
+      </if>
+      <if test="order.by=='thumb'">
+        LEFT JOIN thumbs t
+        ON t.aid=a.id
+        where a.tid=#{tid}
+        <if test='uid!=null'>
+          AND a.uid=#{uid}
+        </if>
+        <if test='published!=null'>
+          AND published=#{published}
+        </if>
+        GROUP BY a.id
+        ORDER BY COUNT(t.id)
+      </if>
+      <if test="order.by=='visit'">
+        where a.tid=#{tid}
+        <if test='uid!=null'>
+          AND a.uid=#{uid}
+        </if>
+        <if test='published!=null'>
+          AND published=#{published}
+        </if>
+        ORDER BY visit
+      </if>
+      <if test="order.direct=='DESC'">
+        DESC
+      </if>
+    </if>
+
+    <if test="order==null">
+      where a.tid=#{tid}
+      <if test='uid!=null'>
+        AND a.uid=#{uid}
+      </if>
+      <if test='published!=null'>
+        AND published=#{published}
+      </if>
+      ORDER BY id DESC
+    </if>
+  </select>
+
+
+
+  <select id="findAll" resultMap="ResultMapWithBLOBs">
+    SELECT a.* FROM article a
+    <if test="order!=null">
+      <if test="order.by=='comment'">
+        LEFT JOIN comment c
+        ON c.aid=a.id
+        where 1=1
+        <if test='uid!=null'>
+          AND a.uid=#{uid}
+        </if>
+        <if test='published!=null'>
+          AND published=#{published}
+        </if>
+        GROUP BY a.id
+        ORDER BY COUNT(c.id)
+      </if>
+      <if test="order.by=='thumb'">
+        LEFT JOIN thumbs t
+        ON t.aid=a.id
+        where 1=1
+        <if test='uid!=null'>
+          AND a.uid=#{uid}
+        </if>
+        <if test='published!=null'>
+          AND published=#{published}
+        </if>
+        GROUP BY a.id
+        ORDER BY COUNT(t.id)
+      </if>
+      <if test="order.by=='visit'">
+        where 1=1
+        <if test='uid!=null'>
+          AND a.uid=#{uid}
+        </if>
+        <if test='published!=null'>
+          AND published=#{published}
+        </if>
+        ORDER BY visit
+      </if>
+      <if test="order.direct=='DESC'">
+        DESC
+      </if>
+
+    </if>
+    <if test="order==null">
+      where a.top=false
+      <if test='uid!=null'>
+        AND a.uid=#{uid}
+      </if>
+      <if test='published!=null'>
+        AND published=#{published}
+      </if>
+      ORDER BY id DESC
+    </if>
+  </select>
+
+
+  <select id="findArticleLike" resultMap="ResultMapWithBLOBs">
+    SELECT a.* FROM article a
+    <if test="order!=null">
+      <if test="order.by=='comment'">
+        LEFT JOIN comment c
+        ON c.aid=a.id
+        where a.id IN (select id from article c where c.info like #{string} or title like #{string})
+        <if test='uid!=null'>
+          AND a.uid=#{uid}
+        </if>
+        <if test='published!=null'>
+          AND published=#{published}
+        </if>
+        GROUP BY a.id
+        ORDER BY COUNT(c.id)
+      </if>
+      <if test="order.by=='thumb'">
+        LEFT JOIN thumbs t
+        ON t.aid=a.id
+        where  a.id IN (select id from article c where c.info like #{string} or title like #{string})
+        <if test='uid!=null'>
+          AND a.uid=#{uid}
+        </if>
+        <if test='published!=null'>
+          AND published=#{published}
+        </if>
+        GROUP BY a.id
+        ORDER BY COUNT(t.id)
+      </if>
+      <if test="order.by=='visit'">
+        where  a.id IN (select id from article c where c.info like #{string} or title like #{string})
+        <if test='uid!=null'>
+          AND a.uid=#{uid}
+        </if>
+        <if test='published!=null'>
+          AND published=#{published}
+        </if>
+        ORDER BY visit
+      </if>
+      <if test="order.direct=='DESC'">
+        DESC
+      </if>
+
+    </if>
+    <if test="order==null">
+      where  a.id IN (select id from article c where c.info like #{string} or title like #{string})
+      <if test='uid!=null'>
+        AND a.uid=#{uid}
+      </if>
+      <if test='published!=null'>
+        AND published=#{published}
+      </if>
+      ORDER BY id DESC
+    </if>
+  </select>
+
+
 </mapper>

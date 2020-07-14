@@ -16,6 +16,11 @@ public class ThumbController {
     @Autowired
     private ThumbsService thumbsService;
 
+    /**
+     * 给某文章点赞
+     * @param aid
+     * @param request
+     */
     @PostMapping("thumbsUp/{aid}")
     public void thumbsUp(@PathVariable("aid") Integer aid, HttpServletRequest request)
     {
@@ -25,6 +30,11 @@ public class ThumbController {
         thumbsService.insert(thumbs);
     }
 
+    /**
+     * 给某文章取消点赞
+     * @param aid
+     * @param request
+     */
     @PostMapping("thumbsDown/{aid}")
     public void thumbsDown(@PathVariable("aid") Integer aid, HttpServletRequest request)
     {

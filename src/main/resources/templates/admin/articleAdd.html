@@ -32,7 +32,7 @@
 <body>
 
 <link rel="stylesheet" th:href="@{/editor-master/css/editormd.css}" href="../../static/editor-master/css/editormd.css" />
-<form id="blog-form" method="post" action="/admin/articleSave">
+<form id="blog-form" method="post" action="articleSave">
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -78,12 +78,10 @@
     </textarea>
     </div>
 
-    <div class="input-group-prepend">
-        置顶:
-        <div class="input-group-text">
-            <input name="top" type="checkbox" aria-label="Checkbox for following text input">
-        </div>
-    </div>
+    <input name="uid" type="hidden" th:value="${session.user.id}">
+
+    <input name="top" value="false" type="hidden" aria-label="Checkbox for following text input">
+<!--默认不置顶    -->
 
 
 <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>

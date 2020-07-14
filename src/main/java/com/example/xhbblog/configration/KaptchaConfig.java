@@ -19,7 +19,7 @@ public class KaptchaConfig {
         // 边框颜色
         properties.setProperty("kaptcha.border.color", "105,179,90");
         // 字体颜色
-        properties.setProperty("kaptcha.textproducer.font.color", "red");
+        properties.setProperty("kaptcha.textproducer.font.color", "black");
         // 图片宽
         properties.setProperty("kaptcha.image.width", "110");
         // 图片高
@@ -31,7 +31,7 @@ public class KaptchaConfig {
         // 验证码长度
         properties.setProperty("kaptcha.textproducer.char.length", "4");
         // 字体
-        properties.setProperty("kaptcha.textproducer.font.names", "宋体,楷体,微软雅黑");
+        properties.setProperty("kaptcha.textproducer.font.names", "微软雅黑");
         Config config = new Config(properties);
         dk.setConfig(config);
 

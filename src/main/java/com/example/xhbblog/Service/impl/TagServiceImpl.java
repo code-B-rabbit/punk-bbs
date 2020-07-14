@@ -2,6 +2,7 @@ package com.example.xhbblog.Service.impl;
 
 
 import com.example.xhbblog.Service.TagService;
+import com.example.xhbblog.manager.RedisTagManager;
 import com.example.xhbblog.mapper.TagMapper;
 import com.example.xhbblog.pojo.Tag;
 import org.slf4j.Logger;
@@ -18,48 +19,47 @@ import java.util.List;
 
 @Service
 @Transactional
-@CacheConfig(cacheNames = "tag")
 @EnableScheduling
 public class TagServiceImpl implements TagService {
 
     @Autowired
     private TagMapper tagMapper;
 
+    @Autowired
+    private RedisTagManager redisTagManager;
+
     private static final Logger LOG = LoggerFactory.getLogger(TagServiceImpl.class);
 
 
     @Override
-    @CacheEvict(allEntries = true)
     public Tag add(Tag tag) {
-        tagMapper.insertSelective(tag);
-        return tag;
+        LOG.info("新增标签{},ID：{}",tag.getName(),tag.getId());
+        return redisTagManager.add(tag);
     }
 
     @Override
-    @CacheEvict(allEntries = true)
     public void delete(Integer id) {
-        tagMapper.deleteByPrimaryKey(id);
+        LOG.info("删除标签{}",id);
+        redisTagManager.delete(id);
     }
 
     @Override
-    @CacheEvict(allEntries = true)
     public Tag update(Tag tag) {
-        tagMapper.updateByPrimaryKey(tag);
-        return tag;
+        LOG.info("更新标签{}",tag.getId());
+        return redisTagManager.update(tag);
     }
 
     @Override
-    @Cacheable(key = "#id")
     public Tag get(Integer id) {
-        LOG.info(id+"标签缓存未命中");
-        return tagMapper.selectByPrimaryKey(id);
+        LOG.info("查询标签{}",id);
+        return redisTagManager.get(id);
     }
 
 
     @Override
-    @Cacheable(key = "getMethodName()")
     public List<Tag> list() {
-        return tagMapper.list();
+        LOG.info("查询全部标签");
+        return redisTagManager.list();
     }
 
     @Override
@@ -69,11 +69,16 @@ public class TagServiceImpl implements TagService {
         return list;     //这里考虑到博客的数量可能经常变动
     }
 
+    @Override
+    public Integer count() {
+        LOG.info("查询标签数量");
+        return tagMapper.count();
+    }
+
     @Scheduled(cron = "0 0 1 * * ?")  //每天的凌晨一点
-    @CacheEvict(allEntries = true)
     public void evit()
     {
-        LOG.info(new Date()+"定时清除所有标签缓存");
+        redisTagManager.evit();
     }
 
 }

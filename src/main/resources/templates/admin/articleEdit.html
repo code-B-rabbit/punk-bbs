@@ -31,7 +31,7 @@
 <nav th:replace="admin/nav::admin_nav(1)"></nav>
 <body>
 <link rel="stylesheet" th:href="@{/editor-master/css/editormd.css}" href="../../static/editor-master/css/editormd.css" />
-<form id="blog-form" method="get" action="/admin/articleSave" th:object="${article}" target="iframe">
+<form id="blog-form" method="get" action="articleSave" th:object="${article}" target="iframe">
     <div class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -80,12 +80,10 @@
     <textarea name="content" th:text="*{content}"></textarea>
         </div>
 
-        <div class="input-group-prepend">
-            置顶:
-            <div class="input-group-text">
-                <input name="top" type="checkbox" aria-label="Checkbox for following text input" th:checked="${article.top eq true}">
-            </div>
-        </div>
+        <input name="uid" type="hidden" th:value="${session.user.id}">
+
+        <input name="top" value="false" type="hidden" aria-label="Checkbox for following text input">
+        <!--默认不置顶    -->
 
 
         <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>

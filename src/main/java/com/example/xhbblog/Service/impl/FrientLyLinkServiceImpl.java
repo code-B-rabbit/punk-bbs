@@ -59,13 +59,25 @@ public class FrientLyLinkServiceImpl implements FriendLyLinkService {
         return mapper.selectByExample(example);
     }
 
+    /**
+     * 根据条件筛选查询出的友链列表
+     * @param b
+     * @return
+     */
     @Override
     @Cacheable("fls")
     public List<FriendlyLink> ListOf(Boolean b) {
         FriendlyLinkExample example=new FriendlyLinkExample();
         example.setOrderByClause("id desc");
-        example.createCriteria().andAllowedEqualTo(b);
+        if(b!=null) {
+            example.createCriteria().andAllowedEqualTo(b);
+        }
         return mapper.selectByExample(example);
+    }
+
+    @Override
+    public Integer count() {
+        return mapper.count();
     }
 
     @Scheduled(cron = "0 0 1 * * ?")  //每天的凌晨一点

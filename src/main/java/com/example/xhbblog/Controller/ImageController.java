@@ -25,6 +25,14 @@ public class ImageController {
     @Autowired
     private PictureService pictureService;         //用于将我所上传的图片存储到数据库中
 
+    /**
+     * 上传图片
+     * @param request
+     * @param response
+     * @param file
+     * @return
+     * @throws IOException
+     */
     @RequestMapping("/uploadImage")          //通过七牛云进行文件上传
     public Map upload(HttpServletRequest request, HttpServletResponse response,
                          @RequestParam(value= "editormd-image-file",  required = true) MultipartFile file) throws IOException {

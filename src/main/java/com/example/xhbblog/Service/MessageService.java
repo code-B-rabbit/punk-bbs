@@ -4,6 +4,9 @@ import com.example.xhbblog.pojo.Message;
 
 import java.util.List;
 
+/**
+ * 留言业务接口
+ */
 public interface MessageService {
     public void add(Message message);
     public void delete(Integer id);

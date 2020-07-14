@@ -24,6 +24,10 @@ public interface ThumbsMapper {
 
     int updateByPrimaryKey(Thumbs record);
 
+
+    @Delete("DELETE FROM thumbs WHERE aid=#{aid}")
+    public void deleteThumbByAid(Integer aid);          //删除文章时进行级联删除
+
     @Select("SELECT COUNT(*) FROM thumbs WHERE address=#{address} AND aid=#{aid} LIMIT 1")           //查出是否被赞
     public Boolean isThumb(Integer aid,String address);
 
@@ -33,13 +37,11 @@ public interface ThumbsMapper {
     @Delete("DELETE FROM thumbs WHERE address=#{address} AND aid=#{aid}")
     public void deleteThumb(Integer aid,String address);    //取消赞
 
-    @Delete("DELETE FROM thumbs WHERE aid=#{aid}")
-    public void deleteThumbByAid(Integer aid);          //删除文章时进行级联删除
-
     /**
      * 获取某篇文章全部的点赞ip地址
      * @return
      */
     @Select("SELECT address FROM thumbs WHERE aid=#{aid}")
     public List<String> ipOfAid(Integer aid);
+
 }

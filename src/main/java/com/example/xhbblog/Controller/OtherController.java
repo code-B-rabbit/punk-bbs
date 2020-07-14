@@ -29,6 +29,14 @@ public class OtherController {
     @Autowired
     private FriendLyLinkService friendLyLinkService;
 
+
+    /**
+     * 时间轴
+     * @param start
+     * @param count
+     * @param model
+     * @return
+     */
     @GetMapping("timeLine")
     public String timeLine(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "5") Integer count, Model model)
     {
@@ -39,12 +47,24 @@ public class OtherController {
     }
 
 
+    /**
+     * 查看留言页
+     * @param model
+     * @return
+     */
     @RequestMapping("/messages")
     public String messages(Model model)
     {
         return "messages";         //只返回分页后的列表
     }
 
+    /**
+     * 异步请求留言数据
+     * @param start
+     * @param count
+     * @param model
+     * @return
+     */
     @GetMapping("/messageList")
     public String messages(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "10") Integer count, Model model)
     {
@@ -57,6 +77,13 @@ public class OtherController {
     }
 
 
+    /**
+     * 新增留言
+     * @param model
+     * @param aid
+     * @param message
+     * @return
+     */
     @PostMapping("/Addmessage")
     public String messages(Model model, Integer aid, Message message)
     {
@@ -65,12 +92,22 @@ public class OtherController {
         return "redirect:/messageList";
     }
 
+    /**
+     * 网课查题页
+     * @param model
+     * @return
+     */
     @GetMapping("/searchAnswer")
     public String search(Model model)
     {
         return "searchAnswer";
     }
 
+    /**
+     * 关于我页
+     * @param model
+     * @return
+     */
     @GetMapping("/aboutMe")
     public String aboutMe(Model model)         //主页访问
     {
@@ -79,6 +116,11 @@ public class OtherController {
         return "home";
     }
 
+    /**
+     * 新增友链申请
+     * @param friendlyLink
+     * @return
+     */
     @PostMapping("/addFriendLyLink")
     public @ResponseBody
     String addLink(@RequestBody FriendlyLink friendlyLink)

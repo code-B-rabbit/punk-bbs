@@ -25,10 +25,18 @@ public class RestUserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/check")        //验证用户
+
+    /**
+     * 用户验证
+     * @param user
+     * @param session
+     * @param request
+     * @param response
+     * @return
+     */
+    @PostMapping("/check")
     public Map<String,Boolean> checkUser(User user, HttpSession session, HttpServletRequest request,HttpServletResponse response)
     {
-        System.out.println(user);
         String password=user.getPassword();        //暂时存储一下旧的密码
         Map<String,Boolean> anw=new HashMap<>();
         User u=userService.check(user);
@@ -37,8 +45,8 @@ public class RestUserController {
             anw.put("message",false);
         }else
         {
-            session.setAttribute("user",u);
             anw.put("message",true);
+            anw.put("adm",u.getRole().equals("admin"));
             if(user.getChecked()!=null&&user.getChecked()==true)
             {
                 CookieUtil.set(response,"name",user.getName(),true);
@@ -47,10 +55,18 @@ public class RestUserController {
                 CookieUtil.remove(request,response,"name");
                 CookieUtil.remove(request,response,"password");
             }
+            session.setAttribute("user",u);
+            session.setAttribute("uid",u.getId());
+            session.setAttribute("admin",u.getRole().equals("admin"));
         }
         return anw;
     }
 
+    /**
+     * 验证是否登录
+     * @param session
+     * @return
+     */
     @PostMapping("/check/login")    //是否登录
     public Map<String,Boolean> check(HttpSession session)
     {
@@ -59,18 +75,31 @@ public class RestUserController {
         return anw;
     }
 
-    @GetMapping("/login")   //登录路由
+    /**
+     * 登录页路由
+     * @return
+     */
+    @GetMapping("/login")
     public ModelAndView login()
     {
         return new ModelAndView("login");
     }
 
+    /**
+     * 注册页路由
+     * @return
+     */
     @GetMapping("/register")
     public ModelAndView register()
     {
         return new ModelAndView("register");
     }
 
+    /**
+     * 异步查询重名
+     * @param name
+     * @return
+     */
     @GetMapping("/check")        //查看是否有重名
     public Map check(String name)
     {
@@ -80,13 +109,13 @@ public class RestUserController {
     }
 
     /**
+     * 查看是否有重邮箱
      * 限刷方式:十秒限刷十次,每秒限刷一次
      * @param email
      * @return
      */
-
     @AccessLimit(maxCount = 10,seconds = 10)
-    @GetMapping("/checkEmail")        //查看是否有重邮箱
+    @GetMapping("/checkEmail")
     public Map checkEmail(String email)
     {
         Map<String,Boolean> anw=new HashMap<>();
@@ -95,20 +124,38 @@ public class RestUserController {
     }
 
 
-    @PostMapping("/addUser")        //添加用户
+    /**
+     * 新增用户
+     * @param u
+     * @param bindingResult
+     * @param redirectAttributes
+     * @param session
+     * @param response
+     * @throws IOException
+     */
+    @PostMapping("/addUser")
     public void addUser(@Valid User u, BindingResult bindingResult, RedirectAttributes redirectAttributes, HttpSession session, HttpServletResponse response) throws IOException {
         if(bindingResult.hasErrors())
         {
             redirectAttributes.addFlashAttribute("message",bindingResult.getFieldError().getDefaultMessage());
+            response.sendRedirect("/user/register");
         }else{
+            String password=u.getPassword();
             userService.add(u);         //我忘了这里是否直接给user直接set上id...
+            u.setPassword(password);
             session.setAttribute("user",u);
+            session.setAttribute("uid",u.getId());
             redirectAttributes.addFlashAttribute("message","账户注册成功!!!");
+            response.sendRedirect("/userAdmin/articleList");       //restController下正常重定向无效
         }
-        response.sendRedirect("/user/register");       //restController下正常重定向无效
     }
 
 
+    /**
+     * 注销用户
+     * @param session
+     * @return
+     */
     @PostMapping("/exit")      //注销
     public Map<String,String> delete(HttpSession session)
     {
@@ -116,6 +163,7 @@ public class RestUserController {
         if(session.getAttribute("user")!=null)
         {
             session.removeAttribute("user");
+            session.removeAttribute("uid");
             anw.put("message","注销成功!");
         }else{
             anw.put("message","您尚未登录");

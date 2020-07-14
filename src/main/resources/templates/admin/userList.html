@@ -31,7 +31,17 @@
 </head>
 <nav th:replace="admin/nav::admin_nav(8)"></nav>
 <body>
-<div class="container">
+<div class="container" style="text-align: center;font-size: 11px!important;">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+                用户列表
+                <span>共</span>
+                <span style="color: red" th:text="${count}"></span>
+                <span>个</span>
+            </li>
+        </ol>
+    </nav>
     <table class="table">
         <thead>
         <tr>
@@ -39,6 +49,7 @@
             <th scope="col">用户名</th>
             <th scope="col">用户邮箱</th>
             <th scope="col">评论数</th>
+            <th scope="col">文章数</th>
             <th scope="col">操作</th>
         </tr>
         </thead>
@@ -53,6 +64,9 @@
             </td>
             <td>
                 <a th:href="@{commentsByUser(id=${user.id})}" th:text="${user.commentSize}"></a>
+            </td>
+            <td>
+                <a th:href="@{articleList(uid=${user.id})}" th:text="${user.articleSize}"></a>
             </td>
             <td>
                 <div class="btn-group" role="group" aria-label="Basic example">

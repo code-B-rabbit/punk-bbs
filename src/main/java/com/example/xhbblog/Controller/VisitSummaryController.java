@@ -13,10 +13,14 @@ public class VisitSummaryController {
     @Autowired
     private LogService logService;
 
+    /**
+     * 访问统计
+     * @param model
+     * @return
+     */
     @GetMapping("/visitSum")
     public String sumPage(Model model)
     {
-        //System.out.println(logService.findLastLogs());
         model.addAttribute("logs",logService.findLastLogs());
         return "visitSum";
     }

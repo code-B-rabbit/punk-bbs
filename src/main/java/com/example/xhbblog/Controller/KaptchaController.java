@@ -1,6 +1,8 @@
 package com.example.xhbblog.Controller;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 验证码控制层
+ */
 @Controller
 public class KaptchaController {
     /**
@@ -25,6 +30,8 @@ public class KaptchaController {
      */
     @Autowired
     DefaultKaptcha defaultKaptcha;
+
+    private Logger LOG= LoggerFactory.getLogger(this.getClass());
 
     @RequestMapping("/defaultKaptcha")
     public void defaultKaptcha(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -64,7 +71,7 @@ public class KaptchaController {
     Map<String,Object> imgvrifyControllerDefaultKaptcha(String tryCode, HttpSession session) {
         Map<String,Object> map=new HashMap<>();
         String rightCode = (String) session.getAttribute("rightCode");
-        System.out.println("rightCode:" + rightCode + " ———— tryCode:" + tryCode);
+        LOG.info("rightCode:{} ———— tryCode:{}",rightCode, tryCode);
         if (!rightCode.equals(tryCode)) {
             map.put("info","验证码错误");
             map.put("error",1);

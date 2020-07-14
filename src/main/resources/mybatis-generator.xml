@@ -41,7 +41,7 @@
         </sqlMapGenerator>
         <!-- targetPackage：mapper接口生成的位置 -->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.example.xhbblog.mapper.mysql"
+                             targetPackage="com.example.xhbblog.mapper"
                              targetProject="src/main/java">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"/>
@@ -49,7 +49,7 @@
         <!-- 指定数据库表  多个表示,可用多个table标签-->
 
 
-<!--        <table tableName="log" domainObjectName="Log" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">-->
+<!--        <table tableName="user_dialogue" domainObjectName="UserDialogue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">-->
 <!--            <property name="my.isgen.usekeys" value="true"/>-->
 <!--            <property name="useActualColumnNames" value="true"/>-->
 <!--            <generatedKey column="id" sqlStatement="JDBC"/>-->

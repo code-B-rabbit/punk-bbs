@@ -1,25 +1,29 @@
 package com.example.xhbblog.Service.impl;
 
 import com.example.xhbblog.Service.CommentService;
+import com.example.xhbblog.manager.RedisCommentManager;
+import com.example.xhbblog.manager.RedisUserManager;
+import com.example.xhbblog.mapper.ArticleMapper;
 import com.example.xhbblog.mapper.CommentMapper;
+import com.example.xhbblog.mapper.UserMapper;
+import com.example.xhbblog.pojo.Article;
 import com.example.xhbblog.pojo.Comment;
+import com.example.xhbblog.pojo.User;
+import com.example.xhbblog.utils.MessageUtil;
+import com.example.xhbblog.websocket.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Set;
 
 
 @Service
@@ -27,31 +31,41 @@ import java.util.Set;
 @CacheConfig(cacheNames = "comment")
 @EnableScheduling           //开启定时器
 public class CommentServiceImpl implements CommentService {
-    
-    @Autowired
-    private CommentMapper mapper;
 
     private static final Logger LOG = LoggerFactory.getLogger(CommentServiceImpl.class);
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private CommentMapper mapper;
+
+    @Autowired
+    private ArticleMapper articleMapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private RedisCommentManager redisCommentManager;
+
+    @Autowired
+    private WebSocketServer webSocketServer;
+
+    @Autowired
+    private RedisUserManager redisUserManager;
 
     @Override
-    @Caching(evict = {
-            @CacheEvict(key = "'countOfArticle'+#comment.getAid()"),
-            @CacheEvict(key = "'countOfComment'+#comment.getAid()"),
-            @CacheEvict(key = "'lastComment'"),
-    })
     public void add(Comment comment) {
-        mapper.insert(comment);
-        Set<String> keys = redisTemplate.keys("comment::" + comment.getAid() + "*");
-        redisTemplate.delete(keys);
+        LOG.info("{}添加评论{}",comment.getUid(),comment.getContent());
+        redisCommentManager.add(comment);
     }
 
+    /**
+     * 递归级联删除一个评论及其子评论
+     * @param id
+     */
     @Override
-    @CacheEvict(allEntries = true)
     public void delete(Integer id) {
-        mapper.deleteByPrimaryKey(id);
+        LOG.info("评论{}被删除",id);
+       redisCommentManager.delete(id);
     }
 
     @Override
@@ -70,76 +84,94 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Cacheable(key = "#aid+','+#start")
     public List<Comment> findByAid(Integer aid,Integer start,Integer count) {
-        LOG.info("文章{}评论缓存未命中",aid);
-        List<Comment> comments=mapper.findByAid(aid,start,count);
-        return getComments(comments);
+        LOG.info("查看文章id为{}的所有评论,起始点为{},查询{}条",aid,start,count);
+        return redisCommentManager.findByAid(aid,start,count);
     }
 
     @Override
     public List<Comment> listByAid(Integer aid) {
+        LOG.info("查看文章id为{}的所有评论",aid);
         return mapper.listByAid(aid);       //给后台查看评论使用的接口
     }
 
-    List<Comment> getComments(List<Comment> comments)
-    {
-        ArrayList<Comment> anw = new ArrayList<>();
-        for(int i=0;i<comments.size();i++)
-        {
-            Comment comment=comments.get(i);
-            comment.setChilds(getChildComments(comment));  //全都变为"直接评论方的子节点"
-            anw.add(comment);
-        }
-        return anw;
+    @Override
+    public Integer countOfArticle(Integer aid) {
+        LOG.info("查看文章id为{}的所有首发评论(非回复)",aid);
+        return redisCommentManager.countOfArticle(aid);
     }
 
-    List<Comment> getChildComments(Comment comment)
-    {
-        List<Comment> anw=new ArrayList<>();
-        for(int i=0;i<comment.getChilds().size();i++)
-        {
-            Comment comment1=comment.getChilds().get(i);
-            anw.add(comment1);
-            if(comment1.getChilds()!=null&&comment1.getChilds().size()!=0)
-            {
-                anw.addAll(getChildComments(comment1));
+    @Override
+    public Integer countOfComment(Integer aid) {
+        LOG.info("查看文章id为{}的所有评论(含回复)",aid);
+        return redisCommentManager.countOfComment(aid);
+    }
+
+    @Override
+    public List<Comment> lastComment() {
+        LOG.info("查询最新评论");
+        return redisCommentManager.lastComment();
+    }
+
+    @Override
+    public List<Comment> listByUid(Integer uid) {
+        LOG.info("查看用户{}的所有评论",uid);
+        return mapper.listByUid(uid);       //给后台查看评论使用的接口
+    }
+
+    @Override
+    public List<Comment> findChilds(Integer cid) {
+        LOG.info("查看评论{}的所有评论",cid);
+        return mapper.listByCid(cid);
+    }
+
+    /**
+     * 将未读信息读入到comment中
+     * 实现目的:当评论某文章时将该评论消息推送给该文章作者,
+     * 若为回复某评论则也同时将回复消息提示推送给该评论作者
+     * 同时放入各自的redis队列中
+     * @param comment
+     */
+    @Override
+    public void sendComment(Comment comment,User user) throws IOException {
+        Article article=articleMapper.get(comment.getAid());
+        String timeStr= LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        if(article.getUid()!=user.getId()){
+            String messageToAdd= MessageUtil.ArtComment(comment,article,user,timeStr);
+            String messageOnline=MessageUtil.ArtCommentOnline(comment,article,user,timeStr);
+            webSocketServer.sendMessage(article.getUid(),messageOnline);  //将消息传送给它评论的文章所对应的那个用户
+            redisUserManager.sendMessageTo(article.getUid(),messageToAdd);
+        }
+        if(comment.getParentID()!=null){
+            LOG.info("{}",comment.getParentID());
+            Comment parComment=mapper.selectByPrimaryKey(comment.getParentID());
+            User parentUser=userMapper.selectByPrimaryKey(parComment.getUid());
+            if(parentUser.getId()!=comment.getUid()){   //自己回复自己除外
+                String replyToAdd=MessageUtil.replyComment(comment,user,timeStr);
+                String replyOnline=MessageUtil.replyCommentOnline(comment,user,timeStr);
+                webSocketServer.sendMessage(parentUser.getId(),replyOnline);
+                redisUserManager.sendMessageTo(article.getUid(),replyToAdd);
             }
         }
-        return anw;
     }
 
     @Override
-    @Cacheable(key = "'countOfArticle'+#aid")
-    public Integer countOfArticle(Integer aid) {
-        LOG.info("文章{}评论数缓存未命中",aid);
-        return mapper.countOfArticle(aid);
+    public void deleteCids(List<Integer> cids) {
+        LOG.info("删除评论{}的所有评论",cids);
+        redisCommentManager.deleteCids(cids);
     }
 
     @Override
-    @Cacheable(key = "'countOfComment'+#aid")
-    public Integer countOfComment(Integer aid) {
-        LOG.info("文章{}评论加回复数缓存未命中",aid);
-        return mapper.countOfComment(aid);
+    public Integer count() {
+        LOG.info("查询评论数量");
+        return mapper.count();
     }
 
-    @Override
-    @Cacheable(key = "'lastComment'")
-    public List<Comment> lastComment() {
-        LOG.info("最新评论缓存未命中");
-        return mapper.lastComment();
-    }
-
-    @Override
-    public List<Comment> listByUid(Integer aid) {
-        return mapper.listByUid(aid);       //给后台查看评论使用的接口
-    }
 
     @Scheduled(cron = "0 0 10,14,16 * * ?")  //每天上午10点，下午2点，4点
-    @CacheEvict(allEntries = true)
     public void evit()
     {
-        LOG.info(new Date()+"定时清除所有评论缓存");
+        redisCommentManager.evit();  //清除所有相关缓存
     }
 
 }

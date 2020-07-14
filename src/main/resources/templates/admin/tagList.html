@@ -31,7 +31,17 @@
 </head>
 <nav th:replace="admin/nav::admin_nav(1)"></nav>
 <body>
-<div class="container" style="text-align: center;">
+<div class="container" style="text-align: center;font-size: 11px!important;">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+                标签列表
+                <span>共</span>
+                <span style="color: red" th:text="${count}"></span>
+                <span>个</span>
+            </li>
+        </ol>
+    </nav>
     <table class="table">
         <thead>
         <tr>
@@ -64,14 +74,26 @@
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                    <form method="get" th:action="@{saveTag}">
+                    <form id="addTag" method="get" th:action="@{saveTag}">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <input  class="form-control"  type="text" aria-label="Dollar amount (with dot and two decimal places)" name="name" placeholder="请输入标签内容">
+                                <input id="tName" class="form-control"  type="text" aria-label="Dollar amount (with dot and two decimal places)" name="name" placeholder="请输入标签内容">
                                 <br>
                             </div>
                             <input class="btn btn-block btn-outline-info" type="submit"/>
                         </div>
+                        <script>
+                            $('form#addTag').submit(
+                                function () {
+                                    var str=$('#tName').val();
+                                    if(str == '' || str == undefined || str == null){
+                                        alert("标签不能为空!!");
+                                        return false;
+                                    }
+                                    return true;
+                                }
+                            )
+                        </script>
                     </form>
                 </li>
             </ul>
@@ -111,4 +133,5 @@
     </div>
 
 </footer>
+
 </html>

@@ -1,14 +1,17 @@
 package com.example.xhbblog.Controller.admin;
 
 import com.example.xhbblog.Service.TagService;
+import com.example.xhbblog.Service.UserService;
 import com.example.xhbblog.pojo.Tag;
 import com.example.xhbblog.utils.PageInfoUtil;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.util.List;
 
@@ -18,6 +21,20 @@ public class TagController {
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private UserService userService;
+
+    @ModelAttribute("count")
+    public Integer count(){
+        return tagService.count();
+    }
+
+    @ModelAttribute("msgCnt")
+    public Long  msgs(@SessionAttribute("uid")Integer uid)
+    {
+        return userService.msgCnt(uid); //用户所获得的消息个数
+    }
 
     @RequestMapping("/tagList")
     public String list(@RequestParam(name = "start",defaultValue = "0") Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count, Model model)

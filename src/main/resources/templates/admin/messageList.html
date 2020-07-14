@@ -31,8 +31,18 @@
 </head>
 <nav th:replace="admin/nav::admin_nav(5)"></nav>
 <body>
-<div class="container">
+<div class="container" style="text-align: center;font-size: 11px!important;">
 
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+                消息列表
+                <span>共</span>
+                <span style="color: red" th:text="${count}"></span>
+                <span>个</span>
+            </li>
+        </ol>
+    </nav>
     <table class="table">
         <thead>
         <tr>
@@ -46,7 +56,7 @@
         <tr th:each="msg:${page.list}">
             <th scope="row" th:text="${msg.id}">1</th>
             <td th:text="${msg.content}">数据结构与算法</td>
-            <td th:text="${#dates.format(msg.createTime,'yyyy-mm-dd hh:mm:ss')}" >数据结构与算法</td>
+            <td th:text="${#dates.format(msg.createTime,'yyyy-MM-dd hh:mm:ss')}" >数据结构与算法</td>
             <td><a type="button" th:href="@{deleteMessage(id=${msg.id})}" class="btn btn-danger">删除</a></td>
         </tr>
         </tbody>

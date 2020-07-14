@@ -22,11 +22,15 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
+    @Select("SELECT COUNT(*) FROM user")
+    Integer count();
+
     @Select("select * from user where role='user' ")
     @Results({
             @Result(property = "id", column = "id"),
-            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfUser"))
-            })
+            @Result(property = "commentSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.CommentMapper.countOfUser")),
+            @Result(property = "articleSize", column = "id", one = @One(select = "com.example.xhbblog.mapper.ArticleMapper.countOfUid"))
+    })
     List<User> selectUser();
 
     @Select("select count(*) from user where name=#{name}")
@@ -41,6 +45,7 @@ public interface UserMapper {
     @Select("select email from user where id=#{uid} limit 1")       //查询姓名
     String findEmail(Integer uid);
 
-    @Select("select id from user where name=#{name} limit 1")       //查询匿名用户的uid
-    Integer  getUid(String name);
+    @Select("select * from user where name=#{name} limit 1")       //查询匿名用户的uid
+    User  getUid(String name);
+
 }

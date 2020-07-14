@@ -148,12 +148,12 @@ $(
             }
         );
         
-        $("form").submit(
+        $("form#form").submit(
             function (event) {
                 if(checkName()&&checkEmail()&&checkPassword()&&passWordEqual())
                 {
-                    alert("注册成功！,正在返回首页");
-                    window.history.go(-2);
+                    alert("注册成功!!");
+                    return true;
                 }else
                 {
                     alert("请检查您的注册信息");

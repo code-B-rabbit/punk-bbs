@@ -38,7 +38,7 @@
     <header>
         <h3 class="h6">博客の评论<span class="no-of-comments" th:text="|${total}|">(3)</span></h3>
     </header>
-    <div class="comment" th:each="comment:${page.list}">
+    <div class="comment" th:each="comment:${page.list}" >
         <div class="comment-header d-flex justify-content-between">
             <div class="user d-flex align-items-center">
                 <div class="image"><img th:src="@{/img/user.svg}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle"></div>
@@ -101,7 +101,7 @@
                     $('input.parentId').val(id);
                 }
             };
-            submit=function () {
+            submitreply=function () {
                 content=$('textarea.content').val();
                 parentID=$('input.parentId').val();
                 if(content=="")
@@ -143,7 +143,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary" onclick="submit()">回复</button>
+        <button type="button" class="btn btn-primary" onclick="submitreply()">回复</button>
       </div>
     </div>
   </div>

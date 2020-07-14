@@ -14,6 +14,15 @@ public class User implements Serializable {
 
     private Boolean checked;               //是否记住密码(传参用)
 
+    private Integer articleSize=0;
+
+    public Integer getArticleSize() {
+        return articleSize;
+    }
+
+    public void setArticleSize(Integer articleSize) {
+        this.articleSize = articleSize;
+    }
 
     public Boolean getChecked() {
         return checked;

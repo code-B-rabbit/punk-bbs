@@ -31,14 +31,26 @@
 </head>
 <nav th:replace="admin/nav::admin_nav(1)"></nav>
 <body>
-<form method="get" th:action="@{/admin/saveTag}">
+<form class="addTag" method="get" th:action="@{/admin/saveTag}">
     <div class="panel panel-default">
         <div class="panel-heading">编辑标签</div>
         <div class="panel-body">
             <input type="hidden" th:value="${tag.id}"  name="id" placeholder="请输入标签内容">
-            <input type="text" th:value="${tag.name}"  name="name" placeholder="请输入标签内容">
+            <input type="text" th:value="${tag.name}" id="tName" name="name" placeholder="请输入标签内容">
         </div>
         <input type="submit"/>
+        <script>
+            $('form.addTag').submit(
+                function () {
+                    var str=$('#tName').val();
+                    if(str == '' || str == undefined || str == null){
+                        alert("标签不能为空!!");
+                        return false;
+                    }
+                    return true;
+                }
+            )
+        </script>
     </div>
 </form>
 </body>

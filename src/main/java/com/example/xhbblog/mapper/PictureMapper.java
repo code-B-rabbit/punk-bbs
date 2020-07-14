@@ -26,4 +26,6 @@ public interface PictureMapper {
     @Select("select auto_increment from information_schema.`TABLES` where table_name='picture' and TABLE_SCHEMA='xhb_blog'")
     int getId();
 
+    @Select("SELECT COUNT(*) FROM picture")
+    public Integer count();
 }

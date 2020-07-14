@@ -31,25 +31,91 @@
 </head>
 <nav th:replace="admin/nav::admin_nav(2)"></nav>
 <body>
-<div class="container" style="text-align: center;">
+<div  class="container" style="text-align: center;font-size: 11px!important;" >
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item active" aria-current="page">
-                <span class="text-info" th:if="${tag}" th:text="|${tag.name}标签下的|"></span>
-                <a href="/admin/articleList">博客列表</a>
+                <a class="text-info" th:if="${tag}" th:text="${tag.name}" th:href="|articleListByTag?tid=${tag.id}|"></a>
+                <span th:if="${tag}">下的</span>
+
+                <a class="text-info" th:if="${user}" th:text="${user.name}" th:href="|articleList?uid=${user.id}|"></a>
+                <span th:if="${user}">的</span>
+
+                <a href="articleList">博客列表</a>
                 <span class="text-info" th:if="${param.key}" th:text="|--->${param.key}的搜索结果|"></span>
+                <span>共</span>
+                <span style="color: red" th:text="${page.total}"></span>
+                <span>个</span>
             </li>
         </ol>
-
     </nav>
 
     <table class="table">
         <thead>
         <tr>
-            <th scope="col">序号</th>
+            <th scope="col">#</th>
             <th scope="col">文章名</th>
-            <th scope="col">评论数</th>
-            <th scope="col">浏览量</th>
+            <th scope="col">封面图片</th>
+            <th scope="col">
+                <div class="btn-group-sm btn-light" role="group">
+                    <button id="btnGroupDrop" type="button" class="btn btn-secondary dropdown-toggle" th:classappend="${order==2 or order==-2} ? 'btn-warning':''"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        评论数
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop">
+                        <a class="dropdown-item" th:href="|?&order=2&${limit}|">
+                            <span th:if="${order} and ${order==2}">√</span>
+                                升序
+                        </a>
+                        <a class="dropdown-item" th:href="|?&order=-2&${limit}|">
+                            <span th:if="${order} and ${order==-2}">√</span>
+                            降序
+                        </a>
+                        <a class="dropdown-item" th:href="|?&order=0&${limit}|">
+                            不排序
+                        </a>
+                    </div>
+                </div>
+            </th>
+            <th scope="col">
+                <div class="btn-group-sm btn-warning" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" th:classappend="${order==3 or order==-3} ? 'btn-warning':''" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        点赞数
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <a class="dropdown-item" th:href="|?&order=3&${limit}|">
+                            升序
+                            <span th:if="${order} and ${order==3}">√</span>
+                        </a>
+                        <a class="dropdown-item" th:href="|?&order=-3&${limit}|">
+                            降序
+                            <span th:if="${order} and ${order==-3}">√</span>
+                        </a>
+                        <a class="dropdown-item" th:href="|?&order=0&${limit}|">
+                            不排序
+                        </a>
+                    </div>
+                </div>
+            </th>
+            <th scope="col">
+                <div class="btn-primary btn-group-sm" role="group">
+                    <button id="btnGroupDrop2" type="button" class="btn btn-secondary dropdown-toggle" th:classappend="${order==1 or order==-1} ? 'btn-warning':''" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        浏览量
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                        <a class="dropdown-item" th:href="|?&order=1&${limit}|">
+                            升序
+                            <span th:if="${order} and ${order==1}">√</span>
+                        </a>
+                        <a class="dropdown-item" th:href="|?&order=-1&${limit}|">
+                            降序
+                            <span th:if="${order} and ${order==-1}">√</span>
+                        </a>
+                        <a class="dropdown-item" th:href="|?&order=0&${limit}|">
+                            不排序
+                        </a>
+                    </div>
+                </div>
+            </th>
             <th scope="col">
                 是否发表
             </th>
@@ -58,6 +124,7 @@
             </th>
             <th scope="col">创建时间</th>
             <th scope="col">文章标签</th>
+            <th scope="col">用户</th>
             <th scope="col">
                 操作
             </th>
@@ -67,46 +134,62 @@
         <tr th:each="article:${tops}">
             <th scope="row" th:text="${article.id}">1</th>
             <td th:text="${article.title}">数据结构与算法</td>
-            <td><a th:href="@{/admin/listByAid(aid=${article.id})}" th:text="${article.commentSize}">100</a></td>
+            <td><a th:href="${article.firstPicture}"><img style="width: 50px!important;" th:src="${article.firstPicture}"></a></td>
+            <td><a th:href="@{listByAid(aid=${article.id})}" th:text="${article.commentSize}">100</a></td>
+            <td th:text="${article.thumbsCount}"></td>
             <td th:text="${article.visit}"></td>
             <td th:text="${article.published}?'已发表':'未发表'">100</td>
             <td th:text="${article.top}?'已置顶':'未置顶'">100</td>
             <td th:text="${#dates.format(article.createTime,'yyyy年MM月dd日')}"></td>
             <td><a th:text="${article.tag.name}" th:href="|articleListByTag?tid=${article.tag.id}|">数据结构与算法</a></td>
             <td>
+                <a th:unless="${session.admin}" th:text="${article.user.name}">数据结构与算法</a>
+                <a th:if="${session.admin}" th:href="@{/admin/articleList(uid=${article.user.id})}" th:text="${article.user.name}">数据结构与算法</a>
+            </td>
+            <td>
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <a type="button" th:text="${article.published}?'查看':'预览'" th:href="@{getArticle(id=${article.id})}" class="btn btn-primary">
                         查看
                     </a>
+                    <a th:unless="${article.top}" type="button" th:if="${session.admin}" th:href="@{TopArticle(id=${article.id})}" class="btn btn-success">置顶</a>
+                    <a th:if="${article.top and session.admin}" type="button" th:href="@{DownArticle(id=${article.id})}" class="btn btn-light">取消</a>
                     <a type="button" th:href="@{editArticle(id=${article.id})}" class="btn btn-warning">修改</a>
-                    <a th:unless="${tag}" type="button" th:href="@{deleteArticle(id=${article.id})}" class="btn btn-danger">删除</a>
-                    <a th:if="${tag}" type="button" th:href="@{deleteArticle(id=${article.id},tid=${tag.id})}" class="btn btn-danger">删除</a>
+                    <a type="button" th:href="|deleteArticle?id=${article.id}&${limit}|" onclick="return confirmAct();" class="btn btn-danger">删除</a>
                 </div>
             </td>
         </tr>
         <tr th:each="article:${page.list}">
             <th scope="row" th:text="${article.id}">1</th>
             <td th:text="${article.title}">数据结构与算法</td>
-            <td><a th:href="@{/admin/listByAid(aid=${article.id})}" th:text="${article.commentSize}">100</a></td>
+            <td><a th:href="${article.firstPicture}"><img style="width: 50px!important;" th:src="${article.firstPicture}"></a></td>
+            <td><a th:href="@{listByAid(aid=${article.id})}" th:text="${article.commentSize}">100</a></td>
+            <td th:text="${article.thumbsCount}"></td>
             <td th:text="${article.visit}"></td>
             <td th:text="${article.published}?'已发表':'未发表'">100</td>
             <td th:text="${article.top}?'已置顶':'未置顶'">100</td>
             <td th:text="${#dates.format(article.createTime,'yyyy年MM月dd日')}"></td>
             <td><a th:text="${article.tag.name}" th:href="|articleListByTag?tid=${article.tag.id}|">数据结构与算法</a></td>
             <td>
+                <a th:unless="${session.admin}" th:text="${article.user.name}">数据结构与算法</a>
+                <a th:if="${session.admin}" th:href="@{/admin/articleList(uid=${article.user.id})}" th:text="${article.user.name}">数据结构与算法</a>
+            </td>
+            <td>
                 <div class="btn-group" role="group" aria-label="Basic example">
+
                 <a type="button" th:text="${article.published}?'查看':'预览'" th:href="@{getArticle(id=${article.id})}" class="btn btn-primary">
                     查看
                 </a>
+                    <a th:if="${article.top and session.admin}" type="button" th:href="@{DownArticle(id=${article.id})}" class="btn btn-light">取消</a>
+                    <a th:unless="${article.top}" th:if="${session.admin}" type="button" th:href="@{TopArticle(id=${article.id})}" class="btn btn-success">置顶</a>
                 <a type="button" th:href="@{editArticle(id=${article.id})}" class="btn btn-warning">修改</a>
-                <a th:unless="${tag}" type="button" th:href="@{deleteArticle(id=${article.id})}" class="btn btn-danger">删除</a>
-                    <a th:if="${tag}" type="button" th:href="@{deleteArticle(id=${article.id},tid=${tag.id})}" class="btn btn-danger">删除</a>
+                <a type="button" th:href="|deleteArticle?id=${article.id}&${limit}|" onclick="return confirmAct();" class="btn btn-danger">删除</a>
+<!--                    <a th:if="${tag}" type="button" th:href="@{deleteArticle(id=${article.id}&${limit})}" class="btn btn-danger">删除</a>-->
                 </div>
             </td>
         </tr>
         </tbody>
     </table>
-    <a th:href="@{/admin/addArticle}"><button type="button" class="btn btn-success">写博客</button></a>
+    <a th:href="addArticle"><button type="button" class="btn btn-success">写博客</button></a>
     <a th:href="|?published=true&${limit}|">
         <button type="button" class="btn btn-primary">
             <span th:if="${limit} and ${#strings.contains(limit,'true')}">√</span>
@@ -119,8 +202,22 @@
             未发表
         </button>
     </a>
+    <a  th:href="|?published= &${limit}|">
+        <button type="button" class="btn btn-info">
+            <span th:if="${limit} and ${!#strings.contains(limit,'false')} and ${!#strings.contains(limit,'true')}">√</span>
+            全部文章
+        </button>
+    </a>
 </div>
-
+<script>
+    confirmAct=function () {
+        if(confirm('确定要删除该文章吗?'))
+        {
+            return true;
+        }
+        return false;
+    }
+</script>
 <br>
 <nav th:replace="admin/page::page"></nav>
 <footer class="main-footer" th:replace="admin/foot::foot">
