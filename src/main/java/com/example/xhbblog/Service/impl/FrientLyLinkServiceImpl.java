@@ -42,7 +42,7 @@ public class FrientLyLinkServiceImpl implements FriendLyLinkService {
     }
 
     @Override
-    @CacheEvict(allEntries = true,condition = "friendlyLink.allowed=true")
+    @CacheEvict(allEntries = true)
     public void update(FriendlyLink friendlyLink) {
         mapper.updateByPrimaryKey(friendlyLink);
     }

@@ -2,6 +2,7 @@ package com.example.xhbblog.Service.impl;
 
 import com.example.xhbblog.Service.ArticleService;
 import com.example.xhbblog.Service.CommentService;
+import com.example.xhbblog.Service.EmailService;
 import com.example.xhbblog.Service.UserService;
 import com.example.xhbblog.manager.RedisArticleManager;
 import com.example.xhbblog.manager.RedisCommentManager;
@@ -30,7 +31,6 @@ import java.util.List;
 
 @Service
 @Transactional
-@CacheConfig(cacheNames = "user")
 public class UserServiceImpl implements UserService {
 
     private Logger LOG=LoggerFactory.getLogger(this.getClass());
@@ -53,6 +53,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RedisUserManager redisUserManager;
 
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public void add(User u) {
@@ -165,9 +167,38 @@ public class UserServiceImpl implements UserService {
         redisUserManager.addMessages(uid,messages);
     }
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
-//        System.out.println(URLDecoder.decode("2020-07-14%2012%3A05%3A20%20%20%E5%8C%BF%E5%90%8D%E7%94%A8%E6%88%B7%20%E8%AF%84%E8%AE%BA%E4%BA%86%E4%BD%A0%E7%9A%84%E6%96%87%E7%AB%A0%3A%3Cspan%20class%3D'text-primary'%3E%E6%9A%B4%E8%B7%B3%2C%E5%A6%82%E9%9B%B7%3C%2Fspan%3E%20%E5%86%85%E5%AE%B9%E4%B8%BA%3A%3Cspan%20style%3D'", "UTF-8"));
+    /**
+     * 先去寻找验证码校验是否过期,如果过期直接修改失败
+     * 未过期则去数据库校验该姓名与邮箱是否存在,不存在也直接修改失败
+     * 若存在则通过update方法修改数据库user表
+     * @param user
+     * @return
+     */
+    @Override
+    public boolean forgetPasswordAndChange(User user) {
+        String code=redisUserManager.getEmailCode(user.getEmail());
+        if(code==null){
+            return false;
+        }
+        Integer uid=userMapper.checkUserExist(user.getName(),user.getEmail());
+        boolean anw=(uid!=null);
+        anw&=(user.getCheckCode()).equals(code);  //还要保证验证码与邮件验证码相等
+        if(anw==true){
+            user.setId(uid);
+            user.setPassword(MD5Utils.code(user.getPassword()));     //密码加密
+            userMapper.updateByPrimaryKeySelective(user);   //修改数据库
+        }
+        return anw;
+    }
 
+    /**
+     * 在redis服务中生成验证码并存储30分钟,通过邮件服务发给所输入的邮箱
+     * @param email
+     */
+    @Override
+    public void sendCheckCodeTo(String email) {
+       String code=redisUserManager.setEmailCode(email);       //所生成的验证码
+       emailService.sendEmail("找回密码验证码",email,"您的验证码为"+code+"请尽快修改,期限为30分钟");
     }
 
 }

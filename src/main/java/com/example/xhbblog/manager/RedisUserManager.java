@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Transactional
@@ -74,6 +75,18 @@ public class RedisUserManager {
         redisTemplate.opsForValue().set(RedisKey.USR+user.getId(),user);
     }
 
+    public String setEmailCode(String email){
+        String s="";
+        for (int i = 0; i < 4; i++) {
+            s+=(int)(Math.random()*10);     //生成验证码
+        }
+        redisTemplate.opsForValue().set(RedisKey.USR_EMAIL+email,s);
+        redisTemplate.expire(RedisKey.USR_EMAIL+email,30, TimeUnit.MINUTES); //设置三十分钟失效
+        return s;
+    }
 
+    public String getEmailCode(String email){
+        return (String) redisTemplate.opsForValue().get(RedisKey.USR_EMAIL+email);
+    }
 
 }

@@ -21,7 +21,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 @ServerEndpoint(value = "/webSocket/{uid}" )
 @Component
-@ComponentScan
 public class WebSocketServer {
 
     private Session session;

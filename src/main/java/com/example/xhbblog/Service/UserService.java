@@ -22,4 +22,9 @@ public interface UserService {
     public List<String> getMessages(Integer uid);     //获得所有的推送消息
     public void deleteUser(Integer uid);  //封号业务
     public void addMessages(String[] messages,Integer uid);
+
+    //用户找回密码相关业务
+    public boolean forgetPasswordAndChange(User user);
+    public void sendCheckCodeTo(String email);
+
 }

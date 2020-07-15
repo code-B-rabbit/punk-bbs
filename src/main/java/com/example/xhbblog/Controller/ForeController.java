@@ -12,11 +12,14 @@ import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,6 +36,9 @@ public class ForeController {
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ArticleMapper mapper;
@@ -121,6 +127,30 @@ public class ForeController {
         model.addAttribute("title","标签:"+tagService.get(tid).getName());
         return "blog";
     }
+
+
+    /**
+     * 查询某个作者的全部文章
+     * @param start
+     * @param count
+     * @param model
+     * @param request
+     * @return
+     */
+    @GetMapping("/articlesByUser")
+    public String articles(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "6") Integer count, Model model, Integer uid
+            ,HttpServletRequest request) {
+        PageHelper.offsetPage(start, count);
+        List<ArticleWithBLOBs> all = articleService.findByUid(uid,IpUtil.getIpAddr(request),true);
+        model.addAttribute("page", new PageInfo<ArticleWithBLOBs>(all));
+        model.addAttribute("uid",uid);
+        model.addAttribute("limit","uid="+uid);
+        model.addAttribute("title","作者:"+userService.get(uid).getName());
+        return "blog";
+    }
+
+
+
 
     /**
      * 搜索

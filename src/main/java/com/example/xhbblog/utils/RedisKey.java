@@ -41,5 +41,6 @@ public  class RedisKey {
     public static final String USR="user::";
 
     public static final String LAST_COMMENT="lastComment";
+    public static final String USR_EMAIL="emailCode::";
 
 }

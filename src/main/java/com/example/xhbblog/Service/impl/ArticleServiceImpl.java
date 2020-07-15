@@ -80,6 +80,19 @@ public class ArticleServiceImpl implements ArticleService {
         return articleMapper.selectByPrimaryKey(id);
     }
 
+    private Integer getId(Object s)
+    {
+        String num=s.toString().substring(9);
+        Integer id=Integer.parseInt(num);
+        return id;
+    }
+
+    private Long getVisit(Double s)
+    {
+        return s.longValue();
+    }
+
+
     private void setCount(Article article)
     {
         article.setThumbsCount(redisThumbManager.thumbCountOf(article.getId()));
@@ -173,6 +186,16 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public List<ArticleWithBLOBs> findByUid(Integer uid, String address, Boolean published) {
+        LOG.info("查询标签为{},是否发表为{}的文章内容",uid,published);
+        List<ArticleWithBLOBs> all = articleMapper.findAll(published,null,uid);
+        for (ArticleWithBLOBs item : all) {
+            setUp(item,address);
+        }
+        return all;
+    }
+
+    @Override
     public List<ArticleWithBLOBs> listAll(Boolean published,Integer rank,Integer uid) {
         LOG.info("查询是否发表为{}的全部文章",published);
         Order order=Order.getOrder(rank);
@@ -236,18 +259,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article getTitle(Integer id) {
         return articleMapper.getTitle(id);
-    }
-
-    private Integer getId(Object s)
-    {
-        String num=s.toString().substring(9);
-        Integer id=Integer.parseInt(num);
-        return id;
-    }
-
-    private Long getVisit(Double s)
-    {
-        return s.longValue();
     }
 
     //访问量最大的三篇文章

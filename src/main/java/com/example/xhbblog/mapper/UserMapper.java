@@ -39,6 +39,9 @@ public interface UserMapper {
     @Select("select count(*) from user where email=#{email}")
     int checkEmail(String email);
 
+    @Select("select id from user where email=#{email} AND name=#{name} LIMIT 1")
+    Integer checkUserExist(String name,String email);
+
     @Select("select name from user where id=#{uid} limit 1")       //查询姓名
     String findName(Integer uid);
 

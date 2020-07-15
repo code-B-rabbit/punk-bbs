@@ -5,6 +5,7 @@ import com.example.xhbblog.annotation.AccessLimit;
 import com.example.xhbblog.pojo.User;
 import com.example.xhbblog.utils.CookieUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,8 +25,6 @@ public class RestUserController {
 
     @Autowired
     private UserService userService;
-
-
     /**
      * 用户验证
      * @param user
@@ -95,6 +94,13 @@ public class RestUserController {
         return new ModelAndView("register");
     }
 
+
+    @GetMapping("/forgetPassword")
+    public ModelAndView forgetPassword()
+    {
+        return new ModelAndView("forgetPassword");
+    }
+
     /**
      * 异步查询重名
      * @param name
@@ -149,6 +155,34 @@ public class RestUserController {
             redirectAttributes.addFlashAttribute("message","账户注册成功!!!");
             response.sendRedirect("/userAdmin/articleList");       //restController下正常重定向无效
         }
+    }
+
+    /**
+     * 发送找回密码验证码到邮箱
+     * @param email
+     */
+    @PostMapping("/sendEmailCode")
+    public void sendEmailCode(String email){
+        userService.sendCheckCodeTo(email);
+    }
+
+    /**
+     * 修改密码用户校验
+     * @return
+     */
+    @AccessLimit(maxCount = 10,seconds = 10)  //接口限刷,每秒一次
+    @PostMapping("/forgetAndChangeUser")
+    public Map<String,Object> forgetAndChangeUser(User user){
+        System.out.println(user);
+        Map<String,Object> anw=new HashMap<>();
+        boolean success=userService.forgetPasswordAndChange(user);
+        if(success==true){
+            anw.put("success",success);
+            anw.put("message","修改密码成功！！");
+        }else{
+            anw.put("message","修改失败,请检查姓名与邮箱或者验证码是否过期");
+        }
+        return anw;
     }
 
 

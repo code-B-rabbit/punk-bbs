@@ -153,7 +153,6 @@ public class ArticleController {
         model.addAttribute("order",order);
         PageInfo<ArticleWithBLOBs> pageInfo=new PageInfo<ArticleWithBLOBs>(articles);
         model.addAttribute("page",pageInfo);
-       // model.addAttribute("count",pageInfo.getTotal());
         String limit="key="+key;
         if(published!=null)
         {

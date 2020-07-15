@@ -20,6 +20,7 @@ public interface ArticleService {
     List<ArticleWithBLOBs> listArticleLike(String s,Boolean published,Integer rank,Integer uid); //用于后台
 
     public ArticleWithBLOBs findById(Integer id,String address);
+    public List<ArticleWithBLOBs> findByUid(Integer uid,String address,Boolean published);
     public List<ArticleWithBLOBs> findByTid(Integer tid,String address,Boolean published);
     public List<ArticleWithBLOBs> findAll(String address);
     List<ArticleWithBLOBs> findArticleLike(String s, String address);

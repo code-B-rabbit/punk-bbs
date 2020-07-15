@@ -16,6 +16,23 @@ public class User implements Serializable {
 
     private Integer articleSize=0;
 
+    private String checkCode;    //用户用于邮件服务的验证码
+
+    @NotNull
+    private String password;
+
+    private String role;
+
+    private String email;
+
+    public String getCheckCode() {
+        return checkCode;
+    }
+
+    public void setCheckCode(String checkCode) {
+        this.checkCode = checkCode;
+    }
+
     public Integer getArticleSize() {
         return articleSize;
     }
@@ -39,14 +56,6 @@ public class User implements Serializable {
     public void setCommentSize(Integer commentSize) {
         this.commentSize = commentSize;
     }
-
-
-    @NotNull
-    private String password;
-
-    private String role;
-
-    private String email;
 
     public Integer getId() {
         return id;
