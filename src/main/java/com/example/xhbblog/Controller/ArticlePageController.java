@@ -12,10 +12,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -81,6 +78,13 @@ public class ArticlePageController {
         Integer total=commentService.countOfArticle(aid);
         Integer commentSize=commentService.countOfComment(aid);
         List<Comment> byAid = commentService.findByAid(aid,start,count);
+        for (Comment comment : byAid) {
+            System.out.println("主评论:"+comment);
+            for (Comment child : comment.getChilds()) {
+                System.out.println(child);
+            }
+            System.out.println(":::");
+        }
         PageInfo<Comment> pageInfo = getPageInfo(total, byAid, start, count);
         model.addAttribute("page",pageInfo);
         model.addAttribute("aid",aid);

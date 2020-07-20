@@ -18,6 +18,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -27,8 +28,7 @@ import java.util.List;
 
 
 @Service
-@Transactional
-@CacheConfig(cacheNames = "comment")
+@Transactional(isolation= Isolation.READ_COMMITTED)
 @EnableScheduling           //开启定时器
 public class CommentServiceImpl implements CommentService {
 
@@ -51,6 +51,22 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private RedisUserManager redisUserManager;
+
+    public List<Comment> setUserAndChild(List<Comment> comments){
+        for (Comment comment : comments) {
+            comment.setUser(redisUserManager.get(comment.getUid()));
+            comment.setChilds(mapper.listByCid(comment.getId()));
+            setUserAndChild(comment.getChilds());
+        }
+        return comments;
+    }
+
+    public List<Comment> setArticle(List<Comment> comments){
+        for (Comment comment : comments) {
+            comment.setArticle(articleMapper.get(comment.getAid()));
+        }
+        return comments;
+    }
 
     @Override
     public void add(Comment comment) {
@@ -80,7 +96,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> list() {
-        return mapper.list();
+        List<Comment> comments=mapper.list();
+        setUserAndChild(comments);
+        setArticle(comments);
+        return comments;
     }
 
     @Override
@@ -92,7 +111,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> listByAid(Integer aid) {
         LOG.info("查看文章id为{}的所有评论",aid);
-        return mapper.listByAid(aid);       //给后台查看评论使用的接口
+        List<Comment> comments=setUserAndChild(mapper.listByAid(aid));       //给后台查看评论使用的接口
+        return setArticle(comments);
     }
 
     @Override
@@ -116,13 +136,15 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> listByUid(Integer uid) {
         LOG.info("查看用户{}的所有评论",uid);
-        return mapper.listByUid(uid);       //给后台查看评论使用的接口
+        List<Comment> comments=setUserAndChild(mapper.listByUid(uid));       //给后台查看评论使用的接口
+        return setArticle(comments);
     }
 
     @Override
     public List<Comment> findChilds(Integer cid) {
         LOG.info("查看评论{}的所有评论",cid);
-        return mapper.listByCid(cid);
+        List<Comment> comments=setUserAndChild(mapper.listByCid(cid));
+        return setArticle(comments);
     }
 
     /**

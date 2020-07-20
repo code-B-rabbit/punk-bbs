@@ -15,13 +15,14 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
 
 @Component
-@Transactional
+@Transactional(isolation= Isolation.READ_COMMITTED)
 public class RedisArticleManager {
     private Logger LOG= LoggerFactory.getLogger(this.getClass());
 
@@ -166,8 +167,8 @@ public class RedisArticleManager {
         for (Comment comment : commentMapper.listByAid(id)) {
             commentMapper.deleteByPrimaryKey(comment.getId());
         }
-        redisTemplate.delete(RedisKey.THUMBS_SET+id);     //删除对应的点赞缓存
-        redisTemplate.delete(RedisKey.THUMB_EXIST+id);  //设置点赞缓存不存在,防止留下缓存项引起脏数据
+        redisTemplate.delete(RedisKey.THUMB_CNT+id);     //删除对应的点赞缓存
+        redisTemplate.delete(RedisKey.THUMB_AID_MAP+id);  //设置点赞缓存不存在,防止留下缓存项引起脏数据
         redisTemplate.delete(RedisKey.ART_VISITS_ZSET);   //更新访问最多
         redisTemplate.delete(RedisKey.LAST_ARTICLE);  //更新最近访问
         redisTemplate.delete(RedisKey.COUNTOF_ARTICLE+id);

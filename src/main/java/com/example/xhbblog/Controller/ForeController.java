@@ -40,11 +40,6 @@ public class ForeController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private ArticleMapper mapper;
-
-    private Logger LOG= LoggerFactory.getLogger(this.getClass());
-
     /**
      * 最新文章
      * @return
@@ -117,8 +112,8 @@ public class ForeController {
      * @return
      */
     @GetMapping("/articlesByTag")
-    public String articles(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "6") Integer count, Model model, Integer tid
-    ,HttpServletRequest request,Integer rank) {
+    public String articlesByTag(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "6") Integer count, Model model, Integer tid
+    ,HttpServletRequest request) {
         PageHelper.offsetPage(start, count);
         List<ArticleWithBLOBs> all = articleService.findByTid(tid,IpUtil.getIpAddr(request),true);
         model.addAttribute("page", new PageInfo<ArticleWithBLOBs>(all));

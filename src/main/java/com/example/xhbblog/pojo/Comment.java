@@ -28,7 +28,15 @@ public class Comment implements Serializable {
 
     private List<Comment> childs;
 
+    private User user;  //映射的用户类
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Article getArticle() {
         return article;
@@ -116,5 +124,24 @@ public class Comment implements Serializable {
 
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
+    }
+
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", aid=" + aid +
+                ", createTime=" + createTime +
+                ", parentID=" + parentID +
+                ", uid=" + uid +
+                ", content='" + content + '\'' +
+                ", article=" + article +
+                ", visitor_name='" + visitor_name + '\'' +
+                ", visitor_email='" + visitor_email + '\'' +
+                ", parentVisitorName='" + parentVisitorName + '\'' +
+                ", childs=" + childs +
+                ", user=" + user +
+                '}';
     }
 }

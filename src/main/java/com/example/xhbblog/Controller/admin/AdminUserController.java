@@ -133,7 +133,6 @@ public class AdminUserController {
     @RequestMapping("/changeAccount")
     public String update(@Valid User user, RedirectAttributes attributes, BindingResult result,HttpSession session)      //同时进行表单校验
     {
-        String password=user.getPassword();            //先保存这个密码的值
         if(result.hasErrors())
         {
             attributes.addFlashAttribute("message",result.getFieldError().getDefaultMessage());
@@ -197,11 +196,13 @@ public class AdminUserController {
     @PostMapping("/messagesNotRead")
     public @ResponseBody void addMessages(@RequestParam(name = "messageList") String[] messageList,
                               @SessionAttribute("uid")Integer uid) throws UnsupportedEncodingException {
-        for(int i=0;i<messageList.length;i++){
-            messageList[i]= URLDecoder.decode(messageList[i],"utf-8");
-        }
         userService.addMessages(messageList,uid);
     }
 
 
+    @RequestMapping("/getArticle")
+    public String get(Integer id)
+    {
+        return "redirect:/article?id="+id; //重定向到fore路径下
+    }
 }

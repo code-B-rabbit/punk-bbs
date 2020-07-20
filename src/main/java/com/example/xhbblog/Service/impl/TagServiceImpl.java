@@ -12,13 +12,14 @@ import org.springframework.cache.annotation.*;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(isolation= Isolation.READ_COMMITTED)
 @EnableScheduling
 public class TagServiceImpl implements TagService {
 

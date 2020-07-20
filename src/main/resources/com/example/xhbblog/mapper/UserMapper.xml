@@ -7,6 +7,7 @@
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="role" property="role" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="headSculpture" property="headSculpture" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -38,7 +39,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, password, role, email
+    id, name, password, role, email, headSculpture
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.xhbblog.pojo.UserExample" >
     select
@@ -67,9 +68,9 @@
   </delete>
   <insert id="insert" parameterType="com.example.xhbblog.pojo.User" useGeneratedKeys="true" keyProperty="id" >
     insert into user (name, password, role, 
-      email)
+      email, headSculpture)
     values (#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR})
+      #{email,jdbcType=VARCHAR}, #{headSculpture,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.xhbblog.pojo.User" useGeneratedKeys="true" keyProperty="id" >
     insert into user
@@ -86,6 +87,9 @@
       <if test="email != null" >
         email,
       </if>
+      <if test="headSculpture != null" >
+        headSculpture,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="name != null" >
@@ -99,6 +103,9 @@
       </if>
       <if test="email != null" >
         #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="headSculpture != null" >
+        #{headSculpture,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -117,6 +124,9 @@
       <if test="email != null" >
         email = #{email,jdbcType=VARCHAR},
       </if>
+      <if test="headSculpture != null" >
+        headSculpture = #{headSculpture,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -125,7 +135,8 @@
     set name = #{name,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       role = #{role,jdbcType=VARCHAR},
-      email = #{email,jdbcType=VARCHAR}
+      email = #{email,jdbcType=VARCHAR},
+      headSculpture = #{headSculpture,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

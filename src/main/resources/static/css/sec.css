@@ -3,9 +3,6 @@
     background-position: center center;
 }
 
-
-
-
 .sec2{
     background: url(../img/divider-bg.jpg);
     background-size: cover;
@@ -38,3 +35,7 @@ body{
     box-shadow: 0 6px 16px rgba(0,0,0,0.12);
 }
 
+
+a.userName:hover{
+    text-decoration: none!important;
+}

@@ -19,8 +19,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * 相当于websocket的controller
  * 无法依赖注入:websocket不是单例的,底层不受spring管理
  */
-@ServerEndpoint(value = "/webSocket/{uid}" )
 @Component
+@ServerEndpoint(value = "/webSocket/{uid}" )
 public class WebSocketServer {
 
     private Session session;

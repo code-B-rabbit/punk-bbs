@@ -20,13 +20,25 @@ public class Article implements Serializable {
 
     private Long visit=new Long(0);        //默认值
 
-    private String nextName;
+    private Article lastArticle;
 
-    private String lastName;
+    private Article nextArticle;
 
-    private Integer nextId;
+    public Article getLastArticle() {
+        return lastArticle;
+    }
 
-    private Integer lastId;
+    public void setLastArticle(Article lastArticle) {
+        this.lastArticle = lastArticle;
+    }
+
+    public Article getNextArticle() {
+        return nextArticle;
+    }
+
+    public void setNextArticle(Article nextArticle) {
+        this.nextArticle = nextArticle;
+    }
 
     private Tag tag;
 
@@ -81,38 +93,6 @@ public class Article implements Serializable {
 
     public void setTag(Tag tag) {
         this.tag = tag;
-    }
-
-    public String getNextName() {
-        return nextName;
-    }
-
-    public void setNextName(String nextName) {
-        this.nextName = nextName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Integer getNextId() {
-        return nextId;
-    }
-
-    public void setNextId(Integer nextId) {
-        this.nextId = nextId;
-    }
-
-    public Integer getLastId() {
-        return lastId;
-    }
-
-    public void setLastId(Integer lastId) {
-        this.lastId = lastId;
     }
 
 

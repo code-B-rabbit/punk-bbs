@@ -54,8 +54,8 @@
                             </div>
                             <input id="name" type="text" name="name" th:value="${session.user.name}" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                         </div>
+                        <input type="hidden" name="id" th:value="${session.user.id}"/>
                         <div class="input-group mb-3">
-                            <input type="hidden" name="id" th:value="${session.user.id}"/>
                             <input type="password" id="password" name="password" th:value="${session.user.password}" class="form-control" placeholder="密码" aria-label="Recipient's username" aria-describedby="button-addon2">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" type="button" id="button-show">点我显示</button>
@@ -97,12 +97,46 @@
                                 })
                             </script>
                         </div>
+
                         <div class="input-group input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="ema">邮箱</span>
                             </div>
                             <input  type="email" name="email" th:value="${session.user.email}" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                         </div>
+
+                        <div class="input-group input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">头像图片地址</span>
+                            </div>
+                            <input id="headSculpture" type="text" name="headSculpture" th:value="${session.user.headSculpture}" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
+                        </div>
+
+                        <div class="input-group input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">图片预览</span>
+                            </div>
+                            <style>
+                                .imgHead{
+                                    max-width: 40px!important;
+                                    min-width: 40px!important;
+                                    height: 40px!important;
+                                }
+                            </style>
+                            <img class="img-fluid rounded-circle imgHead" th:src="${session.user.headSculpture}" id="show" />
+                        </div>
+                        <script>
+                            $(
+                                function () {
+                                    $('input#headSculpture').blur(
+                                        function () {
+                                            $('#show').attr("src", $(this).val());
+                                        }
+                                    )
+                                }
+                            )
+                        </script>
+
                     </form>
                     <button type="submit" class="btn btn-outline-info">提交修改</button>
                     <a href="exit" class="btn btn-outline-warning">退出登录</a>

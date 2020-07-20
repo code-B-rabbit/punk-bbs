@@ -13,14 +13,14 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
-@Transactional
-@CacheConfig(cacheNames = "fls")
+@Transactional(isolation= Isolation.READ_COMMITTED)
 @EnableScheduling
 public class FrientLyLinkServiceImpl implements FriendLyLinkService {
 

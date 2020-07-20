@@ -17,15 +17,15 @@ public interface ArticleService {
     public ArticleWithBLOBs get(Integer id);
     public List<ArticleWithBLOBs> listByTid(Integer tid, Boolean published,Integer rank,Integer uid);   //用于后台
     public List<ArticleWithBLOBs> listAll(Boolean published,Integer rank,Integer uid);
-    List<ArticleWithBLOBs> listArticleLike(String s,Boolean published,Integer rank,Integer uid); //用于后台
+    public List<ArticleWithBLOBs> listArticleLike(String s,Boolean published,Integer rank,Integer uid); //用于后台
 
     public ArticleWithBLOBs findById(Integer id,String address);
     public List<ArticleWithBLOBs> findByUid(Integer uid,String address,Boolean published);
     public List<ArticleWithBLOBs> findByTid(Integer tid,String address,Boolean published);
     public List<ArticleWithBLOBs> findAll(String address);
-    List<ArticleWithBLOBs> findArticleLike(String s, String address);
-    List<Article> foreArticle();
-    List<Article> findLastestArticle();
+    public List<ArticleWithBLOBs> findArticleLike(String s, String address);
+    public List<Article> foreArticle();
+    public List<Article> findLastestArticle();
 
     public Article getTitle(Integer id);
     public List<TimeLine> timeLine();        //这里我将时间轴写到了文章的业务层里面

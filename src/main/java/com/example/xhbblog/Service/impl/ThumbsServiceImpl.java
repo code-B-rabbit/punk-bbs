@@ -12,10 +12,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+
 @Service
-@Transactional
+@Transactional(isolation= Isolation.READ_COMMITTED)
 @EnableScheduling
 public class ThumbsServiceImpl implements ThumbsService {
 
@@ -51,6 +54,7 @@ public class ThumbsServiceImpl implements ThumbsService {
     /**
      * 每天两点和凌晨一点将点赞缓存持久化进数据库
      */
+    @PostConstruct
     @Scheduled(cron = "0 0 1,14 * * ?")
     @Override
     public void redisDataToMySQL() {

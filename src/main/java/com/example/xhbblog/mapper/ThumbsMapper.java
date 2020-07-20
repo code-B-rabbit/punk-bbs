@@ -3,6 +3,7 @@ package com.example.xhbblog.mapper;
 import com.example.xhbblog.pojo.Thumbs;
 import com.example.xhbblog.pojo.ThumbsExample;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -28,14 +29,19 @@ public interface ThumbsMapper {
     @Delete("DELETE FROM thumbs WHERE aid=#{aid}")
     public void deleteThumbByAid(Integer aid);          //删除文章时进行级联删除
 
-    @Select("SELECT COUNT(*) FROM thumbs WHERE address=#{address} AND aid=#{aid} LIMIT 1")           //查出是否被赞
-    public Boolean isThumb(Integer aid,String address);
-
-    @Select("SELECT COUNT(*) FROM thumbs WHERE aid=#{aid}")
-    public Integer countOf(Integer aid);
 
     @Delete("DELETE FROM thumbs WHERE address=#{address} AND aid=#{aid}")
-    public void deleteThumb(Integer aid,String address);    //取消赞
+    public void deleteThumb(Integer aid,String address);    //有则删除
+
+
+    /**
+     * 这里IGNORE是忽略错误
+     * @param aid
+     * @param address
+     */
+    @Insert("INSERT IGNORE INTO thumbs(address,aid) " +
+            "VALUES(#{address},#{aid}) ")
+    public void insertThumbSelective(Integer aid,String address);
 
     /**
      * 获取某篇文章全部的点赞ip地址

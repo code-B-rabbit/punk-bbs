@@ -35,7 +35,7 @@ public class NoRepeatSubmitAop {
 
 
     /**
-     * 这里一直没有解决前端jquery的问题,所以只能在这里防止重复访问了
+     * 这里一直没有解决前端jquery重复提交请求的问题,所以只能在这里防止重复访问了
      * @param pjp
      * @param nrs
      * @return

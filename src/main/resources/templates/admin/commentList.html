@@ -97,16 +97,16 @@
             </td>
             <td th:text="${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
             <td>
-                <a th:text="${comment.visitor_name}" th:href="@{listByUid(uid=${comment.uid})}">徐浩博</a>
+                <a th:text="${comment.user.name}" th:href="@{listByUid(uid=${comment.uid})}">徐浩博</a>
 <!--                <a th:text="${comment.visitor_name}"  th:unless="${session.admin}">徐浩博</a>-->
             </td>
             <td>
                 <span style="text-align: center">
-                    <a style="margin: 0 5px"   th:each="child:${comment.childs}" th:href="@{listByUid(uid=${child.uid})}" th:text="${child.visitor_name}"></a>
+                    <a style="margin: 0 5px"   th:each="child:${comment.childs}" th:href="@{listByUid(uid=${child.uid})}" th:text="${child.user.name}"></a>
 <!--                    <a style="margin: 0 5px" th:unless="${session.admin}"  th:each="child:${comment.childs}" th:text="${child.visitor_name}"></a>-->
                 </span>
             </td>
-            <td th:text="${comment.visitor_email}">511928849@qq.com</td>
+            <td th:text="${comment.user.email}">511928849@qq.com</td>
             <td style="text-align: center" colspan="3">
                 <a th:text="${comment.content}" th:href="@{listByCid(cid=${comment.id})}">
                     511928849@qq.com.........................

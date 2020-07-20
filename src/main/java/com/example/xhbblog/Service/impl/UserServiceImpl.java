@@ -21,6 +21,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
@@ -30,7 +31,7 @@ import java.util.List;
 
 
 @Service
-@Transactional
+@Transactional(isolation= Isolation.READ_COMMITTED)
 public class UserServiceImpl implements UserService {
 
     private Logger LOG=LoggerFactory.getLogger(this.getClass());
@@ -162,9 +163,15 @@ public class UserServiceImpl implements UserService {
      * @param uid
      */
     @Override
-    public void addMessages(String[] messages, Integer uid) {
-        LOG.info("用户{}添加信息{}",uid,messages.length);
-        redisUserManager.addMessages(uid,messages);
+    public void addMessages(String[] messages, Integer uid) throws UnsupportedEncodingException {
+        int length=messages.length;
+        if(length!=0) {
+            for (int i = 0; i < length; i++) {
+                messages[i] = URLDecoder.decode(messages[i], "utf-8");
+            }
+            LOG.info("用户{}添加信息{}", uid, messages);
+            redisUserManager.addMessages(uid, messages);
+        }
     }
 
     /**

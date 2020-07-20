@@ -6,12 +6,13 @@ import com.example.xhbblog.pojo.Picture;
 import com.example.xhbblog.pojo.PictureExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(isolation= Isolation.READ_COMMITTED)
 public class PictureServiceImpl implements PictureService {
 
     @Autowired

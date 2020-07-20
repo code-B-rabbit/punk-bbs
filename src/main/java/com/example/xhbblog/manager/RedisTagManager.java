@@ -11,6 +11,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Component
 @CacheConfig(cacheNames = "tag")
-@Transactional
+@Transactional(isolation= Isolation.READ_COMMITTED)
 public class RedisTagManager {
 
 
@@ -47,7 +48,7 @@ public class RedisTagManager {
     }
 
 
-    @Cacheable(key = "#id")
+    @Cacheable(key = "'tag_'.concat(#a0)")
     public Tag get(Integer id) {
         LOG.info(id+"标签缓存未命中");
         return tagMapper.selectByPrimaryKey(id);

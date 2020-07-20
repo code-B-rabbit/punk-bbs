@@ -5,7 +5,6 @@ import com.example.xhbblog.annotation.AccessLimit;
 import com.example.xhbblog.pojo.User;
 import com.example.xhbblog.utils.CookieUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -54,6 +53,7 @@ public class RestUserController {
                 CookieUtil.remove(request,response,"name");
                 CookieUtil.remove(request,response,"password");
             }
+            u.setPassword(password);
             session.setAttribute("user",u);
             session.setAttribute("uid",u.getId());
             session.setAttribute("admin",u.getRole().equals("admin"));

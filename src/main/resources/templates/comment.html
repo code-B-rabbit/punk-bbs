@@ -41,23 +41,32 @@
     <div class="comment" th:each="comment:${page.list}" >
         <div class="comment-header d-flex justify-content-between">
             <div class="user d-flex align-items-center">
-                <div class="image"><img th:src="@{/img/user.svg}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle"></div>
-                <div class="title"><strong th:text="${comment.visitor_name}">Jabi Hernandiz</strong><span class="date" th:text="${#dates.format(comment.createTime,'yyyy-MM-dd')}">May 2016</span></div>
+                <div class="image">
+                    <img th:if="${comment.user.headSculpture}" th:src="${comment.user.headSculpture}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle">
+                    <img th:unless="${comment.user.headSculpture}" th:src="@{/img/user.svg}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle">
+                </div>
+                <div class="title"><strong th:text="${comment.user.name}">Jabi Hernandiz</strong><span class="date" th:text="${#dates.format(comment.createTime,'yyyy-MM-dd')}">May 2016</span></div>
             </div>
-            <button type="button" th:onclick="reply([[${comment.id}]],[[${comment.visitor_name}]])" class="btn btn-light float-right reply">回复</button>
+            <button type="button" th:onclick="reply([[${comment.id}]],[[${comment.user.name}]])" class="btn btn-light float-right reply">回复</button>
         </div>
         <div class="comment-body">
             <p th:text="${comment.content}">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-            <div class="comment" th:each="comment:${comment.childs}">
+            <div class="comment" th:each="cmt:${comment.childs}">
                 <div class="comment-header d-flex justify-content-between">
             <div class="user d-flex align-items-center">
-                <div class="image"><img th:src="@{/img/user.svg}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle"></div>
-                <div class="title"><strong th:text="|${comment.visitor_name} 回复 ${comment.parentVisitorName}|">Jabi Hernandiz</strong><span class="date" th:text="${#dates.format(comment.createTime,'yyyy-MM-dd')}">May 2016</span></div>
+                <div class="image">
+                    <img th:if="${cmt.user.headSculpture}" th:src="${cmt.user.headSculpture}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle">
+                    <img th:unless="${cmt.user.headSculpture}" th:src="@{/img/user.svg}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle">
+                </div>
+                <div class="title">
+                    <strong th:text="|${cmt.user.name} 回复 ${cmt.parentVisitorName}|">Jabi Hernandiz</strong>
+                    <span class="date" th:text="${#dates.format(cmt.createTime,'yyyy-MM-dd')}">May 2016</span>
+                </div>
             </div>
-            <button type="button" th:onclick="reply([[${comment.id}]],[[${comment.visitor_name}]])" class="btn btn-light float-right reply">回复</button>
+            <button type="button" th:onclick="reply([[${cmt.id}]],[[${cmt.user.name}]])" class="btn btn-light float-right reply">回复</button>
                 </div>
             <div class="comment-reply">
-                <p th:text="${comment.content}">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                <p th:text="${cmt.content}">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
             </div>
             </div>
         </div>
@@ -117,7 +126,7 @@
                             $('textarea.content').val("");
                         }
                     );
-                })
+                });
                 $('#exampleModal').modal('hide');
             }
         })

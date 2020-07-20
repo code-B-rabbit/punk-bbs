@@ -12,6 +12,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
-@Transactional
+@Transactional(isolation= Isolation.READ_COMMITTED)
 @CacheConfig(cacheNames = "user")
 public class RedisUserManager {
 
@@ -31,13 +32,13 @@ public class RedisUserManager {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Cacheable(key = "#id")
+    @Cacheable(key="'user_'.concat(#a0)")
     public User get(Integer id) {
         logger.info("用户{}缓存未命中",id);
         return userMapper.selectByPrimaryKey(id);
     }
 
-    @Cacheable(key = "#name")
+    @Cacheable(key="'user_'.concat(#a0)")
     public User uid(String name) {
         return userMapper.getUid(name);
     }
@@ -63,7 +64,7 @@ public class RedisUserManager {
 
     //消息关闭时为设置已读的消息
     public void addMessages(Integer uid,String []messages){
-        redisTemplate.opsForList().rightPushAll(RedisKey.NOT_READ_COMMENT_LIST+uid,messages);
+            redisTemplate.opsForList().rightPushAll(RedisKey.NOT_READ_COMMENT_LIST+uid,messages);
     }
 
     public void delUsr(Integer uid){

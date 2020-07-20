@@ -87,6 +87,17 @@
                 通知 <span class="badge badge-light" id="msgCnt" th:text="${msgCnt}">4</span>
             </button>
             <style>
+                .imgHead{
+                    max-width: 40px!important;
+                    min-width: 40px!important;
+                    height: 40px!important;
+                }
+            </style>
+            <a href="user">
+                <img class="img-fluid rounded-circle imgHead" th:src="${session.user.headSculpture}" />
+            </a>
+            你好,[[${session.user.name}]]
+            <style>
                 div#notice a{
                     margin-left: 10px!important;
                 }

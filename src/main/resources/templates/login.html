@@ -134,22 +134,19 @@
                         data:data,
                         dataType: "json",
                         success:function (dataStr) {
-                            if(dataStr.message==true){
-                                if(confirm("写篇文章???")){
-                                    if(dataStr.adm==true){
-                                        window.location.href="/admin/articleList";
-                                        return;
-                                    }else{
-                                        window.location.href="/userAdmin/articleList";
-                                        return;
-                                    }
-                                }else{
-                                    history.go(-1);
-                                    location.reload();
-                                }
-                            }else{
-                                alert("用户名或密码错误");
+                            if(dataStr.message==false){
+                                alert("用户名或密码错误")
+                                return;
                             }
+                                if(dataStr.adm==true){
+                                    location.reload();
+                                    window.open("/admin/articleList","_blank");
+                                    return;
+                                }else{
+                                    location.reload();
+                                    window.open("/userAdmin/articleList","_blank");
+                                    return;
+                                }
                         }
                     });
                     return defer.promise();
@@ -189,7 +186,7 @@
                     })
                 })
             </script>
-            <div class="card" target="iframe">
+            <div th:unless="${session.user}" class="card" target="iframe">
                 <div class="card-header">用户登录</div>
                 <div class="card-body">
                     <span class="font-weight-bold">(部分手机自带浏览器可能会无法正常登录,换成其他浏览器即可)</span>
@@ -213,7 +210,7 @@
                             <input class="form-check-input position-static" name="checked" type="checkbox" id="rememberMe"/>
                             30天内记住我
                             没有账户?<a href="/user/register" class="text-success">现在注册</a>
-                            <a href="/user/forgetPassword" class="text-danger">修改密码</a>
+                            <a href="/user/forgetPassword" class="text-danger">忘记密码</a>
                             <btn onclick="refresh()" class="btn-link float-right">验证码看不清楚?换一张</btn>
                         </div>
                         <br>
@@ -239,6 +236,14 @@
                             })
                         </script>
                     </form>
+                </div>
+            </div>
+            <div th:if="${session.user}">
+                <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">您已登录成功!!!</h4>
+                    <p>现在, 您可以自由地在社区里发表文章并互相评论了</p>
+                    <hr>
+                    <p class="mb-0">求知若饥,虚心若愚 ---乔布斯</p>
                 </div>
             </div>
         </div>

@@ -17,7 +17,7 @@ public interface CommentService {
     public List<Comment> list();
     public List<Comment> findByAid(Integer aid,Integer start,Integer count);
     public Integer countOfArticle(Integer aid);
-    List<Comment> lastComment();
+    public List<Comment> lastComment();
     public List<Comment> listByAid(Integer aid);
     public List<Comment> listByUid(Integer aid);
     public List<Comment> findChilds(Integer cid);

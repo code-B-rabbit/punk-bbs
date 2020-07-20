@@ -3,6 +3,7 @@ package com.example.xhbblog.Service;
 
 import com.example.xhbblog.pojo.User;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public interface UserService {
     public Long msgCnt(Integer uid);              //查看消息的个数
     public List<String> getMessages(Integer uid);     //获得所有的推送消息
     public void deleteUser(Integer uid);  //封号业务
-    public void addMessages(String[] messages,Integer uid);
+    public void addMessages(String[] messages,Integer uid) throws UnsupportedEncodingException;
 
     //用户找回密码相关业务
     public boolean forgetPasswordAndChange(User user);

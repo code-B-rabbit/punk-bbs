@@ -62,17 +62,11 @@ public interface ArticleMapper {
     @Select("select count(*) from article where tid=#{tid}")
     Integer countOfTag(Integer tid);        //同样用于后台不需要考虑published
 
-    @Select("select title from article where id<#{aid} and published=true order by id desc limit 1")
-    String findLastName(Integer aid);
+    @Select("SELECT id,title FROM article WHERE id>#{aid} and published=true ORDER BY id limit 1")
+    Article findNextArticle(Integer aid);
 
-    @Select("select id from article where id<#{aid} and published=true order by id desc limit 1")      //这样按时间顺序排是对的吗....
-    Integer findLastId(Integer aid);
-
-    @Select("select title from article where id>#{aid} and published=true order by id limit 1")
-    String findNextName(Integer aid);
-
-    @Select("select id from article where id>#{aid} and published=true order by id limit 1")
-    Integer findNextId(Integer aid);
+    @Select("SELECT id,title FROM article WHERE id<#{aid} and published=true ORDER BY id DESC limit 1")
+    Article findLastArticle(Integer aid);
 
 
     @Select("select * FROM article WHERE id=#{id}")
@@ -82,10 +76,8 @@ public interface ArticleMapper {
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "tid", column = "tid"),      //这里如果使用一个键值当作参数必须将其写在resultMap里去才能取出到对象里
-            @Result(property = "nextName",column = "id",one = @One(select = "com.example.xhbblog.mapper.ArticleMapper.findNextName")),
-            @Result(property = "nextId",column = "id",one = @One(select = "com.example.xhbblog.mapper.ArticleMapper.findNextId")),
-            @Result(property = "lastName",column = "id",one = @One(select = "com.example.xhbblog.mapper.ArticleMapper.findLastName")),
-            @Result(property = "lastId",column = "id",one = @One(select = "com.example.xhbblog.mapper.ArticleMapper.findLastId")),
+            @Result(property = "lastArticle",column = "id",one = @One(select = "com.example.xhbblog.mapper.ArticleMapper.findLastArticle")),
+            @Result(property = "nextArticle",column = "id",one = @One(select = "com.example.xhbblog.mapper.ArticleMapper.findNextArticle")),
     })
     ArticleWithBLOBs findById(Integer id);
 

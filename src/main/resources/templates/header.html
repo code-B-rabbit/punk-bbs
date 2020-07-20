@@ -48,31 +48,7 @@
     <link rel="stylesheet"  th:href="@{/css/typing.css}">
     <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js"></script>
     <script  th:src="@{/js/typing.js}"></script>
-    <nav class="navbar bg-dark navbar-expand-lg" style="background-color: #fdfcf8;!important;">
-        <div class="search-area text-white bg-dark">
-            <div class="search-area-inner  bg-dark d-flex align-items-center justify-content-center" style="background-color: #fdfcf8;!important;">
-                <div class="close-btn">
-                    <svg class="bi bi-reply-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.079 11.9l4.568-3.281a.719.719 0 000-1.238L9.079 4.1A.716.716 0 008 4.719V6c-1.5 0-6 0-7 8 2.5-4.5 7-4 7-4v1.281c0 .56.606.898 1.079.62z"/>
-                    </svg>
-                </div>
-                <div class="row d-flex justify-content-center">
-                    <div class="col-md-8">
-                        <form action="/blogsearch" method="get">
-                            <div class="form-group">
-                                <input type="search" name="search" id="search" placeholder="请输入你要寻找的文章标题或文章内容.......">
-                                <button type="submit" class="text-white submit">
-                                    <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clip-rule="evenodd"/>
-                                        <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clip-rule="evenodd"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <nav class="navbar bg-dark navbar-expand-lg"  style="background-color: #fdfcf8;!important;">
         <div class="bg-dark text-white container" style="background-color: #fdfcf8;!important;">
             <!-- Navbar Brand -->
             <div class="navbar-header d-flex align-items-center justify-content-between">
@@ -172,16 +148,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="navbar-text">
-                    <a href="#" class="text-white search-btn">
-                    <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clip-rule="evenodd"/>
-                        <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clip-rule="evenodd"/>
-                    </svg>
+                <style>
+                    .imgHead{
+                        max-width: 20px;
+                        min-width: 20px;
+                        height: 20px;
+                    }
+                </style>
+                <div style="float: right;margin:0px 5px" class="navbar-text" th:if="${session.user}">
+                    <a th:if="${session.admin}" href="/admin/articleList">
+                        <img th:if="${session.user.headSculpture}" th:src="${session.user.headSculpture}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle imgHead">
+                        <img th:unless="${session.user.headSculpture}" th:src="@{/img/user.svg}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle imgHead">
                     </a>
-                </div>
-                <div style="margin:0px 5px" class="navbar-text" th:if="${session.user}">
-                    <span>您好,</span>
+                    <a th:unless="${session.admin}" href="/userAdmin/articleList">
+                        <img th:if="${session.user.headSculpture}" th:src="${session.user.headSculpture}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle imgHead">
+                        <img th:unless="${session.user.headSculpture}" th:src="@{/img/user.svg}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle imgHead">
+                    </a>
+                        <span>您好,</span>
                     <span th:text="${session.user.name}" style="font-weight: bold"></span>
                     <a th:unless="${session.admin}" href="/userAdmin/articleList">写个文章</a>
                     <a th:if="${session.admin}" href="/admin/articleList">写个文章</a>

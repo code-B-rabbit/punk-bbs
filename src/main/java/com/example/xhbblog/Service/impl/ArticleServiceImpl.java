@@ -14,14 +14,14 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Service
-@Transactional
-@CacheConfig(cacheNames = "article")
+@Transactional(isolation= Isolation.READ_COMMITTED)
 @EnableScheduling
 public class ArticleServiceImpl implements ArticleService {
 
