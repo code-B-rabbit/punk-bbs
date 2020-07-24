@@ -74,14 +74,15 @@ public class CommentServiceImpl implements CommentService {
         redisCommentManager.add(comment);
     }
 
+
     /**
-     * 递归级联删除一个评论及其子评论
-     * @param id
+     * 级联删除单个评论
+     * @param comment
      */
     @Override
-    public void delete(Integer id) {
-        LOG.info("评论{}被删除",id);
-       redisCommentManager.delete(id);
+    public void delete(Comment comment) {
+        LOG.info("评论{}被删除",comment.getId());
+       redisCommentManager.delete(comment);
     }
 
     @Override
@@ -178,9 +179,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteCids(List<Integer> cids) {
-        LOG.info("删除评论{}的所有评论",cids);
-        redisCommentManager.deleteCids(cids);
+    public void deleteCids(List<Comment> comments) {
+        LOG.info("删除评论{}的所有评论",comments);
+        redisCommentManager.deleteCids(comments);
     }
 
     @Override

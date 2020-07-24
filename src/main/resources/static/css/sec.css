@@ -20,12 +20,27 @@
     font-family: "微软雅黑"!important;
 }
 
+
 body{
     background-color: rgb(236, 239, 241)!important;
     z-index: 999!important;
     position :relative!important;
+    zoom: 0.82;
 }
 
+footer{
+    zoom: 1.25!important;
+}
+
+.modal{
+    z-index: 9999999999999999999999999999999999999999999999999999!important;
+}
+
+.modal-backdrop{
+    width: 120% !important;
+    height: 120% !important;
+    z-index: 999!important;
+}
 
 .post:hover {
     -webkit-transform: translateY(-5px);

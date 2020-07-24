@@ -24,14 +24,18 @@ public class RestUserController {
 
     @Autowired
     private UserService userService;
+
+
     /**
      * 用户验证
+     * 十分钟内只允许十次
      * @param user
      * @param session
      * @param request
      * @param response
      * @return
      */
+    @AccessLimit(maxCount = 10,seconds = 600)
     @PostMapping("/check")
     public Map<String,Boolean> checkUser(User user, HttpSession session, HttpServletRequest request,HttpServletResponse response)
     {

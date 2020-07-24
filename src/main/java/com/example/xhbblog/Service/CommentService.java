@@ -11,7 +11,6 @@ import java.util.List;
  */
 public interface CommentService {
     public void add(Comment comment);
-    public void delete(Integer id);
     public void update(Comment comment);
     public Comment get(Integer id);
     public List<Comment> list();
@@ -22,7 +21,8 @@ public interface CommentService {
     public List<Comment> listByUid(Integer aid);
     public List<Comment> findChilds(Integer cid);
     public void sendComment(Comment comment,User user) throws IOException;            //暂时存储评论信息
-    public void deleteCids(List<Integer> cids);
+    public void delete(Comment comment);
+    public void deleteCids(List<Comment> comments);
     public Integer count();
 
     public Integer countOfComment(Integer aid);              //显示的总数

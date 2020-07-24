@@ -95,71 +95,75 @@
                 }
             </script>
             <script>
-                function init() {
-                    $.ajax({
-                        //请求方式
-                        type : "get",
-
-                        contentType: "application/json;charset=UTF-8",
-
-                        url : "/getCookie",
-
-                        dataType:'json',
-
-                        success : function(result) {
-                            $('input.username1').val(result.name);
-                            $('input.userPassword1').val(result.password);
-                            if(result.name!="")
-                            {
-                                $("input#rememberMe").attr("checked","true");
-                            }
-                        },
-                        //请求失败，包含具体的错误信息
-                        error : function(e){
-                            console.log(e.status);
-                            console.log(e.responseText);
-                        }
-                    });
-                }
-                function getOrderList() {
-                    //orderForm即是表单的ID
-                    return false;
-                }
-                function request(data)
-                {
-                    var defer = $.Deferred();
-                    $.ajax({
-                        url:"/user/check",
-                        method:"post",
-                        data:data,
-                        dataType: "json",
-                        success:function (dataStr) {
-                            if(dataStr.message==false){
-                                alert("用户名或密码错误")
-                                return;
-                            }
-                                if(dataStr.adm==true){
-                                    location.reload();
-                                    window.open("/admin/articleList","_blank");
-                                    return;
-                                }else{
-                                    location.reload();
-                                    window.open("/userAdmin/articleList","_blank");
-                                    return;
-                                }
-                        }
-                    });
-                    return defer.promise();
-                }
-
-                function refresh(){
-                    $('img#imgs').trigger("click");
-                }
-
                 $(function () {
                     init();           //初始化cookie
-                    $('form#login').submit(function () {
+                    function init() {
+                        $.ajax({
+                            //请求方式
+                            type : "get",
 
+                            contentType: "application/json;charset=UTF-8",
+
+                            url : "/getCookie",
+
+                            dataType:'json',
+
+                            success : function(result) {
+                                $('input.username1').val(result.name);
+                                $('input.userPassword1').val(result.password);
+                                if(result.name!="")
+                                {
+                                    $("input#rememberMe").attr("checked","true");
+                                }
+                            },
+                            //请求失败，包含具体的错误信息
+                            error : function(e){
+                                console.log(e.status);
+                                console.log(e.responseText);
+                            }
+                        });
+                    }
+                    function getOrderList() {
+                        //orderForm即是表单的ID
+                        return false;
+                    }
+                    function request(data)
+                    {
+                        var defer = $.Deferred();
+                        $.ajax({
+                            url:"/user/check",
+                            method:"post",
+                            data:data,
+                            dataType: "json",
+                            success:function (dataStr) {
+                                if(null != dataStr && "" != dataStr){
+                                    if(dataStr.message==false){
+                                        alert("用户名或密码错误");
+                                        return;
+                                    }else if(dataStr.message==true){
+                                        if(dataStr.adm==true){
+                                            location.reload();
+                                            window.open("/admin/articleList","_blank");
+                                            return;
+                                        }else{
+                                            location.reload();
+                                            window.open("/userAdmin/articleList","_blank");
+                                            return;
+                                        }
+                                    }
+                                }
+                            },
+                            error:function () {
+                                $('#locked').modal('show');
+                            }
+                        });
+                        return defer.promise();
+                    }
+
+                    function refresh(){
+                        $('img#imgs').trigger("click");
+                    }
+                    $('form#login').submit(function () {
                         $.post("/valid",{
                                 tryCode:$("#verCode").val()
                             },
@@ -186,6 +190,21 @@
                     })
                 })
             </script>
+            <div id="locked" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">系统提示</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>短时间内登陆失败次数过多,请过段时间再试</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div th:unless="${session.user}" class="card" target="iframe">
                 <div class="card-header">用户登录</div>
                 <div class="card-body">
@@ -201,7 +220,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" id="verCode"  class="form-control userPassword1" placeholder="请输入验证码" aria-label="Recipient's username" aria-describedby="button-addon2"/>
+                            <input type="text" id="verCode"  class="form-control" placeholder="请输入验证码" aria-label="Recipient's username" aria-describedby="button-addon2"/>
                             <div class="input-group-append" >
                                 <img id="imgs" onclick="this.src='/defaultKaptcha?d=' + new Date()*1" src="/defaultKaptcha"   aria-label="Recipient's username" aria-describedby="button-addon2"/>
                             </div>

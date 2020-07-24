@@ -93,31 +93,31 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
 
-    private void setCount(Article article)
+    public void setCount(Article article)
     {
         article.setThumbsCount(redisThumbManager.thumbCountOf(article.getId()));
     }
 
-    private void setThumb(Article item,String address)
+    public void setThumb(Article item,String address)
     {
         item.setThumb(redisThumbManager.artIsThumb(item.getId(),address));
     }
 
-    private void setTag(Article article)
+    public void setTag(Article article)
     {
         article.setTag(redisTagManager.get(article.getTid()));
     }
 
-    private void setVisit(Article article)
+    public void setVisit(Article article)
     {
         redisArticleManager.setVisit(article);
     }
 
-    private void setUser(Article article){
+    public void setUser(Article article){
         article.setUser(redisUserManager.get(article.getUid()));
     }
 
-    private void setCommentSize(Article article)
+    public void setCommentSize(Article article)
     {
         article.setCommentSize(redisCommentManager.countOfComment(article.getId()));
     }
@@ -125,7 +125,7 @@ public class ArticleServiceImpl implements ArticleService {
     /**
      * 若为条件所有则将相关的浏览,点赞缓存先持久化
      */
-    private void checkOrder(Order order){
+    public void checkOrder(Order order){
         if(order==null){
             return;
         }else if (order.getBy().equals("visit")){
@@ -137,7 +137,7 @@ public class ArticleServiceImpl implements ArticleService {
      * 查询相关的映射类
      * @param article
      */
-    private void setUp(Article article,String address){
+    public void setUp(Article article,String address){
         setVisit(article);
         setCommentSize(article);
         setTag(article);
@@ -146,7 +146,7 @@ public class ArticleServiceImpl implements ArticleService {
         setUser(article);
     }
 
-    private void setUp(Article article){
+    public void setUp(Article article){
         setVisit(article);
         setCommentSize(article);
         setTag(article);

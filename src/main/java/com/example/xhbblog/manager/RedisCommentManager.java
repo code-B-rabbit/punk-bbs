@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-@Transactional(isolation= Isolation.READ_COMMITTED)
 @CacheConfig(cacheNames = "comment")
 public class RedisCommentManager {
 
@@ -41,7 +40,6 @@ public class RedisCommentManager {
     private List<Comment> getComments(List<Comment> comments){
         for (Comment comment : comments) {
             comment.setUser(redisUserManager.get(comment.getUid()));  //给首部评论栏设置user
-            System.out.println(comment.getUser());
             comment.setChilds(getChildComments(comment));        //给首部评论栏设置
         }
         return comments;
@@ -63,63 +61,83 @@ public class RedisCommentManager {
      * 新增这个评论并将原来该文章的评论清空,全部重新载入
      * @param comment
      */
-    @Caching(evict = {
-            @CacheEvict(key = "'countOfArticle'+#comment.getAid()"),
-            @CacheEvict(key = "'countOfComment'+#comment.getAid()"),
-            @CacheEvict(key = "'lastComment'"),
-    })
+//    @Caching(evict = {
+//            @CacheEvict(key = "'countOfArticle'+#comment.getAid()"),
+//            @CacheEvict(key = "'countOfComment'+#comment.getAid()"),
+//            @CacheEvict(key = "'lastComment'"),
+//    })
     public void add(Comment comment) {
         mapper.insert(comment);
         Set<String> keys = redisTemplate.keys(RedisKey.COMMENT+"aid_" + comment.getAid() + "*");
         redisTemplate.delete(keys);
+        redisTemplate.delete(RedisKey.COUNTOF_ARTICLE+comment.getAid());
+        redisTemplate.delete(RedisKey.COUNTOF_COMMENT+comment.getAid());
+        redisTemplate.delete(RedisKey.LAST_COMMENT);
     }
 
     /**
      * 递归级联删除一个评论及其子评论
      * @param id
      */
-    @CacheEvict(allEntries = true)
-    public void delete(Integer id) {
-        LOG.info("{}被删除",id);
-        for (Comment comment : mapper.listByCid(id)) {
-            this.delete(comment.getId());
+  //  @CacheEvict(allEntries = true)
+    public void delete(Comment comment) {
+        LOG.info("{}被删除",comment.getId());
+        Set<String> keys = redisTemplate.keys(RedisKey.COMMENT+"aid_" + comment.getAid() + "*");
+        redisTemplate.delete(keys);
+        redisTemplate.delete(RedisKey.COUNTOF_ARTICLE+comment.getAid());
+        redisTemplate.delete(RedisKey.COUNTOF_COMMENT+comment.getAid());
+        redisTemplate.delete(RedisKey.LAST_COMMENT);
+        for (Comment item : mapper.listByCid(comment.getId())) {
+            this.delete(item);
         }
-        mapper.deleteByPrimaryKey(id);
+        mapper.deleteByPrimaryKey(comment.getId());
     }
 
-    @Cacheable(key = "'aid_'.concat(#a0)+','+'start_'.concat(#a1)")
+//    @Cacheable(key = "'aid_'.concat(#a0)+','+'start_'.concat(#a1)", unless="#result == null")
     public List<Comment> findByAid(Integer aid, Integer start, Integer count) {
-        LOG.info("文章{}评论缓存未命中",aid);
-        List<Comment> comments=mapper.findByAid(aid,start,count);
-        return getComments(comments);
-    }
-
-    @Cacheable(key = "'countOfArticle'.concat(#a0)")
-    public Integer countOfArticle(Integer aid) {
-        LOG.info("文章{}评论数缓存未命中",aid);
-        return mapper.countOfArticle(aid);
-    }
-
-    @Cacheable(key = "'countOfComment'.concat(#a0)")
-    public Integer countOfComment(Integer aid) {
-        LOG.info("文章{}评论加回复数缓存未命中",aid);
-        return mapper.countOfComment(aid);
-    }
-
-    @Cacheable(key = "'lastComment'")
-    public List<Comment> lastComment() {
-        LOG.info("最新评论缓存未命中");
-        List<Comment> comments=mapper.lastComment();
-        for (Comment comment : comments) {
-            comment.setUser(redisUserManager.get(comment.getUid()));
+        if(!redisTemplate.hasKey(RedisKey.COMMENT+"aid_" +aid +"start_"+start)){
+            LOG.info("文章{}评论缓存未命中",aid);
+            List<Comment> comments=mapper.findByAid(aid,start,count);
+            redisTemplate.opsForValue().set(RedisKey.COMMENT+"aid_" +aid +"start_"+start,getComments(comments));
         }
-        return comments;
+        return (List<Comment>) redisTemplate.opsForValue().get(RedisKey.COMMENT+"aid_" +aid +"start_"+start);
     }
 
-    @CacheEvict(allEntries = true)
-    public void deleteCids(List<Integer> cids) {
-        for (Integer cid : cids) {
-            this.delete(cid);
+  //  @Cacheable(key = "'countOfArticle'.concat(#a0)",unless="#result == null")
+    public Integer countOfArticle(Integer aid) {
+        if(!redisTemplate.hasKey(RedisKey.COUNTOF_ARTICLE+aid)){
+            LOG.info("文章{}评论数缓存未命中",aid);
+            redisTemplate.opsForValue().set(RedisKey.COUNTOF_ARTICLE+aid, mapper.countOfArticle(aid));
+        }
+        return (Integer) redisTemplate.opsForValue().get(RedisKey.COUNTOF_ARTICLE+aid);
+    }
+
+  //  @Cacheable(key = "'countOfComment'.concat(#a0)", unless="#result == null")
+    public Integer countOfComment(Integer aid) {
+        if(!redisTemplate.hasKey(RedisKey.COUNTOF_COMMENT+aid)){
+            LOG.info("文章{}评论加回复数缓存未命中",aid);
+            redisTemplate.opsForValue().set(RedisKey.COUNTOF_COMMENT+aid, mapper.countOfComment(aid));
+        }
+        return (Integer) redisTemplate.opsForValue().get(RedisKey.COUNTOF_COMMENT+aid);
+    }
+
+   // @Cacheable(key = "'lastComment'", unless="#result == null")
+    public List<Comment> lastComment() {
+        if(!redisTemplate.hasKey(RedisKey.LAST_COMMENT)){
+            LOG.info("最新评论缓存未命中");
+            List<Comment> comments=mapper.lastComment();
+            for (Comment comment : comments) {
+                comment.setUser(redisUserManager.get(comment.getUid()));
+            }
+            redisTemplate.opsForValue().set(RedisKey.LAST_COMMENT, comments);
+        }
+        return (List<Comment>) redisTemplate.opsForValue().get(RedisKey.LAST_COMMENT);
+    }
+
+
+    public void deleteCids(List<Comment> comments) {
+        for (Comment comment : comments) {
+            this.delete(comment);
         }
     }
 

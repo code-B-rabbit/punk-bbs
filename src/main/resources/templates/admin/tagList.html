@@ -31,18 +31,54 @@
 </head>
 <nav th:replace="admin/nav::admin_nav(1)"></nav>
 <body>
-<div class="container" style="text-align: center;font-size: 11px!important;">
+<div>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item active" aria-current="page">
-                标签列表
-                <span>共</span>
-                <span style="color: red" th:text="${count}"></span>
-                <span>个</span>
+            标签列表
+            <span>共</span>
+            <span style="color: red" th:text="${page.total}"></span>
+            <span>个</span>
+                <a href="#" class="text-danger" onclick="showTagModal()" >新增标签</a>
             </li>
+            <div class="modal" id="tagInput" tabindex="-1" role="dialog">
+                <div class="modal-dialog note">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">新增标签</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="addTag" method="get" th:action="@{saveTag}">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <br>
+                                    <input id="tName" class="form-control"  type="text" aria-label="Dollar amount (with dot and two decimal places)" name="name" placeholder="请输入标签内容">
+                                </div>
+                            </div>
+                            <script>
+                                $('form#addTag').submit(
+                                    function () {
+                                        var str=$('#tName').val();
+                                        if(str == '' || str == undefined || str == null){
+                                            alert("标签不能为空!!");
+                                            return false;
+                                        }
+                                        return true;
+                                    }
+                                )
+                            </script>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </ol>
     </nav>
-    <table class="table">
+    <table class="table table-bordered table-hover">
         <thead>
         <tr>
             <th scope="col">序号</th>
@@ -68,36 +104,6 @@
         </tr>
         </tbody>
     </table>
-        <div class="card" style="width: 18rem;margin-left: 400px!important;">
-            <div class="card-header">
-                新增标签
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                    <form id="addTag" method="get" th:action="@{saveTag}">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <input id="tName" class="form-control"  type="text" aria-label="Dollar amount (with dot and two decimal places)" name="name" placeholder="请输入标签内容">
-                                <br>
-                            </div>
-                            <input class="btn btn-block btn-outline-info" type="submit"/>
-                        </div>
-                        <script>
-                            $('form#addTag').submit(
-                                function () {
-                                    var str=$('#tName').val();
-                                    if(str == '' || str == undefined || str == null){
-                                        alert("标签不能为空!!");
-                                        return false;
-                                    }
-                                    return true;
-                                }
-                            )
-                        </script>
-                    </form>
-                </li>
-            </ul>
-        </div>
 </div>
 </body>
 <footer class="main-footer" th:replace="admin/foot::foot">

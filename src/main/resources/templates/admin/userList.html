@@ -31,19 +31,19 @@
 </head>
 <nav th:replace="admin/nav::admin_nav(8)"></nav>
 <body>
-<div class="container" style="text-align: center;font-size: 11px!important;">
+<div>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item active" aria-current="page">
                 用户列表
                 <span>共</span>
-                <span style="color: red" th:text="${count}"></span>
+                <span style="color: red" th:text="${page.total}"></span>
                 <span>个</span>
             </li>
         </ol>
     </nav>
-    <table class="table">
-        <thead>
+    <table class="table table-bordered table-hover">
+        <thead >
         <tr>
             <th scope="col">序号</th>
             <th scope="col">用户名</th>

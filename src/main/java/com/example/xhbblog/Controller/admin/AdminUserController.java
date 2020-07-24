@@ -2,6 +2,7 @@ package com.example.xhbblog.Controller.admin;
 
 import com.example.xhbblog.Service.ArticleService;
 import com.example.xhbblog.Service.UserService;
+import com.example.xhbblog.annotation.AccessLimit;
 import com.example.xhbblog.pojo.User;
 import com.example.xhbblog.utils.MD5Utils;
 import com.github.pagehelper.PageHelper;
@@ -74,6 +75,7 @@ public class AdminUserController {
      * @return
      * @throws UnsupportedEncodingException
      */
+    @AccessLimit(maxCount = 10,seconds = 600)
     @PostMapping("/checkUser")
     public @ResponseBody Object checkUser(HttpSession session,User user){
         Map<String,Boolean> res=new HashMap<>();

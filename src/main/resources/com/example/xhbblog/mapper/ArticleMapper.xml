@@ -48,6 +48,9 @@
   <sql id="Base_Column_List" >
     id, tid, createTime, title, firstPicture, visit, published, top, uid
   </sql>
+  <sql id="Base_Show_List" >
+    a.id, a.tid, a.createTime, a.title, a.firstPicture, a.visit, a.published, a.top, a.uid,a.info
+  </sql>
   <sql id="Blob_Column_List" >
     content, info
   </sql>
@@ -236,7 +239,8 @@
   </update>
 
   <select id="findByTid" resultMap="ResultMapWithBLOBs">
-    SELECT a.* FROM article a
+    SELECT <include refid="Base_Show_List" />
+     FROM article a
     <if test="order!=null">
       <if test="order.by=='comment'">
         LEFT JOIN comment c
@@ -294,7 +298,8 @@
 
 
   <select id="findAll" resultMap="ResultMapWithBLOBs">
-    SELECT a.* FROM article a
+    SELECT <include refid="Base_Show_List" />
+    FROM article a
     <if test="order!=null">
       <if test="order.by=='comment'">
         LEFT JOIN comment c
@@ -338,20 +343,22 @@
 
     </if>
     <if test="order==null">
-      where a.top=false
+      where 1=1
       <if test='uid!=null'>
         AND a.uid=#{uid}
       </if>
       <if test='published!=null'>
         AND published=#{published}
       </if>
+      AND a.top=false
       ORDER BY id DESC
     </if>
   </select>
 
 
   <select id="findArticleLike" resultMap="ResultMapWithBLOBs">
-    SELECT a.* FROM article a
+    SELECT <include refid="Base_Show_List" />
+    FROM article a
     <if test="order!=null">
       <if test="order.by=='comment'">
         LEFT JOIN comment c

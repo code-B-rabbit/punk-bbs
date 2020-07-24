@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
-@Transactional(isolation= Isolation.READ_COMMITTED)
-@CacheConfig(cacheNames = "user")
 public class RedisUserManager {
 
     private Logger logger= LoggerFactory.getLogger(this.getClass());
@@ -32,15 +30,21 @@ public class RedisUserManager {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Cacheable(key="'user_'.concat(#a0)")
+
     public User get(Integer id) {
-        logger.info("用户{}缓存未命中",id);
-        return userMapper.selectByPrimaryKey(id);
+        if(redisTemplate.hasKey(RedisKey.USR+id)==false){
+            logger.info("用户{}缓存未命中",id);
+            redisTemplate.opsForValue().set(RedisKey.USR+id,userMapper.selectByPrimaryKey(id));
+        }
+        return (User) redisTemplate.opsForValue().get(RedisKey.USR+id);
     }
 
-    @Cacheable(key="'user_'.concat(#a0)")
     public User uid(String name) {
-        return userMapper.getUid(name);
+        if(redisTemplate.hasKey(RedisKey.USR_NAME+name)==false){
+            logger.info("匿名缓存未命中");
+            redisTemplate.opsForValue().set(RedisKey.USR_NAME+name,userMapper.getUid(name));
+        }
+        return (User) redisTemplate.opsForValue().get(RedisKey.USR_NAME+name);
     }
 
     public Long msgCnt(Integer uid) {

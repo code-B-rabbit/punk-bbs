@@ -3,12 +3,14 @@ package com.example.xhbblog.manager;
 import com.example.xhbblog.Service.impl.TagServiceImpl;
 import com.example.xhbblog.mapper.TagMapper;
 import com.example.xhbblog.pojo.Tag;
+import com.example.xhbblog.utils.RedisKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Isolation;
@@ -18,9 +20,10 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-@CacheConfig(cacheNames = "tag")
-@Transactional(isolation= Isolation.READ_COMMITTED)
 public class RedisTagManager {
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     @Autowired
@@ -29,36 +32,48 @@ public class RedisTagManager {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 
-    @CacheEvict(allEntries = true)
+    public void deleteAllTagCache(){
+        redisTemplate.delete(RedisKey.TAG+"*");
+    }
+
+
     public Tag add(Tag tag) {
         tagMapper.insertSelective(tag);
+        deleteAllTagCache();
         return tag;
     }
 
-    @CacheEvict(allEntries = true)
+
     public void delete(Integer id) {
         tagMapper.deleteByPrimaryKey(id);
+        deleteAllTagCache();
     }
 
 
-    @CacheEvict(allEntries = true)
+
     public Tag update(Tag tag) {
         tagMapper.updateByPrimaryKey(tag);
+        deleteAllTagCache();
         return tag;
     }
 
 
-    @Cacheable(key = "'tag_'.concat(#a0)")
     public Tag get(Integer id) {
+        if(!redisTemplate.hasKey(RedisKey.TAG+id)){
+            redisTemplate.opsForValue().set(RedisKey.TAG+id,tagMapper.selectByPrimaryKey(id));
+        }
         LOG.info(id+"标签缓存未命中");
-        return tagMapper.selectByPrimaryKey(id);
+        return (Tag) redisTemplate.opsForValue().get(RedisKey.TAG+id);
     }
 
 
 
-    @Cacheable(key = "getMethodName()")
     public List<Tag> list() {
-        return tagMapper.list();
+        if(!redisTemplate.hasKey(RedisKey.TAG_LIST)){
+            redisTemplate.opsForValue().set(RedisKey.TAG_LIST,tagMapper.list());
+        }
+        LOG.info("标签列表缓存未命中");
+        return (List<Tag>) redisTemplate.opsForValue().get(RedisKey.TAG_LIST);
     }
 
 
@@ -67,9 +82,9 @@ public class RedisTagManager {
     }
 
 
-    @CacheEvict(allEntries = true)
     public void evit()
     {
         LOG.info(new Date()+"定时清除所有标签缓存");
+        deleteAllTagCache();
     }
 }

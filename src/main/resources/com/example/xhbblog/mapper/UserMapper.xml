@@ -58,7 +58,7 @@
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
-    <include refid="Base_Column_List" />
+    id,name,headSculpture
     from user
     where id = #{id,jdbcType=INTEGER}
   </select>

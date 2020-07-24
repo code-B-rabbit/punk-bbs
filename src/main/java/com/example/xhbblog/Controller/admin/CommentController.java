@@ -119,8 +119,8 @@ public class CommentController {   //后台评论只有查找和删除逻辑,添
      * 单个删除
      * @param cid
      */
-    @RequestMapping(value = "/deleteComment/{cid}",method = RequestMethod.POST)
-    public @ResponseBody void deleteCids(@PathVariable("cid") Integer cid){
+    @RequestMapping(value = "/deleteComment",method = RequestMethod.POST)
+    public @ResponseBody void deleteCids(Comment cid){
         commentService.delete(cid);
     }
 
@@ -129,7 +129,7 @@ public class CommentController {   //后台评论只有查找和删除逻辑,添
      * @param cids
      */
     @RequestMapping(value = "/deleteComments",method = RequestMethod.POST)
-    public @ResponseBody Object deleteCids(@RequestBody List<Integer> cids){
+    public @ResponseBody Object deleteCids(@RequestBody List<Comment> cids){
         Map<String,String> res=new HashMap<>();
         try{
             commentService.deleteCids(cids);

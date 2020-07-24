@@ -1,6 +1,7 @@
 package com.example.xhbblog.Controller.user;
 
 import com.example.xhbblog.Service.UserService;
+import com.example.xhbblog.annotation.AccessLimit;
 import com.example.xhbblog.pojo.User;
 import com.example.xhbblog.utils.MD5Utils;
 import com.github.pagehelper.PageHelper;
@@ -77,6 +78,7 @@ public class UserController {
      * @throws UnsupportedEncodingException
      */
     @PostMapping("/checkUser")
+    @AccessLimit(maxCount = 10,seconds = 600)
     public @ResponseBody Object checkUser(HttpSession session,User user){
         Map<String,Boolean> res=new HashMap<>();
         String s=user.getPassword();          //保存用户所输入的未加密密码

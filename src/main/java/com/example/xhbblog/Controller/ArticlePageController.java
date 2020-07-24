@@ -78,13 +78,6 @@ public class ArticlePageController {
         Integer total=commentService.countOfArticle(aid);
         Integer commentSize=commentService.countOfComment(aid);
         List<Comment> byAid = commentService.findByAid(aid,start,count);
-        for (Comment comment : byAid) {
-            System.out.println("主评论:"+comment);
-            for (Comment child : comment.getChilds()) {
-                System.out.println(child);
-            }
-            System.out.println(":::");
-        }
         PageInfo<Comment> pageInfo = getPageInfo(total, byAid, start, count);
         model.addAttribute("page",pageInfo);
         model.addAttribute("aid",aid);

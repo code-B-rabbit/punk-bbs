@@ -24,7 +24,6 @@ import java.util.Set;
  *
  */
 @Component
-@Transactional(isolation= Isolation.READ_COMMITTED)
 public class RedisThumbManager {
 
 

@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-@Transactional(isolation= Isolation.READ_COMMITTED)
 public class RedisArticleManager {
     private Logger LOG= LoggerFactory.getLogger(this.getClass());
 

@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
         }
         List<Comment> comments=commentMapper.listByUid(uid);
         for (Comment comment : comments) {
-            redisCommentManager.delete(comment.getId());
+            redisCommentManager.delete(comment);
         }
         userMapper.deleteByPrimaryKey(uid);
     }

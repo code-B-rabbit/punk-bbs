@@ -31,8 +31,8 @@
 </head>
 <nav th:replace="admin/nav::admin_nav(2)"></nav>
 <body>
-<div  class="container" style="text-align: center;font-size: 11px!important;" >
-    <nav aria-label="breadcrumb">
+<div>
+    <nav  aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item active" aria-current="page">
                 <a class="text-info" th:if="${tag}" th:text="${tag.name}" th:href="|articleListByTag?tid=${tag.id}|"></a>
@@ -49,8 +49,16 @@
             </li>
         </ol>
     </nav>
-
-    <table class="table">
+    <table id="table" class="table table-bordered table-hover"
+           data-toggle="table"
+            data-classes="table table-hover"
+    data-show-columns="true"
+    data-striped="true"
+    data-show-toggle="true"
+    data-search="true"
+    data-show-refresh="true"
+    data-toolbar="#toolbar"
+    data-height="500">
         <thead>
         <tr>
             <th scope="col">#</th>
@@ -126,7 +134,14 @@
             <th scope="col">文章标签</th>
             <th scope="col">用户</th>
             <th scope="col">
-                操作
+                <form style="float: right" method="get" action="articleLike">
+                <span  class="input-group input-group-sm">
+                <input type="text" name="key" class="form-control" th:value="${param.key}" placeholder="输入博客内容或标题" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <span class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">模糊搜索</button>
+                </span>
+                </span>
+                </form>
             </th>
         </tr>
         </thead>
@@ -215,7 +230,7 @@
             return true;
         }
         return false;
-    }
+    };
     delArt=function (aid,uid) {
         $.ajax({
             //请求方式

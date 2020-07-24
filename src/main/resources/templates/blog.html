@@ -236,7 +236,6 @@
                   </div>
                 </div>
               </div>
-
               <div class="card mb-3" th:each="a:${page.list}">
                 <div class="row no-gutters">
                   <div class="col-md-4">
@@ -280,7 +279,7 @@
                             <path fill-rule="evenodd" d="M.5 2A1.5 1.5 0 0 1 2 .5h4.586a1.5 1.5 0 0 1 1.06.44l7 7a1.5 1.5 0 0 1 0 2.12l-4.585 4.586a1.5 1.5 0 0 1-2.122 0l-7-7A1.5 1.5 0 0 1 .5 6.586V2zM2 1.5a.5.5 0 0 0-.5.5v4.586a.5.5 0 0 0 .146.353l7 7a.5.5 0 0 0 .708 0l4.585-4.585a.5.5 0 0 0 0-.708l-7-7a.5.5 0 0 0-.353-.146H2z" clip-rule="evenodd"/>
                             <path fill-rule="evenodd" d="M2.5 4.5a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm2-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" clip-rule="evenodd"/>
                           </svg>
-                          <a th:href="@{/articlesByTag(tid=${a.tag.id})}" th:text="${a.tag.name}" ></a>
+                          <a th:href="@{/articlesByTag(tid=${a.tid})}" th:text="${a.tag.name}" ></a>
                         </small>
 
                         <small class="text-muted text-info" >
@@ -368,6 +367,18 @@
                       </p>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div class="card w-100 " th:if="!${page.total}">
+                <h5 class="card-header">
+                  抱歉,没有相关的文章
+                </h5>
+                <div class="card-body">
+                  <h5 class="card-title" th:if="${uid}">抱歉,他(她)是个很神秘的人</h5>
+                  <h5 class="card-title" th:if="${tid}">抱歉,这个标签似乎还没有文章</h5>
+                  <p class="card-text" th:if="${uid}">----行胜于言是他的座右铭</p>
+                  <p class="card-text" th:if="${tid}">----站主是条懒狗,他懒了,你可以去置顶栏用游客评论匿名骂他,当然实名也挺好</p>
+                  <a  class="btn btn-info" href="/articles">看看更多</a>
                 </div>
               </div>
             </div>

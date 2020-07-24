@@ -31,7 +31,7 @@
 </head>
 <nav th:replace="admin/nav::admin_nav(9)"></nav>
 <body>
-<div class="container" style="text-align: center;font-size: 11px!important;">
+<div>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="articleList">管理首页</a></li>
@@ -68,7 +68,7 @@
             </li>
         </ol>
     </nav>
-    <table class="table">
+    <table class="table table-bordered table-hover">
         <thead>
         <tr>
             <th scope="col">#</th>
@@ -79,15 +79,15 @@
             <th scope="col">回复者</th>
             <th scope="col">评论邮箱</th>
             <th scope="col">评论详情</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
+            <th></th>
+            <th></th>
             <th scope="col">操作</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="comment:${page.list}">
             <td>
-                <input name="cids" type="checkbox" th:value="${comment.id}" />
+                <input th:aid="${comment.aid}" name="cids" type="checkbox" th:value="${comment.id}" />
             </td>
             <td scope="row" th:text="${comment.id}">1</td>
             <td>
@@ -98,12 +98,10 @@
             <td th:text="${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
             <td>
                 <a th:text="${comment.user.name}" th:href="@{listByUid(uid=${comment.uid})}">徐浩博</a>
-<!--                <a th:text="${comment.visitor_name}"  th:unless="${session.admin}">徐浩博</a>-->
             </td>
             <td>
                 <span style="text-align: center">
                     <a style="margin: 0 5px"   th:each="child:${comment.childs}" th:href="@{listByUid(uid=${child.uid})}" th:text="${child.user.name}"></a>
-<!--                    <a style="margin: 0 5px" th:unless="${session.admin}"  th:each="child:${comment.childs}" th:text="${child.visitor_name}"></a>-->
                 </span>
             </td>
             <td th:text="${comment.user.email}">511928849@qq.com</td>
@@ -114,9 +112,9 @@
             </td>
             <td>
                 <a th:onclick="showInput([[${comment.id}]],[[${comment.content}]],[[${comment.article.id}]])" class="btn btn-success" type="button">回复</a>
-                <a type="button" th:if="${session.admin}"  th:onclick="|javascript : del('${comment.id}')|" class="btn btn-danger">删除</a>
-                <a type="button" th:if="${mine}"  href="#" th:onclick="|javascript : del('${comment.id}')|" class="btn btn-danger">删除</a>
-                <a type="button" th:if="${comment.uid==session.uid} and ${!session.admin} and ${!mine}"  href="#" th:onclick="|javascript : del('${comment.id}')|" class="btn btn-danger">删除</a>
+                <a type="button" th:if="${session.admin}"  th:onclick="del([[${comment.id}]],[[${comment.aid}]])" class="btn btn-danger">删除</a>
+                <a type="button" th:if="${mine}"  href="#" th:onclick="del([[${comment.id}]],[[${comment.aid}]])" class="btn btn-danger">删除</a>
+                <a type="button" th:if="${comment.uid==session.uid} and ${!session.admin} and ${!mine}"  href="#" th:onclick="del([[${comment.id}]],[[${comment.aid}]])" class="btn btn-danger">删除</a>
                 <div class="modal fade" id="inputModal" style="z-index: 999999999999999999999999!important;" tabindex="999999999999999999999" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -225,7 +223,7 @@
             var cids=new Array();
             $("input[name='cids']:checked").each(
                 function () {
-                    cids.push($(this).val());
+                    cids.push({'id':$(this).val(),'aid':$(this).attr("aid")});
                 }
             );
             $.ajax({
@@ -247,17 +245,16 @@
                 }
             })
         };
-        del=function (cid) {
+        del=function (cid,aid) {
             if(confirmAct(0)==false){
                 return;
             }
             $.ajax({
                 //请求方式
                 type : "POST",
-                //请求的媒体类型
-                contentType: "application/json;charset=UTF-8",
+                url : "deleteComment",
 
-                url : "deleteComment/"+cid,
+                data:{'id':cid,'aid':aid},
                 //请求成功
                 success : function() {
                     window.location.reload();
@@ -268,8 +265,8 @@
     <br>
     <br>
     <nav th:replace="admin/page::page"></nav>
-
 </div>
+<div style="bottom: 0px!important;">
 <footer class="main-footer" th:replace="admin/foot::foot">
     <div class="container">
         <div class="row">
@@ -303,5 +300,6 @@
     </div>
 
 </footer>
+</div>
 </body>
 </html>

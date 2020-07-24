@@ -36,14 +36,16 @@
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <div th:fragment="comments" class="post-comments">
     <header>
-        <h3 class="h6">博客の评论<span class="no-of-comments" th:text="|${total}|">(3)</span></h3>
+        <h3  class="h6">博客の评论<span class="no-of-comments" th:text="|${total}|">(3)</span></h3>
     </header>
     <div class="comment" th:each="comment:${page.list}" >
         <div class="comment-header d-flex justify-content-between">
             <div class="user d-flex align-items-center">
                 <div class="image">
-                    <img th:if="${comment.user.headSculpture}" th:src="${comment.user.headSculpture}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle">
-                    <img th:unless="${comment.user.headSculpture}" th:src="@{/img/user.svg}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle">
+                    <a th:href="|/articlesByUser?uid=${comment.uid}|">
+                        <img  th:if="${comment.user.headSculpture}" th:src="${comment.user.headSculpture}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle">
+                        <img th:unless="${comment.user.headSculpture}" th:src="@{/img/user.svg}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle">
+                    </a>
                 </div>
                 <div class="title"><strong th:text="${comment.user.name}">Jabi Hernandiz</strong><span class="date" th:text="${#dates.format(comment.createTime,'yyyy-MM-dd')}">May 2016</span></div>
             </div>
@@ -55,8 +57,10 @@
                 <div class="comment-header d-flex justify-content-between">
             <div class="user d-flex align-items-center">
                 <div class="image">
+                    <a th:href="|/articlesByUser?uid=${cmt.uid}|">
                     <img th:if="${cmt.user.headSculpture}" th:src="${cmt.user.headSculpture}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle">
                     <img th:unless="${cmt.user.headSculpture}" th:src="@{/img/user.svg}" src="../static/img/user.svg" alt="..." class="img-fluid rounded-circle">
+                    </a>
                 </div>
                 <div class="title">
                     <strong th:text="|${cmt.user.name} 回复 ${cmt.parentVisitorName}|">Jabi Hernandiz</strong>

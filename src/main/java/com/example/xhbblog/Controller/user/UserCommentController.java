@@ -135,24 +135,24 @@ public class UserCommentController {   //后台评论只有查找和删除逻辑
     }
 
     /**
-     * 单个删除
-     * @param cid
+     * 评论单个删除
+     * @param comment
      */
-    @RequestMapping(value = "/deleteComment/{cid}",method = RequestMethod.POST)
-    public @ResponseBody void deleteCids(@PathVariable("cid") Integer cid){
-        commentService.delete(cid);
+    @RequestMapping(value = "/deleteComment",method = RequestMethod.POST)
+    public @ResponseBody void deleteCids(Comment comment){
+        commentService.delete(comment);
     }
-
 
     /**
      * 评论批量删除
-     * @param cids
+     * @param comments
+     * @return
      */
     @RequestMapping(value = "/deleteComments",method = RequestMethod.POST)
-    public @ResponseBody Object deleteCids(@RequestBody List<Integer> cids){
+    public @ResponseBody Object deleteCids(@RequestBody List<Comment> comments){
         Map<String,String> res=new HashMap<>();
         try{
-            commentService.deleteCids(cids);
+            commentService.deleteCids(comments);
             res.put("msg","success");
         }catch (Exception e){
             res.put("msg","请检查批量删除的评论项中是否有评论含有未删除子评论");

@@ -26,6 +26,16 @@ public interface ArticleMapper {
 
     int updateByPrimaryKey(Article record);
 
+
+    List<ArticleWithBLOBs> findArticleLike(@Param("string") String string, @Param("published") Boolean published, @Param("order") Order order,@Param("uid") Integer uid);
+
+
+    List<ArticleWithBLOBs> findAll(@Param("published") Boolean published,@Param("order") Order order,@Param("uid") Integer uid);
+
+
+    List<ArticleWithBLOBs> findByTid(@Param("tid") Integer tid, @Param("published") Boolean published, @Param("order") Order order,@Param("uid") Integer uid);
+
+
     /**
      * 这里保证了一定不会删除其他用户的文章
      * @param uid
@@ -49,7 +59,6 @@ public interface ArticleMapper {
 
     @Select("SELECT COUNT(*) FROM article")
     public Integer count();
-
 
     /**
      * 用于导航栏
@@ -81,20 +90,12 @@ public interface ArticleMapper {
     })
     ArticleWithBLOBs findById(Integer id);
 
-    List<ArticleWithBLOBs> findArticleLike(@Param("string") String string, @Param("published") Boolean published, @Param("order") Order order,@Param("uid") Integer uid);
-
-
-    List<ArticleWithBLOBs> findAll(@Param("published") Boolean published,@Param("order") Order order,@Param("uid") Integer uid);
-
-
-    List<ArticleWithBLOBs> findByTid(@Param("tid") Integer tid, @Param("published") Boolean published, @Param("order") Order order,@Param("uid") Integer uid);
-
-
     @Select("<script>" +
-            "select * from article where top=true" +
+            "select * from article where 1=1" +
             "<when test='published!=null'>"+
             "AND published=#{published}"+
             "</when>" +
+            "AND top=true" +
             "<when test='uid!=null'>" +
             "AND uid=#{uid}" +
             "</when>"+
