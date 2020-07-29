@@ -24,6 +24,8 @@ public interface CommentService {
     public void delete(Comment comment);
     public void deleteCids(List<Comment> comments);
     public Integer count();
+    List<Comment> listAnonymousByUid(Integer uid);
+    List<Comment> listAnonymousComment();
 
     public Integer countOfComment(Integer aid);              //显示的总数
 }

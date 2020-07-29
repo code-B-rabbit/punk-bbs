@@ -58,7 +58,7 @@
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
-    id,name,headSculpture
+    id,name,headSculpture,email
     from user
     where id = #{id,jdbcType=INTEGER}
   </select>

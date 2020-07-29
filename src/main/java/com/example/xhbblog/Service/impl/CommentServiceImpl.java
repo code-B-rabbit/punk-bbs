@@ -24,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -52,11 +54,26 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private RedisUserManager redisUserManager;
 
-    public List<Comment> setUserAndChild(List<Comment> comments){
+    public Set<User> setUserAndChild(List<Comment> comments){
+        Set<User> childUser=new HashSet<>();
         for (Comment comment : comments) {
-            comment.setUser(redisUserManager.get(comment.getUid()));
-            comment.setChilds(mapper.listByCid(comment.getId()));
-            setUserAndChild(comment.getChilds());
+            User u=redisUserManager.get(comment.getUid());
+            comment.setUser(u);
+            comment.setReplyUsers(setUserAndChild(mapper.listByCid(comment.getId())));
+            if(comment.getAnonymous()){
+                User user = new User();
+                user.setId(null);
+                user.setName("匿名用户");
+                u=user;
+            }
+            childUser.add(u);
+        }
+        return childUser;
+    }
+
+    public List<Comment> setArticle(List<Comment> comments,Article article){
+        for (Comment comment : comments) {
+            comment.setArticle(article);
         }
         return comments;
     }
@@ -112,8 +129,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> listByAid(Integer aid) {
         LOG.info("查看文章id为{}的所有评论",aid);
-        List<Comment> comments=setUserAndChild(mapper.listByAid(aid));       //给后台查看评论使用的接口
-        return setArticle(comments);
+        List<Comment> comments=mapper.listByAid(aid);       //给后台查看评论使用的接口
+        setUserAndChild(comments);
+        Article article = articleMapper.get(aid);
+        return setArticle(comments,article);
     }
 
     @Override
@@ -137,14 +156,16 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> listByUid(Integer uid) {
         LOG.info("查看用户{}的所有评论",uid);
-        List<Comment> comments=setUserAndChild(mapper.listByUid(uid));       //给后台查看评论使用的接口
+        List<Comment> comments=mapper.listByUid(uid);       //给后台查看评论使用的接口
+        setUserAndChild(comments);
         return setArticle(comments);
     }
 
     @Override
     public List<Comment> findChilds(Integer cid) {
         LOG.info("查看评论{}的所有评论",cid);
-        List<Comment> comments=setUserAndChild(mapper.listByCid(cid));
+        List<Comment> comments=mapper.listByCid(cid);
+        setUserAndChild(comments);
         return setArticle(comments);
     }
 
@@ -159,6 +180,7 @@ public class CommentServiceImpl implements CommentService {
     public void sendComment(Comment comment,User user) throws IOException {
         Article article=articleMapper.get(comment.getAid());
         String timeStr= LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        //若评论的文章就是评论者的则直接忽略
         if(article.getUid()!=user.getId()){
             String messageToAdd= MessageUtil.ArtComment(comment,article,user,timeStr);
             String messageOnline=MessageUtil.ArtCommentOnline(comment,article,user,timeStr);
@@ -173,7 +195,7 @@ public class CommentServiceImpl implements CommentService {
                 String replyToAdd=MessageUtil.replyComment(comment,user,timeStr);
                 String replyOnline=MessageUtil.replyCommentOnline(comment,user,timeStr);
                 webSocketServer.sendMessage(parentUser.getId(),replyOnline);
-                redisUserManager.sendMessageTo(article.getUid(),replyToAdd);
+                redisUserManager.sendMessageTo(parentUser.getId(),replyToAdd);
             }
         }
     }
@@ -188,6 +210,22 @@ public class CommentServiceImpl implements CommentService {
     public Integer count() {
         LOG.info("查询评论数量");
         return mapper.count();
+    }
+
+    @Override
+    public List<Comment> listAnonymousByUid(Integer uid) {
+        LOG.info("查看用户{}的所有匿名评论",uid);
+        List<Comment> comments=mapper.listAnonymousByUid(uid);       //给后台查看评论使用的接口
+        setUserAndChild(comments);
+        return setArticle(comments);
+    }
+
+    @Override
+    public List<Comment> listAnonymousComment() {
+        LOG.info("查询所有匿名评论");
+        List<Comment> comments=mapper.listAnonymousComment();       //给后台查看评论使用的接口
+        setUserAndChild(comments);
+        return setArticle(comments);
     }
 
 

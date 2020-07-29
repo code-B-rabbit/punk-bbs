@@ -13,6 +13,8 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * 用于传递websocket各用户间推送消息的自己编写的工具类
+ * 用于生成推送给redis的消息
+ * 并检测是否为匿名
  */
 public class MessageUtil {
 
@@ -23,7 +25,11 @@ public class MessageUtil {
      * @return
      */
     public static String ArtComment(Comment comment,Article article,User u,String timeStr){
-        String messageToAdd=timeStr+"  "+u.getName()+" 评论了你的文章:"+"<span class='text-primary'>"+article.getTitle()+"</span>"+" 内容为:".concat(
+        String name=u.getName();
+        if(comment.getAnonymous()==true){
+            name="匿名用户";
+        }
+        String messageToAdd=timeStr+"  "+name+" 评论了你的文章:"+"<span class='text-primary'>"+article.getTitle()+"</span>"+" 内容为:".concat(
                 "<span style='color:red'>" +
                 comment.getContent()+"</span>" +
                         "<a onclick='return writeIn();' href='listByAid?aid=" +article.getId()+
@@ -34,12 +40,21 @@ public class MessageUtil {
     }
 
     public static String ArtCommentOnline(Comment comment,Article article,User u,String timeStr){
-        String message=timeStr+"  "+u.getName()+" 评论了你的文章:"+article.getTitle()+" :".concat(comment.getContent());    //用于后台字符串实时推送
+        String name=u.getName();
+        if(comment.getAnonymous()==true){
+            name="匿名用户";
+        }
+        String message=timeStr+"  "+name+" 评论了你的文章:"+article.getTitle()+" :".concat(comment.getContent());    //用于后台字符串实时推送
         return message;
     }
 
     public static String replyComment(Comment comment,User u,String timeStr){
-        String message=timeStr+"  "+u.getName()+"回复了你的评论  内容为:"+comment.getContent()+" "+
+        String name=u.getName();
+        if(comment.getAnonymous()==true){
+            name="匿名用户";
+        }
+        String message=timeStr+"  "+name+"回复了你的评论  内容为: "+
+                "<span style='color:red'>"+comment.getContent()+ "</span>"+
                 "<a onclick='return writeIn();' href='listByCid?cid="+comment.getParentID()+"'>"
                 +"去看看"+
                 "</a>";
@@ -47,7 +62,11 @@ public class MessageUtil {
     }
 
     public static String replyCommentOnline(Comment comment,User u,String timeStr){
-        String message=timeStr+"  "+u.getName()+"回复了你的评论 内容为:"+comment.getContent();
+        String name=u.getName();
+        if(comment.getAnonymous()==true){
+            name="匿名用户";
+        }
+        String message=timeStr+"  "+name+"回复了你的评论 内容为:"+comment.getContent();
         return message;
     }
 }

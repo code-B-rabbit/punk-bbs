@@ -3,6 +3,7 @@ package com.example.xhbblog.pojo;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class Comment implements Serializable {
     private Integer id;
@@ -17,18 +18,47 @@ public class Comment implements Serializable {
 
     private String content;
 
+    private Boolean anonymous;
+
+    public Boolean getAnonymous() {
+        return anonymous;
+    }
+
+    public void setAnonymous(Boolean anonymous) {
+        this.anonymous = anonymous;
+    }
+
     //四个映射类属性
     private Article article;     //多对一映射
 
     private String visitor_name;
 
-    private String visitor_email;
 
-    private String parentVisitorName;
+    private Comment parentComment;
+
+    public Comment getParentComment() {
+        return parentComment;
+    }
+
+    public void setParentComment(Comment parentComment) {
+        this.parentComment = parentComment;
+    }
 
     private List<Comment> childs;
 
     private User user;  //映射的用户类
+
+
+    private Set<User> replyUsers;   //评论的全部使用者
+
+    public Set<User> getReplyUsers() {
+        return replyUsers;
+    }
+
+    public void setReplyUsers(Set<User> replyUsers) {
+        this.replyUsers = replyUsers;
+    }
+
 
     public User getUser() {
         return user;
@@ -44,14 +74,6 @@ public class Comment implements Serializable {
 
     public void setArticle(Article article) {
         this.article = article;
-    }
-
-    public String getParentVisitorName() {
-        return parentVisitorName;
-    }
-
-    public void setParentVisitorName(String parentVisitorName) {
-        this.parentVisitorName = parentVisitorName;
     }
 
     public List<Comment> getChilds() {
@@ -70,13 +92,6 @@ public class Comment implements Serializable {
         this.visitor_name = visitor_name;
     }
 
-    public String getVisitor_email() {
-        return visitor_email;
-    }
-
-    public void setVisitor_email(String visitor_email) {
-        this.visitor_email = visitor_email;
-    }
 
     public Integer getId() {
         return id;
@@ -126,7 +141,6 @@ public class Comment implements Serializable {
         this.content = content == null ? null : content.trim();
     }
 
-
     @Override
     public String toString() {
         return "Comment{" +
@@ -136,12 +150,13 @@ public class Comment implements Serializable {
                 ", parentID=" + parentID +
                 ", uid=" + uid +
                 ", content='" + content + '\'' +
+                ", anonymous=" + anonymous +
                 ", article=" + article +
                 ", visitor_name='" + visitor_name + '\'' +
-                ", visitor_email='" + visitor_email + '\'' +
-                ", parentVisitorName='" + parentVisitorName + '\'' +
+                ", parentComment=" + parentComment +
                 ", childs=" + childs +
                 ", user=" + user +
+                ", replyUsers=" + replyUsers +
                 '}';
     }
 }

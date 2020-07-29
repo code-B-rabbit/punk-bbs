@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -73,8 +74,12 @@ public class ArticlePageController {
      * @return
      */
     @RequestMapping("/comments")
-    public String comments(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "5") Integer count, Model model, Integer aid)
+    public String comments(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "5") Integer count, Model model, Integer aid,Boolean error)
     {
+        if(error!=null) //出现登录超时错误
+        {
+            model.addAttribute("res","登录超时,请重新登录");
+        }
         Integer total=commentService.countOfArticle(aid);
         Integer commentSize=commentService.countOfComment(aid);
         List<Comment> byAid = commentService.findByAid(aid,start,count);
@@ -87,20 +92,23 @@ public class ArticlePageController {
 
     /**
      * 添加评论
-     * @param model
      * @param aid
      * @param comment
      * @param session
      * @return
      */
     @PostMapping("/Addcomment")
-    public String comments(Model model, Integer aid, Comment comment, HttpSession session) throws IOException {
+    public String comments(Integer aid, Comment comment, HttpSession session, RedirectAttributes redirectAttributes) throws IOException {
         User user= (User) session.getAttribute("user");
-        comment.setUid(user.getId());             //设置评论的用户ID
-        comment.setCreateTime(new Date());
-        commentService.add(comment);
-        commentService.sendComment(comment,user);   //用于后台消息推送
-        return "redirect:/comments?aid="+aid;
+        if(user==null){
+            return "redirect:/comments?aid="+aid+"&error="+true;
+        }else{
+            comment.setUid(user.getId());             //设置评论的用户ID
+            comment.setCreateTime(new Date());
+            commentService.add(comment);
+            commentService.sendComment(comment,user);   //用于后台消息推送
+            return "redirect:/comments?aid="+aid;
+        }
     }
 
     /**
@@ -113,7 +121,7 @@ public class ArticlePageController {
      */
     @PostMapping("/AddcommentNoName")
     public String noNameAdd(Model model, Integer aid, Comment comment, HttpSession session) throws IOException {
-        User user=userService.uid("匿名用户");
+        User user=userService.uid("匿名游客");
         comment.setUid(user.getId());
         comment.setCreateTime(new Date());
         commentService.add(comment);

@@ -139,4 +139,35 @@ public class CommentController {   //后台评论只有查找和删除逻辑,添
         }
         return res;
     }
+
+    /**
+     * 一个用户所有匿名评论的文章
+     * @param start
+     * @param count
+     * @param model
+     * @param uid
+     * @return
+     */
+    @RequestMapping("/listAnoByUid")
+    public String listByUid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count,Model model,@SessionAttribute("uid")Integer uid)
+    {
+        PageHelper.offsetPage(start,count);
+        List<Comment> comments=commentService.listAnonymousByUid(uid);
+        model.addAttribute("page",new PageInfo<Comment>(comments));
+        model.addAttribute("limit","uid="+uid);
+        model.addAttribute("user",userService.get(uid));
+        model.addAttribute("anonymous",true);
+        return "admin/commentList";
+    }
+
+
+    @RequestMapping("/listAnoComments")
+    public String listByUid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count,Model model)
+    {
+        PageHelper.offsetPage(start,count);
+        List<Comment> comments=commentService.listAnonymousComment();
+        model.addAttribute("page",new PageInfo<Comment>(comments));
+        model.addAttribute("allAnonymous",true);   //说明是所有的匿名评论
+        return "admin/commentList";
+    }
 }

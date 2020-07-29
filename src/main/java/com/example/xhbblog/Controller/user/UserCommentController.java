@@ -99,6 +99,26 @@ public class UserCommentController {   //后台评论只有查找和删除逻辑
     }
 
 
+    /**
+     * 一个用户所有匿名评论的文章
+     * @param start
+     * @param count
+     * @param model
+     * @param uid
+     * @return
+     */
+    @RequestMapping("/listAnoByUid")
+    public String listByUid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count,Model model,@SessionAttribute("uid")Integer uid)
+    {
+        PageHelper.offsetPage(start,count);
+        List<Comment> comments=commentService.listAnonymousByUid(uid);
+        model.addAttribute("page",new PageInfo<Comment>(comments));
+        model.addAttribute("limit","uid="+uid);
+        model.addAttribute("user",userService.get(uid));
+        model.addAttribute("mine",uid==uid);
+        model.addAttribute("anonymous",true);
+        return "admin/commentList";
+    }
 
     /**
      * 后台回复评论

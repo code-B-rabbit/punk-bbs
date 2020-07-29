@@ -572,7 +572,7 @@
               <ul class="list-group">
                 <a th:href="@{article(id=${c.aid})}" class="list-group-item d-flex justify-content-between align-items-center" th:each="c:${lastComments}">
                     [[${c.content}]]
-                  <span th:text="${c.user.name}" class="badge badge-primary badge-pill">14</span>
+                  <span th:text="${c.anonymous}?'匿名用户':${c.user.name}" class="badge badge-primary badge-pill">14</span>
                 </a>
               </ul>
             </div>

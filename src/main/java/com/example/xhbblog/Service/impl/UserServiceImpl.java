@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User uid(String name) {
-        LOG.info("删除名为{}的用户id",name);
+        LOG.info("查看匿名用户{}",name);
         return redisUserManager.uid(name);
     }
 

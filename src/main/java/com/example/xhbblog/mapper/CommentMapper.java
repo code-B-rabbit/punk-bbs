@@ -43,8 +43,8 @@ public interface CommentMapper {
     @Select("select * from comment ORDER BY id DESC")
     List<Comment> list();
 
-    @Select("SELECT name from user u where id = (SELECT uid FROM COMMENT WHERE ID=#{id})" )
-    String findParentName(Integer id);       //获得每一个评论的父评论访问者姓名(若父节点为空则bu'cha)
+    @Select("SELECT * FROM COMMENT WHERE ID=#{pid}" )
+    Comment findParentComment(Integer pid);       //获得每一个评论的父评论访问者姓名(若父节点为空则bu'cha)
 
     @Select("select * from comment where aid=#{aid} order by id desc")         //按时间的倒序查询
     List<Comment> listByAid(Integer aid);           //给后台用
@@ -56,6 +56,11 @@ public interface CommentMapper {
     @Select("select * from comment where parentID=#{cid} order by id desc")         //按时间的倒序查询
     List<Comment> listByCid(Integer cid);
 
+    @Select("SELECT * FROM comment WHERE uid=#{uid} AND anonymous=true order by id desc")   //用户匿名发表的全部评论
+    List<Comment> listAnonymousByUid(Integer uid);
+
+    @Select("SELECT * FROM comment WHERE anonymous=true order by id desc")        //所有用户全部匿名
+    List<Comment> listAnonymousComment();
 
     @Select("select * from comment where aid=#{aid} and parentID is null order by id desc" +
             " limit #{start},#{count}")         //按时间的倒序查询

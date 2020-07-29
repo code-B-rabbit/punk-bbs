@@ -47,6 +47,7 @@
         <tr>
             <th scope="col">序号</th>
             <th scope="col">用户名</th>
+            <th scope="col">用户头像</th>
             <th scope="col">用户邮箱</th>
             <th scope="col">评论数</th>
             <th scope="col">文章数</th>
@@ -58,6 +59,11 @@
             <th scope="row" th:text="${user.id}">1</th>
             <td th:text="${user.name}">
                 数据结构与算法
+            </td>
+            <td>
+                <a th:href="${user.headSculpture}?${user.headSculpture}:@{/img/user.svg}">
+                <img class="img-fluid rounded-circle" style="width: 30px!important;height: 30px!important;" th:src="${user.headSculpture}?${user.headSculpture}:@{/img/user.svg}">
+                </a>
             </td>
             <td th:text="${user.email}">
                 3

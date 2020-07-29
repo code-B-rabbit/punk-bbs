@@ -27,9 +27,6 @@ public class MyExceptionController {
     private static final Logger logger= LoggerFactory.getLogger(MyExceptionController.class);
     public static final String DEFAULT_ERROR_VIEW = "error";
 
-    @Autowired
-    private EmailService emailService;
-
 
     /**
      * 处理所有的Controller层面的异常
@@ -46,9 +43,8 @@ public class MyExceptionController {
                 map.put(s,request.getParameterMap().get(s));
             }
             logger.error("请求为{},参数为{},发现异常{}",request.getRequestURL(),map,ex.getMessage());
-
-            emailService.sendEmail("服务器发现\"朋克\"系统错误","511928849@qq.com",
-                    String.format("请求为%s,参数为%s发现异常%s",request.getRequestURL(),map,ex.getMessage()));//发送错误信息邮件
+//            emailService.sendEmail("服务器发现\"朋克\"系统错误","511928849@qq.com",
+//                    String.format("请求为%s,参数为%s发现异常%s",request.getRequestURL(),map,ex.getMessage()));//发送错误信息邮件
         }
 
         //将异常信息设置如modelAndView

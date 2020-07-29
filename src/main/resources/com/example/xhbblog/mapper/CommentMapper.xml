@@ -7,6 +7,7 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="parentID" property="parentID" jdbcType="INTEGER" />
     <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="anonymous" property="anonymous" jdbcType="BIT" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.example.xhbblog.pojo.Comment" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
@@ -41,7 +42,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, aid, createTime, parentID, uid
+    id, aid, createTime, parentID, uid, anonymous
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -92,9 +93,11 @@
   </delete>
   <insert id="insert" parameterType="com.example.xhbblog.pojo.Comment" useGeneratedKeys="true" keyProperty="id" >
     insert into comment (aid, createTime, parentID, 
-      uid, content)
+      uid, anonymous, content
+      )
     values (#{aid,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{parentID,jdbcType=INTEGER}, 
-      #{uid,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
+      #{uid,jdbcType=INTEGER}, #{anonymous,jdbcType=BIT}, #{content,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.example.xhbblog.pojo.Comment" useGeneratedKeys="true" keyProperty="id" >
     insert into comment
@@ -110,6 +113,9 @@
       </if>
       <if test="uid != null" >
         uid,
+      </if>
+      <if test="anonymous != null" >
+        anonymous,
       </if>
       <if test="content != null" >
         content,
@@ -127,6 +133,9 @@
       </if>
       <if test="uid != null" >
         #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="anonymous != null" >
+        #{anonymous,jdbcType=BIT},
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
@@ -148,6 +157,9 @@
       <if test="uid != null" >
         uid = #{uid,jdbcType=INTEGER},
       </if>
+      <if test="anonymous != null" >
+        anonymous = #{anonymous,jdbcType=BIT},
+      </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -160,6 +172,7 @@
       createTime = #{createTime,jdbcType=TIMESTAMP},
       parentID = #{parentID,jdbcType=INTEGER},
       uid = #{uid,jdbcType=INTEGER},
+      anonymous = #{anonymous,jdbcType=BIT},
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -168,7 +181,8 @@
     set aid = #{aid,jdbcType=INTEGER},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       parentID = #{parentID,jdbcType=INTEGER},
-      uid = #{uid,jdbcType=INTEGER}
+      uid = #{uid,jdbcType=INTEGER},
+      anonymous = #{anonymous,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

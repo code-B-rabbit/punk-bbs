@@ -327,6 +327,7 @@
                       <input name="aid" id="aid" th:value="${art.id}" type="hidden" />
                       <div class="form-group ph-col-12 col-md-12">
                         <button id="submitComment" type="submit" class="btn btn-warning">发送评论</button>
+                        <button id="anonymousComment" type="submit" class="btn btn-primary">匿名评论</button>
                         <button id="noNameSubmit" type="submit" class="btn btn-success">游客评论</button>
                       </div>
                     </div>
@@ -432,6 +433,33 @@
               }
       );
 
+      $('button#anonymousComment').click(
+              function () {
+                anw=[[${session.user}]];
+                if(anw==null)
+                {
+                  alert("请先登录");
+                  window.location.href="/user/login";
+                }else
+                {
+                  content=$('textarea#content').val();
+                  if(content=="")
+                  {
+                    $('#modal1').modal('show');
+                    return;
+                  }
+                  aid=$('input#aid').val();
+                  data={'content':content,'aid':aid,'anonymous':true};
+                  $('div.post-comments').load(
+                          '/Addcomment',data,function () {
+                            $('textarea#content').val("");
+                          }
+                  );
+                  $('html,body').animate({scrollTop:$('.post-comments').offset().top});
+                }
+              }
+      )
+
         $('button#noNameSubmit').click(
             function () {
                     content=$('textarea#content').val();
@@ -441,7 +469,7 @@
                         return;
                     }
                     aid=$('input#aid').val();
-                    data={'content':content,'aid':aid};
+                    data={'content':content,'aid':aid,'anonymous':false};
                     $('div.post-comments').load(
                         '/AddcommentNoName',data,function () {
                             $('textarea#content').val("");
@@ -467,7 +495,7 @@
                     return;
                   }
                   aid=$('input#aid').val();
-                  data={'content':content,'aid':aid};
+                  data={'content':content,'aid':aid,'anonymous':false};
                   $('div.post-comments').load(
                           '/Addcomment',data,function () {
                             $('textarea#content').val("");

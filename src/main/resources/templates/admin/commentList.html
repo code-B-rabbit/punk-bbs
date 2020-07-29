@@ -29,7 +29,7 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
 </head>
-<nav th:replace="admin/nav::admin_nav(9)"></nav>
+<nav  th:replace="admin/nav::admin_nav(${allAnonymous}?88:9)"></nav>
 <body>
 <div>
     <nav aria-label="breadcrumb">
@@ -46,7 +46,8 @@
             <li th:if="${user}" class="breadcrumb-item active" aria-current="page">
                 <a class="text-info" th:text="|${user.name}|">
                     ****
-                </a>的所有评论
+                </a>的所有
+                <span th:if="${anonymous}"><a href="#">匿名</a></span>评论
                 <span>共</span>
                 <span style="color: red" th:text="${page.total}"></span>
                 <span>个</span>
@@ -61,6 +62,7 @@
                 <span>个</span>
             </li>
             <li th:unless="${user} or ${article} or ${cmt}" class="breadcrumb-item active" aria-current="page">
+                <a href="#" th:if="${allAnonymous}">全部匿名的</a>
                 评论列表
                 <span>共</span>
                 <span style="color: red" th:text="${page.total}"></span>
@@ -71,16 +73,15 @@
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
-            <th scope="col">#</th>
+            <th width="3%" scope="col">#</th>
             <th scope="col">id</th>
             <th scope="col">评论文章</th>
             <th scope="col">评论时间</th>
             <th scope="col">评论者</th>
             <th scope="col">回复者</th>
             <th scope="col">评论邮箱</th>
-            <th scope="col">评论详情</th>
-            <th></th>
-            <th></th>
+            <th width="25%" scope="col" style="text-align: center!important;">评论详情</th>
+            <th scope="col">匿名</th>
             <th scope="col">操作</th>
         </tr>
         </thead>
@@ -97,24 +98,47 @@
             </td>
             <td th:text="${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
             <td>
-                <a th:text="${comment.user.name}" th:href="@{listByUid(uid=${comment.uid})}">徐浩博</a>
+                <a th:if="${comment.user.id==session.uid or session.admin}" th:text="${comment.user.name}" th:href="@{listByUid(uid=${comment.uid})}">徐浩博</a>
+                <span th:unless="${comment.user.id==session.uid or session.admin}">
+                    <a th:unless="${comment.anonymous}" th:text="${comment.user.name}" th:href="@{listByUid(uid=${comment.uid})}">
+                        徐浩博
+                    </a>
+                    <a th:if="${comment.anonymous}" th:text="匿名用户" href="#">
+                        徐浩博
+                    </a>
+                </span>
             </td>
             <td>
                 <span style="text-align: center">
-                    <a style="margin: 0 5px"   th:each="child:${comment.childs}" th:href="@{listByUid(uid=${child.uid})}" th:text="${child.user.name}"></a>
+                    <a style="margin: 0 5px"  th:each="childUser:${comment.replyUsers}" th:href="${childUser.id}?@{listByUid(uid=${childUser.id})}:'#'" th:text="${childUser.name}">
+                    </a>
                 </span>
             </td>
-            <td th:text="${comment.user.email}">511928849@qq.com</td>
-            <td style="text-align: center" colspan="3">
+            <td>
+                <a th:if="${comment.user.id==session.uid or session.admin}" th:text="${comment.user.email}" >徐浩博</a>
+                <span th:unless="${comment.user.id==session.uid or session.admin}">
+                    <a th:unless="${comment.anonymous}" th:text="${comment.user.email}" >
+                        511928849@qq.com
+                    </a>
+                    <a th:if="${comment.anonymous}" th:text="邮箱已被隐藏" href="#">
+                        徐浩博
+                    </a>
+                </span>
+            </td>
+            <td style="text-align: center" >
                 <a th:text="${comment.content}" th:href="@{listByCid(cid=${comment.id})}">
                     511928849@qq.com.........................
                 </a>
             </td>
             <td>
-                <a th:onclick="showInput([[${comment.id}]],[[${comment.content}]],[[${comment.article.id}]])" class="btn btn-success" type="button">回复</a>
-                <a type="button" th:if="${session.admin}"  th:onclick="del([[${comment.id}]],[[${comment.aid}]])" class="btn btn-danger">删除</a>
-                <a type="button" th:if="${mine}"  href="#" th:onclick="del([[${comment.id}]],[[${comment.aid}]])" class="btn btn-danger">删除</a>
-                <a type="button" th:if="${comment.uid==session.uid} and ${!session.admin} and ${!mine}"  href="#" th:onclick="del([[${comment.id}]],[[${comment.aid}]])" class="btn btn-danger">删除</a>
+               <span th:if="${comment.anonymous}">是</span>
+                <span th:unless="${comment.anonymous}">否</span>
+            </td>
+            <td>
+                <a th:onclick="showInput([[${comment.id}]],[[${comment.content}]],[[${comment.article.id}]])" class="btn btn-success btn-sm" type="button">回复</a>
+                <a type="button" th:if="${session.admin}"  th:onclick="del([[${comment.id}]],[[${comment.aid}]])" class="btn btn-danger btn-sm">删除</a>
+                <a type="button" th:if="${mine}"  href="#" th:onclick="del([[${comment.id}]],[[${comment.aid}]])" class="btn btn-danger btn-sm">删除</a>
+                <a type="button" th:if="${comment.uid==session.uid} and ${!session.admin} and ${!mine}"  href="#" th:onclick="del([[${comment.id}]],[[${comment.aid}]])" class="btn btn-danger btn-sm">删除</a>
                 <div class="modal fade" id="inputModal" style="z-index: 999999999999999999999999!important;" tabindex="999999999999999999999" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -128,70 +152,82 @@
                             <div class="modal-body">
                                 <textarea class="form-control content" name="content" id="content"></textarea>
                                 <input type="hidden" id="parentID" name="parentID"/>
+                                <input type="hidden" id="anonymous" name="anonymous"/>
                                 <input type="hidden" id="aid" name="aid"/>
                                 <input type="hidden" id="uid" name="uid" th:value="${session.user.id}"/>
                                 <span id="warn" class="text-danger"></span>
                             </div>
                             </form>
                             <div class="modal-footer">
-                                <button id="subReply"  class="btn btn-primary" >回复</button>
+                                <button id="subReply"  class="btn btn-primary" >回复评论</button>
+                                <button id="anonymousSubReply"  class="btn btn-warning" >匿名回复</button>
                                 <button  type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <script th:inline="javascript">
-                    $('#subReply').one("click",
+                    $(
                         function () {
-                            $(this).prop('disabled',true);
-                            var str=$('#content').val();
-                            if(str == '' || str == undefined || str == null){
-                                $('span#warn').text("内容不能为空!!!");
-                            }else{
-                                $('span#warn').text("");
-                                var params = $("#replySubmit").serializeArray();
-                                var values = {};
-                                for( x in params ){
-                                    values[params[x].name] = params[x].value;
-                                };
-                                var idata = JSON.stringify(values);
-                                $.ajax({
-                                    //请求方式
-                                    type : "POST",
-                                    //请求的媒体类型
-                                    contentType: "application/json;charset=UTF-8",
-                                    //请求地址
-                                    data : idata,
+                            $('#anonymous').val(false);
+                            $('#anonymousSubReply').on("click",function () {
+                                $('#anonymous').val(true);
+                                $('#subReply').click();
+                            });
+                            $('#subReply').one("click",
+                                function () {
+                                    $(this).prop('disabled',true);
+                                    var str=$('#content').val();
+                                    if(str == '' || str == undefined || str == null){
+                                        $('span#warn').text("内容不能为空!!!");
+                                    }else{
+                                        $('span#warn').text("");
+                                        var params = $("#replySubmit").serializeArray();
+                                        var values = {};
+                                        for( x in params ){
+                                            values[params[x].name] = params[x].value;
+                                        };
+                                        var idata = JSON.stringify(values);
+                                        console.log(idata);
+                                        $.ajax({
+                                            //请求方式
+                                            type : "POST",
+                                            //请求的媒体类型
+                                            contentType: "application/json;charset=UTF-8",
+                                            //请求地址
+                                            data : idata,
 
-                                    url : "replyComment",
-                                    //请求成功
-                                    success : function(result) {
-                                        window.location.reload();
+                                            url : "replyComment",
+                                            //请求成功
+                                            success : function(result) {
+                                                window.location.reload();
+                                            }
+                                        })
+                                        return false;
                                     }
-                                })
-                                return false;
-                            }
-                            return false;
+                                    return false;
+                                }
+                            )
+                            showInput=function (cid,content,aid) {
+                                $('#aid').val(aid);
+                                $('#parentID').val(cid);
+                                $('h5#Inputtitle').text("回复评论: "+content);
+                                $('#inputModal').modal('show');
+                            };
+                            confirmAct=function (choose) {
+                                var str="确定要删除这个评论吗?";
+                                if(choose==1){
+                                    str='确定要删除这些评论吗?';
+                                }
+                                if(confirm(str))
+                                {
+                                    return true;
+                                }else{
+                                    return false;
+                                }
+                            };
                         }
                     )
-                    showInput=function (cid,content,aid) {
-                        $('#aid').val(aid);
-                        $('#parentID').val(cid);
-                        $('h5#Inputtitle').text("回复评论: "+content);
-                        $('#inputModal').modal('show');
-                    };
-                    confirmAct=function (choose) {
-                        var str="确定要删除这个评论吗?";
-                        if(choose==1){
-                            str='确定要删除这些评论吗?';
-                        }
-                        if(confirm(str))
-                        {
-                            return true;
-                        }else{
-                            return false;
-                        }
-                    };
                 </script>
             </td>
         </tr>

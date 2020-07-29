@@ -61,14 +61,14 @@
     data-height="500">
         <thead>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">文章名</th>
-            <th scope="col">封面图片</th>
-            <th scope="col">
+            <th width="5%" scope="col">#</th>
+            <th width="15%" scope="col">文章名</th>
+            <th width="5%" scope="col">封面图片</th>
+            <th width="5%" scope="col">
                 <div class="btn-group-sm btn-light" role="group">
-                    <button id="btnGroupDrop" type="button" class="btn btn-secondary dropdown-toggle" th:classappend="${order==2 or order==-2} ? 'btn-warning':''"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a id="btnGroupDrop"  class="dropdown-toggle" th:classappend="${order==2 or order==-2} ? 'btn-warning':''"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         评论数
-                    </button>
+                    </a>
                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop">
                         <a class="dropdown-item" th:href="|?&order=2&${limit}|">
                             <span th:if="${order} and ${order==2}">√</span>
@@ -84,11 +84,11 @@
                     </div>
                 </div>
             </th>
-            <th scope="col">
-                <div class="btn-group-sm btn-warning" role="group">
-                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" th:classappend="${order==3 or order==-3} ? 'btn-warning':''" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <th width="5%" scope="col">
+                <div class="btn-group-sm btn-light" role="group">
+                    <a id="btnGroupDrop1" class="dropdown-toggle" th:classappend="${order==3 or order==-3} ? 'btn-warning':''" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         点赞数
-                    </button>
+                    </a>
                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                         <a class="dropdown-item" th:href="|?&order=3&${limit}|">
                             升序
@@ -104,11 +104,11 @@
                     </div>
                 </div>
             </th>
-            <th scope="col">
-                <div class="btn-primary btn-group-sm" role="group">
-                    <button id="btnGroupDrop2" type="button" class="btn btn-secondary dropdown-toggle" th:classappend="${order==1 or order==-1} ? 'btn-warning':''" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <th width="5%" scope="col">
+                <div class="btn-light btn-group-sm" role="group">
+                    <a id="btnGroupDrop2" class="dropdown-toggle" th:classappend="${order==1 or order==-1} ? 'btn-warning':''" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         浏览量
-                    </button>
+                    </a>
                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
                         <a class="dropdown-item" th:href="|?&order=1&${limit}|">
                             升序
@@ -124,16 +124,16 @@
                     </div>
                 </div>
             </th>
-            <th scope="col">
-                是否发表
+            <th width="5%" scope="col">
+                状态
             </th>
-            <th scope="col">
-                是否置顶
+            <th width="5%" scope="col">
+                置顶
             </th>
-            <th scope="col">创建时间</th>
-            <th scope="col">文章标签</th>
-            <th scope="col">用户</th>
-            <th scope="col">
+            <th width="10%" scope="col">创建时间</th>
+            <th width="9%" scope="col">文章标签</th>
+            <th width="10%" scope="col">用户</th>
+            <th width="21%" scope="col">
                 <form style="float: right" method="get" action="articleLike">
                 <span  class="input-group input-group-sm">
                 <input type="text" name="key" class="form-control" th:value="${param.key}" placeholder="输入博客内容或标题" aria-label="Recipient's username" aria-describedby="button-addon2">
@@ -147,57 +147,61 @@
         </thead>
         <tbody>
         <tr th:each="article:${tops}">
-            <th scope="row" th:text="${article.id}">1</th>
-            <td th:text="${article.title}">数据结构与算法</td>
-            <td><a th:href="${article.firstPicture}"><img style="width: 50px!important;" th:src="${article.firstPicture}"></a></td>
-            <td><a th:href="@{listByAid(aid=${article.id})}" th:text="${article.commentSize}">100</a></td>
-            <td th:text="${article.thumbsCount}"></td>
-            <td th:text="${article.visit}"></td>
-            <td th:text="${article.published}?'已发表':'未发表'">100</td>
-            <td th:text="${article.top}?'已置顶':'未置顶'">100</td>
-            <td th:text="${#dates.format(article.createTime,'yyyy年MM月dd日')}"></td>
-            <td><a th:text="${article.tag.name}" th:href="|articleListByTag?tid=${article.tag.id}|">数据结构与算法</a></td>
-            <td>
+            <th width="5%" th:text="${article.id}">1</th>
+            <td width="15%" th:text="${article.title}">数据结构与算法</td>
+            <td width="5%"><a th:href="${article.firstPicture}">
+                <img style="height:20px!important;width: 50px!important;" th:src="${article.firstPicture}"></a>
+            </td>
+            <td width="5%"><a th:href="@{listByAid(aid=${article.id})}" th:text="${article.commentSize}">100</a></td>
+            <td width="5%" th:text="${article.thumbsCount}"></td>
+            <td width="5%" th:text="${article.visit}"></td>
+            <td width="5%"  th:text="${article.published}?'发表':'草稿'">100</td>
+            <td width="5%" th:text="${article.top}?'已置顶':'未置顶'">100</td>
+            <td width="10%" th:text="${#dates.format(article.createTime,'yyyy年MM月dd日')}"></td>
+            <td width="9%"><a th:text="${article.tag.name}" th:href="|articleListByTag?tid=${article.tag.id}|">数据结构与算法</a></td>
+            <td width="10%">
                 <a th:unless="${session.admin}" th:text="${article.user.name}">数据结构与算法</a>
                 <a th:if="${session.admin}" th:href="@{/admin/articleList(uid=${article.user.id})}" th:text="${article.user.name}">数据结构与算法</a>
             </td>
-            <td>
+            <td width="21%">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                    <a type="button" th:text="${article.published}?'查看':'预览'" th:href="@{getArticle(id=${article.id})}" class="btn btn-primary">
+                    <a type="button" th:text="${article.published}?'查看':'预览'" th:href="@{getArticle(id=${article.id})}" class="btn btn-primary btn-sm">
                         查看
                     </a>
-                    <a th:unless="${article.top}" type="button" th:if="${session.admin}" th:href="@{TopArticle(id=${article.id})}" class="btn btn-success">置顶</a>
-                    <a th:if="${article.top and session.admin}" type="button" th:href="@{DownArticle(id=${article.id})}" class="btn btn-light">取消</a>
-                    <a type="button" th:href="@{editArticle(id=${article.id})}" class="btn btn-warning">修改</a>
-                    <a type="button" href="#" th:onclick="delArt([[${article.id}]],[[${article.uid}]])" class="btn btn-danger">删除</a>
+                    <a th:if="${article.top and session.admin}" type="button" th:href="@{DownArticle(id=${article.id})}" class="btn btn-light btn-sm">取消</a>
+                    <a th:unless="${article.top}" th:if="${session.admin}" type="button" th:href="@{TopArticle(id=${article.id})}" class="btn btn-success btn-sm">置顶</a>
+                    <a type="button" th:href="@{editArticle(id=${article.id})}" class="btn btn-warning btn-sm">修改</a>
+                    <a type="button" href="#" th:onclick="delArt([[${article.id}]],[[${article.uid}]])" class="btn btn-danger btn-sm">删除</a>
                 </div>
             </td>
         </tr>
         <tr th:each="article:${page.list}">
-            <th scope="row" th:text="${article.id}">1</th>
-            <td th:text="${article.title}">数据结构与算法</td>
-            <td><a th:href="${article.firstPicture}"><img style="width: 50px!important;" th:src="${article.firstPicture}"></a></td>
-            <td><a th:href="@{listByAid(aid=${article.id})}" th:text="${article.commentSize}">100</a></td>
-            <td th:text="${article.thumbsCount}"></td>
-            <td th:text="${article.visit}"></td>
-            <td th:text="${article.published}?'已发表':'未发表'">100</td>
-            <td th:text="${article.top}?'已置顶':'未置顶'">100</td>
-            <td th:text="${#dates.format(article.createTime,'yyyy年MM月dd日')}"></td>
-            <td><a th:text="${article.tag.name}" th:href="|articleListByTag?tid=${article.tag.id}|">数据结构与算法</a></td>
-            <td>
+            <th width="5%" th:text="${article.id}">1</th>
+            <td width="15%" th:text="${article.title}">数据结构与算法</td>
+            <td width="5%"><a th:href="${article.firstPicture}">
+                <img style="height:20px!important;width: 50px!important;" th:src="${article.firstPicture}"></a>
+            </td>
+            <td width="5%"><a th:href="@{listByAid(aid=${article.id})}" th:text="${article.commentSize}">100</a></td>
+            <td width="5%" th:text="${article.thumbsCount}"></td>
+            <td width="5%" th:text="${article.visit}"></td>
+            <td width="5%"  th:text="${article.published}?'发表':'草稿'">100</td>
+            <td width="5%" th:text="${article.top}?'已置顶':'未置顶'">100</td>
+            <td width="10%" th:text="${#dates.format(article.createTime,'yyyy年MM月dd日')}"></td>
+            <td width="9%"><a th:text="${article.tag.name}" th:href="|articleListByTag?tid=${article.tag.id}|">数据结构与算法</a></td>
+            <td width="10%">
                 <a th:unless="${session.admin}" th:text="${article.user.name}">数据结构与算法</a>
                 <a th:if="${session.admin}" th:href="@{/admin/articleList(uid=${article.user.id})}" th:text="${article.user.name}">数据结构与算法</a>
             </td>
-            <td>
+            <td width="21%">
                 <div class="btn-group" role="group" aria-label="Basic example">
 
-                <a type="button" th:text="${article.published}?'查看':'预览'" th:href="@{getArticle(id=${article.id})}" class="btn btn-primary">
+                <a type="button" th:text="${article.published}?'查看':'预览'" th:href="@{getArticle(id=${article.id})}" class="btn btn-primary btn-sm">
                     查看
                 </a>
-                    <a th:if="${article.top and session.admin}" type="button" th:href="@{DownArticle(id=${article.id})}" class="btn btn-light">取消</a>
-                    <a th:unless="${article.top}" th:if="${session.admin}" type="button" th:href="@{TopArticle(id=${article.id})}" class="btn btn-success">置顶</a>
-                <a type="button" th:href="@{editArticle(id=${article.id})}" class="btn btn-warning">修改</a>
-                <a type="button" href="#" th:onclick="delArt([[${article.id}]],[[${article.uid}]])" class="btn btn-danger">删除</a>
+                    <a th:if="${article.top and session.admin}" type="button" th:href="@{DownArticle(id=${article.id})}" class="btn btn-light btn-sm">取消</a>
+                    <a th:unless="${article.top}" th:if="${session.admin}" type="button" th:href="@{TopArticle(id=${article.id})}" class="btn btn-success btn-sm">置顶</a>
+                <a type="button" th:href="@{editArticle(id=${article.id})}" class="btn btn-warning btn-sm">修改</a>
+                <a type="button" href="#" th:onclick="delArt([[${article.id}]],[[${article.uid}]])" class="btn btn-danger btn-sm">删除</a>
                 </div>
             </td>
         </tr>
@@ -213,7 +217,7 @@
     <a  th:href="|?published=false&${limit}|">
         <button type="button" class="btn btn-warning">
             <span th:if="${limit} and ${#strings.contains(limit,'false')}">√</span>
-            未发表
+            草稿箱
         </button>
     </a>
     <a  th:href="|?published= &${limit}|">
@@ -223,6 +227,9 @@
         </button>
     </a>
 </div>
+
+
+
 <script th:inline="javascript">
     confirmAct=function () {
         if(confirm('确定要删除该文章吗?'))
@@ -232,20 +239,22 @@
         return false;
     };
     delArt=function (aid,uid) {
-        $.ajax({
-            //请求方式
-            type : "POST",
-            //请求的媒体类型
-            //contentType: "application/json;charset=UTF-8",
+        if(confirmAct()==true){
+            $.ajax({
+                //请求方式
+                type : "POST",
+                //请求的媒体类型
+                //contentType: "application/json;charset=UTF-8",
 
-            url : "deleteArticle",
+                url : "deleteArticle",
 
-            data:{'id':aid,'uid':uid},
-            //请求成功
-            success : function() {
-                window.location.reload();
-            }
-        })
+                data:{'id':aid,'uid':uid},
+                //请求成功
+                success : function() {
+                    window.location.reload();
+                }
+            })
+        }
     }
 </script>
 <br>
