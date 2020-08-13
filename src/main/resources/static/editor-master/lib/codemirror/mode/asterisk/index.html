@@ -69,7 +69,7 @@ exten => s,1,Wait(1)			; Wait a second, just for fun
 same  => n,Answer			; Answer the line
 same  => n,Set(TIMEOUT(digit)=5)	; Set Digit Timeout to 5 seconds
 same  => n,Set(TIMEOUT(response)=10)	; Set Response Timeout to 10 seconds
-same  => n(restart),BackGround(demo-congrats)	; Play a congratulatory message
+same  => n(restart),BackGround(demo-congrats)	; Play a congratulatory webSocketMessage
 same  => n(instruct),BackGround(demo-instruct)	; Play some instructions
 same  => n,WaitExten			; Wait for an extension to be dialed.
 
@@ -113,7 +113,7 @@ exten => i,1,Playback(invalid)		; "That's not valid, try again"
 exten => 500,1,Playback(demo-abouttotry); Let them know what's going on
 exten => 500,n,Dial(IAX2/guest@pbx.digium.com/s@default)	; Call the Asterisk demo
 exten => 500,n,Playback(demo-nogo)	; Couldn't connect to the demo site
-exten => 500,n,Goto(s,6)		; Return to the start over message.
+exten => 500,n,Goto(s,6)		; Return to the start over webSocketMessage.
 
 ;
 ; Create an extension, 600, for evaluating echo latency.

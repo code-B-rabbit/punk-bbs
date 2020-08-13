@@ -47,8 +47,17 @@ public interface ArticleMapper {
     @Update("UPDATE article SET visit =#{visit} where id=#{id}")
     void updateArticleVisit(Long visit, Integer id);
 
+    @Update("UPDATE article SET bid =#{bid},top=false where id=#{aid}")
+    void setArticleBanned(Integer aid,Integer bid);
 
-    @Update("UPDATE ARTICLE SET top=true,published=true WHERE id=#{id}")
+    @Update("UPDATE article SET bid =null where id=#{aid}")
+    void setArticleRelease(Integer aid);
+
+    /**
+     * 自动在置顶时解封
+     * @param id
+     */
+    @Update("UPDATE ARTICLE SET top=true,published=true,bid=null WHERE id=#{id}")
     public void topArticle(Integer id);            //设为置顶(置顶时默认发表)
 
     @Update("UPDATE ARTICLE SET top=false WHERE id=#{id}")
@@ -65,7 +74,7 @@ public interface ArticleMapper {
      * @param id
      * @return
      */
-    @Select("SELECT id,title FROM article WHERE id=#{id}")
+    @Select("SELECT id,title,uid FROM article WHERE id=#{id}")
     public Article getTitle(Integer id);
 
     @Select("select count(*) from article where tid=#{tid}")

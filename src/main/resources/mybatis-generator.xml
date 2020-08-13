@@ -49,7 +49,56 @@
         <!-- 指定数据库表  多个表示,可用多个table标签-->
 
 
+<!--        <table tableName="article" domainObjectName="Article" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">-->
+<!--            <property name="my.isgen.usekeys" value="true"/>-->
+<!--            <property name="useActualColumnNames" value="true"/>-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--        </table>-->
+
+<!--        <table tableName="bannedInfo" domainObjectName="BannedInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">-->
+<!--            <property name="my.isgen.usekeys" value="true"/>-->
+<!--            <property name="useActualColumnNames" value="true"/>-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--        </table>-->
+
 <!--        <table tableName="comment" domainObjectName="Comment" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">-->
+<!--            <property name="my.isgen.usekeys" value="true"/>-->
+<!--            <property name="useActualColumnNames" value="true"/>-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--        </table>-->
+
+<!--        <table tableName="friendly_link" domainObjectName="FriendlyLink" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">-->
+<!--            <property name="my.isgen.usekeys" value="true"/>-->
+<!--            <property name="useActualColumnNames" value="true"/>-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--        </table>-->
+
+<!--        <table tableName="log" domainObjectName="Log" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">-->
+<!--            <property name="my.isgen.usekeys" value="true"/>-->
+<!--            <property name="useActualColumnNames" value="true"/>-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--        </table>-->
+
+<!--        <table tableName="webSocketMessage" domainObjectName="Message" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">-->
+<!--            <property name="my.isgen.usekeys" value="true"/>-->
+<!--            <property name="useActualColumnNames" value="true"/>-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--        </table>-->
+
+<!--        <table tableName="tag" domainObjectName="Tag" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">-->
+<!--            <property name="my.isgen.usekeys" value="true"/>-->
+<!--            <property name="useActualColumnNames" value="true"/>-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--        </table>-->
+
+<!--        <table tableName="thumb" domainObjectName="Thumb" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">-->
+<!--            <property name="my.isgen.usekeys" value="true"/>-->
+<!--            <property name="useActualColumnNames" value="true"/>-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--        </table>-->
+
+
+<!--        <table tableName="user" domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">-->
 <!--            <property name="my.isgen.usekeys" value="true"/>-->
 <!--            <property name="useActualColumnNames" value="true"/>-->
 <!--            <generatedKey column="id" sqlStatement="JDBC"/>-->

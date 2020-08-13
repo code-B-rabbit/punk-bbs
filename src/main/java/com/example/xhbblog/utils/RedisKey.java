@@ -1,7 +1,6 @@
 package com.example.xhbblog.utils;
 
 import com.example.xhbblog.mapper.*;
-import com.example.xhbblog.pojo.Thumbs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,6 @@ import java.util.Set;
 /**
  * 记录没有使用spring boot cache的key工具类
  */
-@Component
-@Transactional
-@EnableScheduling
 public  class RedisKey {
 
     public static final String ART_VISITS_ZSET="visits";   //文章访问排行使用ZSET数据结构,并进行实时更新
@@ -45,5 +41,9 @@ public  class RedisKey {
 
     public static final String TAG="tag::";
     public static final String TAG_LIST="tag::tagList";
+
+    public static final String SHIRO_SESSION_ONLINE="shiro_session_online::";
+//    public static final String WEBSOCKET_SESSION="websocket_session_key::";
+    public static final String WEBSOCKET_CHANNEL="websocket_channel";
 
 }

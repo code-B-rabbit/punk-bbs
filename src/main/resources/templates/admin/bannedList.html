@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="admin/advice::head">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>后台管理</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="../../static/vendor/bootstrap/css/bootstrap.min.css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="../../static/vendor/font-awesome/css/font-awesome.min.css" th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
+    <!-- Custom icon font-->
+    <link rel="stylesheet" href="../../static/css/fontastic.css" th:href="@{/css/fontastic.css}">
+    <!-- Google fonts - Open Sans-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <!-- Fancybox-->
+    <link rel="stylesheet" href="../../static/vendor/@fancyapps/fancybox/jquery.fancybox.min.css">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="../../static/css/style.default.css" id="theme-stylesheet" th:href="@{/css/style.default.css}">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="../../static/css/custom.css" th:href="@{/css/custom.css}">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="favicon.png">
+
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+</head>
+<nav th:replace="admin/nav::admin_nav(100)">
+
+</nav>
+<body>
+<div>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+                封禁项列表
+                <span>共</span>
+                <span style="color: red" th:text="${page.total}"></span>
+                <span>个</span>
+                <a href="#" class="text-danger" onclick="showAddBanned()" >新增封禁项</a>
+            </li>
+            <script>
+                $(
+                    function () {
+                        showAddBanned=function () {
+                            $('#bannedInput').modal('show');
+                        };
+                        $('input.change').blur(
+                            function () {
+                                    data={"id":$(this).attr("id"),"reason":$(this).val()};
+                                    $.post("/admin/updateBannedInfo", data,
+                                        function(res){
+                                            if(res==true){
+                                                $(this).addClass("border-danger");
+                                            }else{
+                                                alert("禁用项理由不能为空!!");
+                                            }
+                                    }
+                                    );
+                                }
+                        );
+                    }
+                )
+            </script>
+            <div class="modal" id="bannedInput" tabindex="-1" role="dialog">
+                <div class="modal-dialog note">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">新增禁用项</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="addBanned" method="post" action="/admin/addBannedInfo">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <input style="margin-top: 20px!important;margin-bottom: 20px!important;" id="banned" name="reason" class="form-control"  type="text" placeholder="请输入禁用理由">
+                                </div>
+                            </div>
+                            <script>
+                                $('form#addBanned').submit(
+                                    function () {
+                                        var str=$('#banned').val();
+                                        if(str == '' || str == undefined || str == null){
+                                            alert("禁用原因不能为空!!");
+                                            return false;
+                                        }
+                                        return true;
+                                    }
+                                );
+
+                            </script>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">新增</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </ol>
+    </nav>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th scope="col">序号</th>
+            <th scope="col">封禁理由</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="bannedInfo:${page.list}">
+            <td th:id="${bannedInfo.id}" scope="row" name="id" th:text="${bannedInfo.id}">1</td>
+            <td>
+                <input  class="form-control change" th:id="${bannedInfo.id}" th:value="${bannedInfo.reason}" name="reason">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <nav th:replace="admin/page::page"></nav>
+</div>
+</body>
+<footer class="main-footer" th:replace="admin/foot::foot">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="logo">
+                    <h6 class="text-white">徐浩博的技术小站</h6>
+                </div>
+                <div class="contact-details">
+                    <p>Phone: 15690116825</p>
+                    <p>Email: 511928849@qq.com</a></p>
+                    <ul class="social-menu">
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-instagram"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-behance"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="menus d-flex">
+                    <ul class="list-unstyled">
+                        <li> <a>友链</a></li>
+                        <li> <a href="#" th:each="fl:${fls}" th:text="${fl.name}" th:href="${fl.link}">My Account</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+    </div>
+
+</footer>
+
+</html>

@@ -1,8 +1,14 @@
 package com.example.xhbblog.pojo;
 
-import java.io.Serializable;
+import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Date;
+
+@Data
 public class FriendlyLink implements Serializable {
+    private static final long serialVersionUID = 7511131561369700376L;
+
     private Integer id;
 
     private String name;
@@ -13,43 +19,7 @@ public class FriendlyLink implements Serializable {
 
     private String email;
 
-    public Integer getId() {
-        return id;
-    }
+    private Date createTime;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link == null ? null : link.trim();
-    }
-
-    public Boolean getAllowed() {
-        return allowed;
-    }
-
-    public void setAllowed(Boolean allowed) {
-        this.allowed = allowed;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
-    }
+    private Date updateTime;
 }

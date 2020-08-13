@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:replace="admin/login::head">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="admin/advice::head">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>后台管理</title>
@@ -39,15 +39,16 @@
         alert(msg);          //修改回显
     }
 </script>
+<link rel="stylesheet"  th:href="@{/css/login.css}">
 <div class="container">
-    <div class="row justify-content-center" style="height: 520px">
+    <div class="justify-content-center" style="height: 520px;margin-top: 50px">
         <div class="align-self-center">
             <div class="card">
                 <div class="card-header">
                     管理员账户管理
                 </div>
                 <div class="card-body">
-                    <form id="form" method="post" action="changeAccount">
+                    <form id="changeAccount"  method="post" action="changeAccount">
                         <div class="input-group input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing">姓名</span>
@@ -55,48 +56,6 @@
                             <input id="name" type="text" name="name" th:value="${session.user.name}" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                         </div>
                         <input type="hidden" name="id" th:value="${session.user.id}"/>
-                        <div class="input-group mb-3">
-                            <input type="password" id="password" name="password" th:value="${session.user.password}" class="form-control" placeholder="密码" aria-label="Recipient's username" aria-describedby="button-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" id="button-show">点我显示</button>
-                            </div>
-                            <script>
-                                $(function () {
-                                    hide=true;        //全局的是否隐藏的变量
-                                    $("#button-show").click(
-                                        function () {
-                                            hide=!hide;
-                                            if(hide==true)
-                                            {
-                                                $('#password').attr('type','password');
-                                                $(this).text("点我显示");
-                                            }else
-                                            {
-                                                $('#password').attr('type','text');
-                                                $(this).text("点我隐藏");
-                                            }
-                                        }
-                                    );
-                                    $(".btn-outline-info").click(function(){
-                                        if($('#password').val()==""||$('#password').val()==null||$('#name').val()==""||$('#name').val()==null)            //表单校验
-                                        {
-                                            alert("请将个人信息填写完整!!!")
-                                            return;
-                                        }else
-                                        {
-                                            d = confirm("真的要对账号密码进行修改吗???");
-                                            if(d==true)
-                                            {
-                                                $("#form").submit();
-                                            }else
-                                            {
-                                                return;
-                                            }
-                                        }
-                                    });
-                                })
-                            </script>
-                        </div>
 
                         <div class="input-group input-group mb-3">
                             <div class="input-group-prepend">
@@ -136,10 +95,28 @@
                                 }
                             )
                         </script>
-
+                        <button type="submit" class="btn btn-outline-info">提交修改</button>
+                        <a href="exit" class="btn btn-outline-warning">退出登录</a>
+                        <script>
+                            $('form#changeAccount').submit(
+                                function () {
+                                    data=$('form').serializeArray();
+                                    $.ajax({
+                                        url:"changeAccount",
+                                        method:"post",
+                                        data:data,
+                                        success: function (dataStr) {
+                                            alert(dataStr.msg);
+                                        },
+                                        error:function () {
+                                            alert("系统出错,请重试");
+                                        }
+                                    });
+                                    return false;
+                                }
+                            )
+                        </script>
                     </form>
-                    <button type="submit" class="btn btn-outline-info">提交修改</button>
-                    <a href="exit" class="btn btn-outline-warning">退出登录</a>
                 </div>
             </div>
         </div>

@@ -16,19 +16,19 @@ public class UserLoginInterceptor implements HandlerInterceptor {
 
     Logger logger =LoggerFactory.getLogger(UserLoginInterceptor.class);
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        HttpSession session=request.getSession();
-        User user= (User) session.getAttribute("user");
-        if(user!=null&&user.getRole().equals("user"))
-        {
-            logger.info("用户页面请求通过");
-            return true;
-        } else{
-            logger.info("拦截请求{}",request.getRequestURI());
-            response.sendRedirect("/userAdmin/adminLogin");
-            return false;
-        }
-    }
+//    @Override
+//    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+//        HttpSession session=request.getSession();
+//        User user= (User) session.getAttribute("user");
+//        if(user!=null&&user.getRole().equals("user"))
+//        {
+//            logger.info("用户页面请求通过");
+//            return true;
+//        } else{
+//            logger.info("拦截请求{}",request.getRequestURI());
+//            response.sendRedirect("/userAdmin/adminLogin");
+//            return false;
+//        }
+//    }
 
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:replace="admin/login::head">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="admin/advice::head">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>后台管理</title>
@@ -73,8 +73,8 @@
             <td><a th:href="${fl.link}" th:text="${fl.link}"></a></td>
             <th th:text="${fl.allowed}?'同意':'未同意'">同意</th>
             <td><div class="btn-group" role="group" aria-label="Basic example">
-                <a type="button" th:unless="${fl.allowed}" th:href="@{checkAgree(id=${fl.id},start=${page.pageSize*(page.pageNum-1)})}" class="btn btn-warning">同意</a>
-                <a type="button" th:href="@{deleteFl(id=${fl.id},agree=${agree})}" class="btn btn-danger">删除</a>
+                <a type="button" th:unless="${fl.allowed}" th:href="@{checkAgree(id=${fl.id},start=${page.pageSize*(page.pageNum-1)})}" class="btn btn-warning btn-sm">同意</a>
+                <a type="button" th:href="@{deleteFl(id=${fl.id},agree=${agree})}" class="btn btn-danger btn-sm">删除</a>
             </div>
             </td>
         </tr>

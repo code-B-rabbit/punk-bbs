@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,14 +28,14 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
 </head>
-<nav th:replace="admin/nav::admin_nav(1)"></nav>
+<nav th:replace="admin/nav::admin_nav(2)"></nav>
 <body>
 <link rel="stylesheet" th:href="@{/editor-master/css/editormd.css}" href="../../static/editor-master/css/editormd.css" />
 <form id="blog-form" method="get" action="articleSave" th:object="${article}" target="iframe">
-    <div class="container">
+    <div class="container" style="margin-bottom: 20px">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/admin/articleList">博客管理</a></li>
+                <li class="breadcrumb-item"><a href="articleList">博客管理</a></li>
                 <li class="breadcrumb-item active" aria-current="page">博客修改</li>
             </ol>
         </nav>
@@ -100,8 +100,9 @@
                 });
             });
         </script>
-        <button type="submit" class="btn btn-info btn-lg btn-block publish">发表</button>
-        <button type="submit" class="btn btn-secondary btn-lg btn-block save">保存</button>
+        <button th:if="${session.uid==article.uid}" th:unless="${article.bid}" type="submit" class="btn btn-info btn-lg btn-block publish">发表到广场</button>
+        <button th:aid="${article.id}" th:if="${article.bid}" type="submit" class="btn btn-info btn-lg btn-block  apply">申请解封</button>
+        <button type="submit" class="btn btn-secondary btn-lg btn-block save">保存到草稿</button>
         <button onclick="javascript:window.location.replace(document.referrer);" class="btn btn-secondary btn-block btn-lg btn-dark">返回</button>
         <iframe id="iframe" name="iframe" style="display:none;"></iframe>
     </div>
@@ -121,7 +122,19 @@
                 $('#blog-form').submit();
                 alert("文章修改成功!!!");
             }
-        )
+        );
+        $('button.apply').click(
+            function () {
+                $.get(
+                    "applyForRelease/"+$(this).attr("aid"),
+                    function () {
+                        $('input#published').val(false);
+                        $('#blog-form').submit();
+                        alert("申请解封成功!!!");
+                    }
+                )
+            }
+        );
     })
 </script>
 </body>

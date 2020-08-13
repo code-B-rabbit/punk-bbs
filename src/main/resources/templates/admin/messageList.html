@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:replace="admin/login::head">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="admin/advice::head">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>后台管理</title>
@@ -57,7 +57,7 @@
             <th scope="row" th:text="${msg.id}">1</th>
             <td th:text="${msg.content}">数据结构与算法</td>
             <td th:text="${#dates.format(msg.createTime,'yyyy-MM-dd hh:mm:ss')}" >数据结构与算法</td>
-            <td><a type="button" th:href="@{deleteMessage(id=${msg.id})}" class="btn btn-danger">删除</a></td>
+            <td><a type="button" th:href="@{deleteMessage(id=${msg.id})}" class="btn btn-danger btn-sm">删除</a></td>
         </tr>
         </tbody>
     </table>

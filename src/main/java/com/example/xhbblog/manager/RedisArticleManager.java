@@ -2,7 +2,7 @@ package com.example.xhbblog.manager;
 
 import com.example.xhbblog.mapper.ArticleMapper;
 import com.example.xhbblog.mapper.CommentMapper;
-import com.example.xhbblog.mapper.ThumbsMapper;
+import com.example.xhbblog.mapper.ThumbMapper;
 import com.example.xhbblog.pojo.Article;
 import com.example.xhbblog.pojo.ArticleWithBLOBs;
 import com.example.xhbblog.pojo.Comment;
@@ -10,13 +10,9 @@ import com.example.xhbblog.utils.RedisKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -32,7 +28,7 @@ public class RedisArticleManager {
     private ArticleMapper articleMapper;
 
     @Autowired
-    private ThumbsMapper thumbsMapper;
+    private ThumbMapper thumbsMapper;
 
     @Autowired
     private CommentMapper commentMapper;

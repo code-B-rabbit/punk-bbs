@@ -1,20 +1,13 @@
 package com.example.xhbblog.manager;
 
-import com.example.xhbblog.Service.impl.TagServiceImpl;
 import com.example.xhbblog.mapper.TagMapper;
 import com.example.xhbblog.pojo.Tag;
 import com.example.xhbblog.utils.RedisKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;

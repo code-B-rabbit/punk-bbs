@@ -1,15 +1,13 @@
 package com.example.xhbblog.manager;
 
-import com.example.xhbblog.mapper.ThumbsMapper;
-import com.example.xhbblog.pojo.Thumbs;
+import com.example.xhbblog.mapper.ThumbMapper;
+import com.example.xhbblog.pojo.Thumb;
 import com.example.xhbblog.utils.RedisKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,7 +31,7 @@ public class RedisThumbManager {
     private RedisTemplate redisTemplate;
 
     @Autowired
-    private ThumbsMapper thumbsMapper;
+    private ThumbMapper thumbsMapper;
 
     /**
      * 某文章点赞数
@@ -82,7 +80,7 @@ public class RedisThumbManager {
      * 点赞
      * @param thumbs
      */
-    public void insert(Thumbs thumbs) {
+    public void insert(Thumb thumbs) {
         LOG.info("文章::{}被点赞",thumbs.getAid());
         redisTemplate.opsForValue().increment(RedisKey.THUMB_CNT+thumbs.getAid(),1);
         redisTemplate.opsForHash().put(RedisKey.THUMB_AID_MAP+thumbs.getAid(),thumbs.getAddress(),1);

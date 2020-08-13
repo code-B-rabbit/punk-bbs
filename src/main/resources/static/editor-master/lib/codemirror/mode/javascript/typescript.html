@@ -29,8 +29,8 @@
 <div><textarea id="code" name="code">
 class Greeter {
 	greeting: string;
-	constructor (message: string) {
-		this.greeting = message;
+	constructor (webSocketMessage: string) {
+		this.greeting = webSocketMessage;
 	}
 	greet() {
 		return "Hello, " + this.greeting;

@@ -1,35 +1,16 @@
 package com.example.xhbblog.pojo;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
+@Data
 public class Picture implements Serializable {
+    private static final long serialVersionUID = 5985966843968079008L;
+
     private Integer id;
 
     private String filekey;
 
     private String url;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getFilekey() {
-        return filekey;
-    }
-
-    public void setFilekey(String filekey) {
-        this.filekey = filekey == null ? null : filekey.trim();
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url == null ? null : url.trim();
-    }
 }

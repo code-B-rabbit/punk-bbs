@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:replace="header::head(博客用户注册)">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,8 +15,8 @@
         display: none;
     }
 </style>
-
-<body class="bg-info">
+<link rel="stylesheet"  th:href="@{/css/login.css}">
+<body>
 <script th:inline="javascript">
     var msg=[[${message}]];
     if(msg)
@@ -26,7 +26,7 @@
 </script>
 
 <div class="container">
-    <div class="row justify-content-center" style="height: 520px">
+    <div  class="row justify-content-center" style="height: 520px;margin-top: 150px!important;">
         <div class="align-self-center">
             <div class="card">
                 <div class="card-header">用户注册</div>

@@ -1,10 +1,15 @@
 package com.example.xhbblog.pojo;
 
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 
+@Data
 public class Article implements Serializable {
+
+    private static final long serialVersionUID = -6944406518449178907L;
 
     private Integer id;
 
@@ -12,7 +17,11 @@ public class Article implements Serializable {
 
     private Integer uid;
 
+    private Integer bid;
+
     private Date createTime;
+
+    private Date updateTime;
 
     private String title;
 
@@ -23,22 +32,6 @@ public class Article implements Serializable {
     private Article lastArticle;
 
     private Article nextArticle;
-
-    public Article getLastArticle() {
-        return lastArticle;
-    }
-
-    public void setLastArticle(Article lastArticle) {
-        this.lastArticle = lastArticle;
-    }
-
-    public Article getNextArticle() {
-        return nextArticle;
-    }
-
-    public void setNextArticle(Article nextArticle) {
-        this.nextArticle = nextArticle;
-    }
 
     private Tag tag;
 
@@ -54,117 +47,5 @@ public class Article implements Serializable {
 
     private Boolean published;
 
-
-    public Integer getUid() {
-        return uid;
-    }
-
-    public void setUid(Integer uid) {
-        this.uid = uid;
-    }
-
-    public Boolean getThumb() {
-        return thumb;
-    }
-
-    public void setThumb(Boolean thumb) {
-        this.thumb = thumb;
-    }
-
-    public Integer getThumbsCount() {
-        return thumbsCount;
-    }
-
-    public void setThumbsCount(Integer thumbsCount) {
-        this.thumbsCount = thumbsCount;
-    }
-
-    public Integer getCommentSize() {
-        return commentSize;
-    }
-
-    public void setCommentSize(Integer commentSize) {
-        this.commentSize = commentSize;
-    }
-
-    public Tag getTag() {
-        return tag;
-    }
-
-    public void setTag(Tag tag) {
-        this.tag = tag;
-    }
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getTid() {
-        return tid;
-    }
-
-    public void setTid(Integer tid) {
-        this.tid = tid;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title == null ? null : title.trim();
-    }
-
-    public String getFirstPicture() {
-        return firstPicture;
-    }
-
-    public void setFirstPicture(String firstPicture) {
-        this.firstPicture = firstPicture == null ? null : firstPicture.trim();
-    }
-
-    public Long getVisit() {
-        return visit;
-    }
-
-    public void setVisit(Long visit) {
-        this.visit = visit;
-    }
-
-    public Boolean getPublished() {
-        return published;
-    }
-
-    public void setPublished(Boolean published) {
-        this.published = published;
-    }
-
-    public Boolean getTop() {
-        return top;
-    }
-
-    public void setTop(Boolean top) {
-        this.top = top;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+    private BannedInfo bannedInfo;
 }

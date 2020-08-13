@@ -65,7 +65,7 @@ elsif address :domain :is ["From", "To"] "example.com"
 }
 
 #
-# Try and catch unsolicited email.  If a message is not to me,
+# Try and catch unsolicited email.  If a webSocketMessage is not to me,
 # or it contains a subject known to be spam, file it away.
 #
 elsif anyof (not address :all :contains
@@ -73,7 +73,7 @@ elsif anyof (not address :all :contains
              header :matches "subject"
                ["*make*money*fast*", "*university*dipl*mas*"])
 {
-  # If message header does not contain my address,
+  # If webSocketMessage header does not contain my address,
   # it's from a list.
   fileinto "spam";   # move to "spam" folder
 }

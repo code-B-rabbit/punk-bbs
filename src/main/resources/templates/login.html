@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:replace="header::head(博客登录)">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -85,10 +85,10 @@
     </nav>
 </header>
 <div class="container">
-    <div class="row justify-content-center" style="height: 500px">
+    <div class="justify-content-center" style="height: 500px">
         <div class="align-self-center">
             <script th:inline="javascript">
-                var msg=[[${message}]];
+                var msg=[[${webSocketMessage}]];
                 if(msg)
                 {
                     alert(msg);          //修改回显
@@ -96,40 +96,12 @@
             </script>
             <script>
                 $(function () {
-                    init();           //初始化cookie
-                    function init() {
-                        $.ajax({
-                            //请求方式
-                            type : "get",
-
-                            contentType: "application/json;charset=UTF-8",
-
-                            url : "/getCookie",
-
-                            dataType:'json',
-
-                            success : function(result) {
-                                $('input.username1').val(result.name);
-                                $('input.userPassword1').val(result.password);
-                                if(result.name!="")
-                                {
-                                    $("input#rememberMe").attr("checked","true");
-                                }
-                            },
-                            //请求失败，包含具体的错误信息
-                            error : function(e){
-                                console.log(e.status);
-                                console.log(e.responseText);
-                            }
-                        });
-                    }
                     function getOrderList() {
                         //orderForm即是表单的ID
                         return false;
                     }
                     function request(data)
                     {
-                        var defer = $.Deferred();
                         $.ajax({
                             url:"/user/check",
                             method:"post",
@@ -157,17 +129,19 @@
                                 $('#locked').modal('show');
                             }
                         });
-                        return defer.promise();
                     }
+
 
                     function refresh(){
                         $('img#imgs').trigger("click");
                     }
                     $('form#login').submit(function () {
+                        console.log("开始验证验证码");
                         $.post("/valid",{
                                 tryCode:$("#verCode").val()
                             },
                             function(data) {
+                                console.log("返回data:",data);
                                 if(data.error)
                                 {
                                     alert(data.info);
@@ -205,7 +179,7 @@
                     </div>
                 </div>
             </div>
-            <div th:unless="${session.user}" class="card" target="iframe">
+            <div shiro:notAuthenticated=""  class="card" style="margin-top: 50px" target="iframe">
                 <div class="card-header">用户登录</div>
                 <div class="card-body">
                     <span class="font-weight-bold">(部分手机自带浏览器可能会无法正常登录,换成其他浏览器即可)</span>
@@ -226,10 +200,9 @@
                             </div>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input position-static" name="checked" type="checkbox" id="rememberMe"/>
-                            30天内记住我
                             没有账户?<a href="/user/register" class="text-success">现在注册</a>
                             <a href="/user/forgetPassword" class="text-danger">忘记密码</a>
+                            <a href="/user/forgetPassword" class="text-warning">修改密码</a>
                             <btn onclick="refresh()" class="btn-link float-right">验证码看不清楚?换一张</btn>
                         </div>
                         <br>
@@ -257,7 +230,7 @@
                     </form>
                 </div>
             </div>
-            <div th:if="${session.user}">
+            <div style="margin-top: 100px!important;" shiro:authenticated="">
                 <div class="alert alert-success" role="alert">
                     <h4 class="alert-heading">您已登录成功!!!</h4>
                     <p>现在, 您可以自由地在社区里发表文章并互相评论了</p>

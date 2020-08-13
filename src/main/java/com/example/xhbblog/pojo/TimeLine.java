@@ -1,34 +1,14 @@
 package com.example.xhbblog.pojo;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+@Data
 public class TimeLine implements Serializable {
+    private static final long serialVersionUID = 3016128787458018145L;
     private Date time;         //哪一天
     private List<Article> articleList;
-
-    @Override
-    public String toString() {
-        return "TimeLine{" +
-                "time=" + time +
-                ", articleList=" + articleList +
-                '}';
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
-
-    public List<Article> getArticleList() {
-        return articleList;
-    }
-
-    public void setArticleList(List<Article> articleList) {
-        this.articleList = articleList;
-    }
 }

@@ -52,7 +52,7 @@ $file = 'uploads/' . $_FILES['file']['name'];
 // 详细过程略
 move_uploaded_file($_FILES['file']['tmp_name'], $file);
 
-$location = $_GET['callback'].'?success=1&message=xxxxxxx&url=http://static.xxx.com/2015/02/15'.$file.'&temp='.date('ymdhis');
+$location = $_GET['callback'].'?success=1&webSocketMessage=xxxxxxx&url=http://static.xxx.com/2015/02/15'.$file.'&temp='.date('ymdhis');
 
 header('location:' . $location);
 exit;
@@ -97,7 +97,7 @@ exit;
                      跨域时，上传的图片服务器后台只需要返回一个跳转 URL 并跳转到原页面同域下的 callback 页面，结构如下：
                      {
                         success   : 0 | 1,   // 0 表示上传失败，1 表示上传成功
-                        message   : "提示的信息，上传成功或上传失败及错误信息等。",
+                        webSocketMessage   : "提示的信息，上传成功或上传失败及错误信息等。",
                         dialog_id : $_GET['dialog_id'],
                         url       : "远程图片地址"    // 上传成功时才返回
                      }

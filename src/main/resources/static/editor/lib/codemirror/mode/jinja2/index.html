@@ -32,9 +32,9 @@
 {{ item.sand == true and item.keyword == false ? 1 : 0 }}
 {{ app.get(55, 1.2, true) }}
 {% if app.get(&#39;_route&#39;) == (&#39;_home&#39;) %}home{% endif %}
-{% if app.session.flashbag.has(&#39;message&#39;) %}
-  {% for message in app.session.flashbag.get(&#39;message&#39;) %}
-    {{ message.content }}
+{% if app.session.flashbag.has(&#39;webSocketMessage&#39;) %}
+  {% for webSocketMessage in app.session.flashbag.get(&#39;webSocketMessage&#39;) %}
+    {{ webSocketMessage.content }}
   {% endfor %}
 {% endif %}
 {{ path(&#39;_home&#39;, {&#39;section&#39;: app.request.get(&#39;section&#39;)}) }}

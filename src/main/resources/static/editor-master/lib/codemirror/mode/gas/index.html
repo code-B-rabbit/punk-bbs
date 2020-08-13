@@ -39,12 +39,12 @@
 
 main:
         push    {sp, lr}
-        ldr     r0, =message
+        ldr     r0, =webSocketMessage
         bl      puts
         mov     r0, #0
         pop     {sp, pc}
 
-message:
+webSocketMessage:
         .asciz "Hello world!<br />"
 </textarea>
         </form>

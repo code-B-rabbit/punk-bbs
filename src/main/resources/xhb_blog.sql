@@ -41,11 +41,11 @@ CREATE TABLE `logs` (
 INSERT INTO `logs` VALUES (1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2);
 
 #
-# Structure for table "message"
+# Structure for table "webSocketMessage"
 #
 
-DROP TABLE IF EXISTS `message`;
-CREATE TABLE `message` (
+DROP TABLE IF EXISTS `webSocketMessage`;
+CREATE TABLE `webSocketMessage` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `content` text,
   `createTime` datetime DEFAULT NULL,
@@ -53,10 +53,10 @@ CREATE TABLE `message` (
 ) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4;
 
 #
-# Data for table "message"
+# Data for table "webSocketMessage"
 #
 
-INSERT INTO `message` VALUES (58,'界面很丑','2020-04-11 00:00:00'),(69,'🐂','2020-05-11 20:24:38'),(74,'22','2020-05-18 22:04:50');
+INSERT INTO `webSocketMessage` VALUES (58,'界面很丑','2020-04-11 00:00:00'),(69,'🐂','2020-05-11 20:24:38'),(74,'22','2020-05-18 22:04:50');
 
 #
 # Structure for table "picture"

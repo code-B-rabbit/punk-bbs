@@ -22,6 +22,12 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
+    @Select("SELECT id FROM user WHERE role='admin'")
+    List<User> selectAdmin();
+
+    @Select("SELECT id,name,headSculpture FROM user WHERE id=#{id} LIMIT 1")
+    User findById(Integer id);
+
     @Select("SELECT COUNT(*) FROM user")
     Integer count();
 
@@ -43,6 +49,6 @@ public interface UserMapper {
     Integer checkUserExist(String name,String email);
 
     @Select("select * from user where name=#{name}")       //查询匿名用户的uid
-    User  getUid(String name);
+    User  findByName(String name);
 
 }

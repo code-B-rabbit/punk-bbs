@@ -1,7 +1,7 @@
 package com.example.xhbblog.manager;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
-import com.example.xhbblog.Service.impl.CommentServiceImpl;
+import com.example.xhbblog.mapper.UserMapper;
+import com.example.xhbblog.service.impl.CommentServiceImpl;
 import com.example.xhbblog.mapper.CommentMapper;
 import com.example.xhbblog.pojo.Comment;
 import com.example.xhbblog.utils.RedisKey;
@@ -10,12 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +28,9 @@ public class RedisCommentManager {
     private RedisUserManager redisUserManager;
 
     @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
     private CommentMapper mapper;
 
     @Autowired
@@ -40,7 +39,7 @@ public class RedisCommentManager {
 
     private List<Comment> getComments(List<Comment> comments){
         for (Comment comment : comments) {
-            comment.setUser(redisUserManager.get(comment.getUid()));  //给首部评论栏设置user
+            comment.setUser(userMapper.findById(comment.getUid()));  //给首部评论栏设置user
             comment.setChilds(getChildComments(comment));        //给首部评论栏设置
         }
         return comments;
@@ -54,7 +53,7 @@ public class RedisCommentManager {
         List<Comment> childs=mapper.listByCid(comment.getId());  //查出其所有的子评论
         for (Comment child : childs) {
             child.setParentComment(par);
-            child.setUser(redisUserManager.get(child.getUid()));
+            child.setUser(userMapper.findById(child.getUid()));
             comments.add(child);
             comments.addAll(getChildComments(child));
         }
@@ -123,7 +122,7 @@ public class RedisCommentManager {
             LOG.info("最新评论缓存未命中");
             List<Comment> comments=mapper.lastComment();
             for (Comment comment : comments) {
-                comment.setUser(redisUserManager.get(comment.getUid()));
+                comment.setUser(userMapper.findById(comment.getUid()));
             }
             redisTemplate.opsForValue().set(RedisKey.LAST_COMMENT, comments);
         }

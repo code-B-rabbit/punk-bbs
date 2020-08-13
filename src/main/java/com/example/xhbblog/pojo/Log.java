@@ -1,10 +1,15 @@
 package com.example.xhbblog.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Log {
+@Data
+public class Log implements Serializable {
+    private static final long serialVersionUID = -3540387666405041638L;
+
     private Integer id;
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone="GMT+8")
@@ -12,27 +17,5 @@ public class Log {
 
     private Long visit;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Long getVisit() {
-        return visit;
-    }
-
-    public void setVisit(Long visit) {
-        this.visit = visit;
-    }
+    private Date updateTime;
 }

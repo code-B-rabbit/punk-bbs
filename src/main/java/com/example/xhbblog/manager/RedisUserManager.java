@@ -2,8 +2,10 @@ package com.example.xhbblog.manager;
 
 
 import com.example.xhbblog.mapper.UserMapper;
+import com.example.xhbblog.message.WebSocketMessage;
 import com.example.xhbblog.pojo.User;
 import com.example.xhbblog.utils.RedisKey;
+import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -31,18 +34,10 @@ public class RedisUserManager {
     private RedisTemplate redisTemplate;
 
 
-    public User get(Integer id) {
-        if(redisTemplate.hasKey(RedisKey.USR+id)==false){
-            logger.info("用户{}缓存未命中",id);
-            redisTemplate.opsForValue().set(RedisKey.USR+id,userMapper.selectByPrimaryKey(id));
-        }
-        return (User) redisTemplate.opsForValue().get(RedisKey.USR+id);
-    }
-
-    public User uid(String name) {
+    public User findByName(String name) {
         if(redisTemplate.hasKey(RedisKey.USR_NAME+name)==false){
             logger.info("匿名缓存未命中");
-            redisTemplate.opsForValue().set(RedisKey.USR_NAME+name,userMapper.getUid(name));
+            redisTemplate.opsForValue().set(RedisKey.USR_NAME+name,userMapper.findByName(name));
         }
         return (User) redisTemplate.opsForValue().get(RedisKey.USR_NAME+name);
     }
@@ -62,13 +57,17 @@ public class RedisUserManager {
         return messages;
     }
 
-    public void sendMessageTo(Integer uid,String message){
-        redisTemplate.opsForList().leftPush(RedisKey.NOT_READ_COMMENT_LIST+uid,message);  //放入redis list对象里去
+    public void sendMessageTo(Integer uid,String msg){
+        WebSocketMessage message = new WebSocketMessage(uid,msg);
+        redisTemplate.convertAndSend(RedisKey.WEBSOCKET_CHANNEL,message);
+        redisTemplate.opsForList().leftPush(RedisKey.NOT_READ_COMMENT_LIST+uid,msg);  //放入redis list对象里去
+        redisTemplate.expire(RedisKey.NOT_READ_COMMENT_LIST+uid,7,TimeUnit.DAYS);
     }
 
-    //消息关闭时为设置已读的消息
+    //消息关闭时为设置已读的消息,设置七天的过期时间
     public void addMessages(Integer uid,String []messages){
-            redisTemplate.opsForList().rightPushAll(RedisKey.NOT_READ_COMMENT_LIST+uid,messages);
+        redisTemplate.opsForList().rightPushAll(RedisKey.NOT_READ_COMMENT_LIST+uid,messages);
+        redisTemplate.expire(RedisKey.NOT_READ_COMMENT_LIST+uid,7,TimeUnit.DAYS);
     }
 
     public void delUsr(Integer uid){
@@ -94,4 +93,16 @@ public class RedisUserManager {
         return (String) redisTemplate.opsForValue().get(RedisKey.USR_EMAIL+email);
     }
 
+    public Serializable loadShiroSession(Integer uid){
+        return (Serializable) redisTemplate.opsForValue().get(RedisKey.SHIRO_SESSION_ONLINE+uid);
+    }
+
+    public void putShiroSession(Integer uid,Serializable sessionId){
+        redisTemplate.opsForValue().set(RedisKey.SHIRO_SESSION_ONLINE+uid,sessionId);
+        redisTemplate.expire(RedisKey.SHIRO_SESSION_ONLINE+uid,2,TimeUnit.HOURS);
+    }
+
+    public  void deleteShiroSession(Integer uid){
+        redisTemplate.delete(RedisKey.SHIRO_SESSION_ONLINE+uid);
+    }
 }

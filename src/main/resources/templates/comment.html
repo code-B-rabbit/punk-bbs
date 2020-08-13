@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head >
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Bootstrap Blog - B4 Template by Bootstrap Temple</title>
@@ -122,8 +122,7 @@
             reply=function (id,name) {
                 if(anw==null)
                 {
-                    alert("请先登录");
-                    window.location.href="/user/login";
+                    $('#loginAdvice').modal('show');
                 }else
                 {
                     $('#exampleModal').modal('show');
@@ -160,7 +159,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <h5 class="modal-title" id="exampleModalLabel">New webSocketMessage</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -168,8 +167,8 @@
       <div class="modal-body">
               <input type="hidden" class="parentId"/>
           <div class="form-group">
-            <label for="message-text" class="col-form-label">您的回复信息:</label>
-            <textarea class="form-control content" id="message-text"></textarea>
+            <label for="webSocketMessage-text" class="col-form-label">您的回复信息:</label>
+            <textarea class="form-control content" id="webSocketMessage-text"></textarea>
               匿名评论:<input onclick="ano=!ano" id="ano" type="checkbox" />
           </div>
       </div>

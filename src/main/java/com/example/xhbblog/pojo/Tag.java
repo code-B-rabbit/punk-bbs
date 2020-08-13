@@ -1,44 +1,22 @@
 package com.example.xhbblog.pojo;
 
-import java.io.Serializable;
+import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Date;
+
+@Data
 public class Tag implements Serializable {
+    private static final long serialVersionUID = -1459598898209192855L;
+
     private Integer id;
 
     private String name;
 
     private Integer numbersOfBlog;     //该标签的博客数量
 
-    public Integer getId() {
-        return id;
-    }
+    private Date createTime;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private Date updateTime;
 
-    @Override
-    public String toString() {
-        return "Tag{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", numbersOfBlog=" + numbersOfBlog +
-                '}';
-    }
-
-    public Integer getNumbersOfBlog() {
-        return numbersOfBlog;
-    }
-
-    public void setNumbersOfBlog(Integer numbersOfBlog) {
-        this.numbersOfBlog = numbersOfBlog;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
 }

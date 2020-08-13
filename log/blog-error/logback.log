@@ -2,9 +2,9 @@
 2020-07-10 10:36:12.174  ERROR  [-nio-80-exec-10]  c.example.xhbblog.Controller.MyExceptionController :  null
 2020-07-10 10:41:25.259  ERROR  [p-nio-80-exec-6]  c.example.xhbblog.Controller.MyExceptionController :  null
 2020-07-10 10:42:29.727  ERROR  [p-nio-80-exec-3]  c.example.xhbblog.Controller.MyExceptionController :  null
-2020-07-10 10:43:16.254  ERROR  [p-nio-80-exec-1]  com.example.xhbblog.aop.LogAspect                  :  >>>> Target class name=com.example.xhbblog.Controller.KaptchaController | method name=imgvrifyControllerDefaultKaptcha
+2020-07-10 10:43:16.254  ERROR  [p-nio-80-exec-1]  com.example.xhbblog.aop.LogAspect                  :  >>>> Target class name=com.example.xhbblog.controller.KaptchaController | method name=imgvrifyControllerDefaultKaptcha
 java.lang.NullPointerException
-	 at com.example.xhbblog.Controller.KaptchaController.imgvrifyControllerDefaultKaptcha(KaptchaController.java:75) <<<<
+	 at com.example.xhbblog.controller.KaptchaController.imgvrifyControllerDefaultKaptcha(KaptchaController.java:75) <<<<
 2020-07-10 10:43:16.261  ERROR  [p-nio-80-exec-1]  c.example.xhbblog.Controller.MyExceptionController :  null
 2020-07-10 10:43:16.611  ERROR  [p-nio-80-exec-6]  c.example.xhbblog.Controller.MyExceptionController :  null
 2020-07-10 10:43:57.927  ERROR  [p-nio-80-exec-6]  c.example.xhbblog.Controller.MyExceptionController :  null
@@ -49,7 +49,7 @@ APPLICATION FAILED TO START
 
 Description:
 
-Field redisUserManager in com.example.xhbblog.Service.impl.ArticleServiceImpl required a bean of type 'com.example.xhbblog.manager.RedisUserManager' that could not be found.
+Field redisUserManager in com.example.xhbblog.service.impl.ArticleServiceImpl required a bean of type 'com.example.xhbblog.manager.RedisUserManager' that could not be found.
 
 The injection point has the following annotations:
 	- @org.springframework.beans.factory.annotation.Autowired(required=true)
@@ -168,7 +168,7 @@ Caused by: java.lang.IllegalArgumentException: error at ::0 can't find reference
 2020-07-10 12:03:51.834  ERROR  [p-nio-80-exec-7]  c.example.xhbblog.Controller.MyExceptionController :  请求为http://localhost/admin/articleList发现异常null
 2020-07-10 12:04:54.561  ERROR  [p-nio-80-exec-7]  o.a.c.c.C.[.[localhost].[/].[dispatcherServlet]    :  Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is java.lang.NullPointerException] with root cause
 java.lang.NullPointerException: null
-	at com.example.xhbblog.Controller.admin.ArticleController.list(ArticleController.java:80)
+	at com.example.xhbblog.controller.admin.ArticleController.list(ArticleController.java:80)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

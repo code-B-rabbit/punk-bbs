@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:replace="admin/login::head">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="admin/advice::head">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>后台管理</title>
@@ -62,8 +62,8 @@
         <thead>
         <tr>
             <th width="5%" scope="col">#</th>
-            <th width="15%" scope="col">文章名</th>
-            <th width="5%" scope="col">封面图片</th>
+            <th width="15%" scope="col">标题</th>
+            <th width="5%" scope="col">封面</th>
             <th width="5%" scope="col">
                 <div class="btn-group-sm btn-light" role="group">
                     <a id="btnGroupDrop"  class="dropdown-toggle" th:classappend="${order==2 or order==-2} ? 'btn-warning':''"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -149,27 +149,38 @@
         <tr th:each="article:${tops}">
             <th width="5%" th:text="${article.id}">1</th>
             <td width="15%" th:text="${article.title}">数据结构与算法</td>
-            <td width="5%"><a th:href="${article.firstPicture}">
-                <img style="height:20px!important;width: 50px!important;" th:src="${article.firstPicture}"></a>
+            <td width="5%">
+                <span th:unless="${article.firstPicture!=''}">暂无</span>
+                <a th:if="${article.firstPicture!=''}" th:href="${article.firstPicture}">
+                <img style="height:30px!important;width: 30px!important;" th:src="${article.firstPicture}">
+                </a>
             </td>
             <td width="5%"><a th:href="@{listByAid(aid=${article.id})}" th:text="${article.commentSize}">100</a></td>
             <td width="5%" th:text="${article.thumbsCount}"></td>
             <td width="5%" th:text="${article.visit}"></td>
-            <td width="5%"  th:text="${article.published}?'发表':'草稿'">100</td>
+            <td width="5%">
+                <a href="#" th:if="${article.bid}" th:bid="${article.bid}" class="text-danger banned">
+                    封禁
+                </a>
+                <span th:unless="${article.bid}" th:text="${article.published}?'发表':'草稿'">
+                </span>
+            </td>
             <td width="5%" th:text="${article.top}?'已置顶':'未置顶'">100</td>
             <td width="10%" th:text="${#dates.format(article.createTime,'yyyy年MM月dd日')}"></td>
             <td width="9%"><a th:text="${article.tag.name}" th:href="|articleListByTag?tid=${article.tag.id}|">数据结构与算法</a></td>
             <td width="10%">
-                <a th:unless="${session.admin}" th:text="${article.user.name}">数据结构与算法</a>
-                <a th:if="${session.admin}" th:href="@{/admin/articleList(uid=${article.user.id})}" th:text="${article.user.name}">数据结构与算法</a>
+                <a shiro:lacksRole="admin" th:text="${article.user.name}">数据结构与算法</a>
+                <a shiro:hasRole="admin" th:href="@{/admin/articleList(uid=${article.user.id})}" th:text="${article.user.name}">数据结构与算法</a>
             </td>
             <td width="21%">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <a type="button" th:text="${article.published}?'查看':'预览'" th:href="@{getArticle(id=${article.id})}" class="btn btn-primary btn-sm">
                         查看
                     </a>
-                    <a th:if="${article.top and session.admin}" type="button" th:href="@{DownArticle(id=${article.id})}" class="btn btn-light btn-sm">取消</a>
-                    <a th:unless="${article.top}" th:if="${session.admin}" type="button" th:href="@{TopArticle(id=${article.id})}" class="btn btn-success btn-sm">置顶</a>
+                    <a shiro:hasRole="admin" th:unless="${article.bid}" th:if="${article.top}" type="button" th:href="@{DownArticle(id=${article.id})}" class="btn btn-light btn-sm">取消</a>
+                    <a shiro:hasRole="admin" th:unless="${article.top} or ${article.bid}" type="button" th:href="@{TopArticle(id=${article.id})}" class="btn btn-success btn-sm">置顶</a>
+                    <a shiro:hasRole="admin" th:unless="${article.bid}" type="button" th:onclick="bannedArticle([[${article.id}]],[[${article.title}]])" class="btn btn-danger btn-sm">封禁</a>
+                    <a shiro:hasRole="admin" th:if="${article.bid}" type="button" th:href="@{releaseArticle(id=${article.id})}" class="btn btn-success btn-sm">解封</a>
                     <a type="button" th:href="@{editArticle(id=${article.id})}" class="btn btn-warning btn-sm">修改</a>
                     <a type="button" href="#" th:onclick="delArt([[${article.id}]],[[${article.uid}]])" class="btn btn-danger btn-sm">删除</a>
                 </div>
@@ -178,19 +189,28 @@
         <tr th:each="article:${page.list}">
             <th width="5%" th:text="${article.id}">1</th>
             <td width="15%" th:text="${article.title}">数据结构与算法</td>
-            <td width="5%"><a th:href="${article.firstPicture}">
-                <img style="height:20px!important;width: 50px!important;" th:src="${article.firstPicture}"></a>
+            <td width="5%">
+                <span th:unless="${article.firstPicture!=''}">暂无</span>
+                <a th:if="${article.firstPicture!=''}" th:href="${article.firstPicture}">
+                <img style="height:30px!important;width: 30px!important;" th:src="${article.firstPicture}">
+                </a>
             </td>
             <td width="5%"><a th:href="@{listByAid(aid=${article.id})}" th:text="${article.commentSize}">100</a></td>
             <td width="5%" th:text="${article.thumbsCount}"></td>
             <td width="5%" th:text="${article.visit}"></td>
-            <td width="5%"  th:text="${article.published}?'发表':'草稿'">100</td>
+            <td width="5%">
+                <a href="#" th:if="${article.bid}" th:bid="${article.bid}" class="text-danger banned">
+                    封禁
+                </a>
+                <span th:unless="${article.bid}" th:text="${article.published}?'发表':'草稿'">
+                </span>
+            </td>
             <td width="5%" th:text="${article.top}?'已置顶':'未置顶'">100</td>
             <td width="10%" th:text="${#dates.format(article.createTime,'yyyy年MM月dd日')}"></td>
             <td width="9%"><a th:text="${article.tag.name}" th:href="|articleListByTag?tid=${article.tag.id}|">数据结构与算法</a></td>
             <td width="10%">
-                <a th:unless="${session.admin}" th:text="${article.user.name}">数据结构与算法</a>
-                <a th:if="${session.admin}" th:href="@{/admin/articleList(uid=${article.user.id})}" th:text="${article.user.name}">数据结构与算法</a>
+                <a shiro:lacksRole="admin"  th:text="${article.user.name}">数据结构与算法</a>
+                <a shiro:hasRole="admin"  th:href="@{/admin/articleList(uid=${article.user.id})}" th:text="${article.user.name}">数据结构与算法</a>
             </td>
             <td width="21%">
                 <div class="btn-group" role="group" aria-label="Basic example">
@@ -198,10 +218,12 @@
                 <a type="button" th:text="${article.published}?'查看':'预览'" th:href="@{getArticle(id=${article.id})}" class="btn btn-primary btn-sm">
                     查看
                 </a>
-                    <a th:if="${article.top and session.admin}" type="button" th:href="@{DownArticle(id=${article.id})}" class="btn btn-light btn-sm">取消</a>
-                    <a th:unless="${article.top}" th:if="${session.admin}" type="button" th:href="@{TopArticle(id=${article.id})}" class="btn btn-success btn-sm">置顶</a>
-                <a type="button" th:href="@{editArticle(id=${article.id})}" class="btn btn-warning btn-sm">修改</a>
-                <a type="button" href="#" th:onclick="delArt([[${article.id}]],[[${article.uid}]])" class="btn btn-danger btn-sm">删除</a>
+                    <a shiro:hasRole="admin" th:unless="${article.bid}" th:if="${article.top}" type="button" th:href="@{DownArticle(id=${article.id})}" class="btn btn-light btn-sm">取消</a>
+                    <a shiro:hasRole="admin" th:unless="${article.top} or ${article.bid}" type="button" th:href="@{TopArticle(id=${article.id})}" class="btn btn-success btn-sm">置顶</a>
+                    <a shiro:hasRole="admin" th:unless="${article.bid}" type="button" th:onclick="bannedArticle([[${article.id}]],[[${article.title}]])" class="btn btn-danger btn-sm">封禁</a>
+                    <a shiro:hasRole="admin" th:if="${article.bid}" type="button" th:onclick="releaseArticle([[${article.id}]])" class="btn btn-success btn-sm">解封</a>
+                    <a type="button" th:href="@{editArticle(id=${article.id})}" class="btn btn-warning btn-sm">修改</a>
+                    <a type="button" href="#" th:onclick="delArt([[${article.id}]],[[${article.uid}]])" class="btn btn-danger btn-sm">删除</a>
                 </div>
             </td>
         </tr>
@@ -228,9 +250,103 @@
     </a>
 </div>
 
+<div class="modal fade" id="bannedReason" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">封闭理由</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body bannedReason">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+
+<div shiro:hasRole="admin" class="modal fade" id="bannedArticle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="title">封禁文章:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/article/bannedArticle" method="post" id="bannedSubmit" target="#tar">
+            <div class="modal-body bannedReason">
+                    <input type="hidden" name="aid" id="aid">
+                    <div class="input-group mb-3">
+                        <select id="bid" name="bid" class="custom-select">
+                        <option th:each="bannedInfo:${bannedInfos}" th:value="${bannedInfo.id}" th:text="${bannedInfo.reason}">
+                            Choose...
+                        </option>
+                        </select>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <a type="button" class="btn btn-secondary" data-dismiss="modal">取消</a>
+                <button type="submit" class="btn btn-primary">封禁</button>
+            </div>
+            </form>
+            <iframe style="display: none" id="tar">
+
+            </iframe>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        $('.banned').click(
+            function () {
+                $.get(
+                    "reasonForBanned/"+$(this).attr("bid"),
+                    function (res) {
+                        $('.bannedReason').text(res.reason);
+                        $('#bannedReason').modal('show');
+                    }
+                )
+            }
+        );
+    })
+</script>
 
 <script th:inline="javascript">
+    $('#bannedSubmit').submit(
+        function () {
+            data={"aid":$('#aid').val(),"bid":$("#bid").val()};
+            $.post(
+                "/admin/bannedArticle",data,
+                function () {
+                    window.location.reload();
+                }
+            );
+            return false;
+        }
+    );
+    releaseArticle=function(aid){
+        if(confirmRea()==true){
+            $.get(
+                "/admin/releaseArticle/"+aid,
+                function () {
+                    window.location.reload();
+                }
+            );
+        }
+    };
+    bannedArticle=function(aid,title){
+                $('#title').text("封禁文章："+title);
+                $('#aid').val(aid);
+                $('#bannedArticle').modal('show');
+    };
     confirmAct=function () {
         if(confirm('确定要删除该文章吗?'))
         {
@@ -238,6 +354,15 @@
         }
         return false;
     };
+
+    confirmRea=function () {
+        if(confirm('确定要解禁该文章吗?'))
+        {
+            return true;
+        }
+        return false;
+    };
+
     delArt=function (aid,uid) {
         if(confirmAct()==true){
             $.ajax({

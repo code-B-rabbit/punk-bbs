@@ -90,7 +90,7 @@
         {            
             if(empty($_FILES[$name]['name'])) //上传文件为空时
             {
-               $this->message($this->errors['empty']);
+               $this->webSocketMessage($this->errors['empty']);
                 
                 return false;
             }
@@ -99,14 +99,14 @@
             
             if(!file_exists($this->savePath)) //目录不存在
             {
-                $this->message($this->errors['not_exist']);
+                $this->webSocketMessage($this->errors['not_exist']);
                 
                 return false;
             }
 
             if(!is_writable($this->savePath)) //目录不可写
             {
-                $this->message($this->errors['unwritable']);
+                $this->webSocketMessage($this->errors['unwritable']);
                 
                 return false;
             }
@@ -132,16 +132,16 @@
             if ($this->formats != "" && !in_array($this->fileExt, $this->formats))
             {
                 $formats = implode(',', $this->formats);
-                $message = "您上传的文件" . $files["name"] . "是" . $this->fileExt . "格式的，系统不允许上传，您只能上传" . $formats . "格式的文件。";
-                $this->message($message);
+                $webSocketMessage = "您上传的文件" . $files["name"] . "是" . $this->fileExt . "格式的，系统不允许上传，您只能上传" . $formats . "格式的文件。";
+                $this->webSocketMessage($webSocketMessage);
                 
                 return false;
             }
 
             if ($files["size"] / 1024 > $this->maxSize)
             {
-                $message = "您上传的 " . $files["name"] . "，文件大小超出了系统限定值" . $this->maxSize . " KB，不能上传。";
-                $this->message($message);
+                $webSocketMessage = "您上传的 " . $files["name"] . "，文件大小超出了系统限定值" . $this->maxSize . " KB，不能上传。";
+                $this->webSocketMessage($webSocketMessage);
                 
                 return false;
             }
@@ -150,7 +150,7 @@
             {
                 if(file_exists($this->savePath.$this->saveName)) //有相同的文件存在
                 {
-                    $this->message($this->saveName . $this->errors['same_file']);
+                    $this->webSocketMessage($this->saveName . $this->errors['same_file']);
                     
                     return false;
                 }
@@ -161,44 +161,44 @@
                 switch($files["errors"])
                 {
                     case '0':
-                        $message = "文件上传成功";
+                        $webSocketMessage = "文件上传成功";
                         break;
                     
                     case '1':
-                        $message = "上传的文件超过了 php.ini 中 upload_max_filesize 选项限制的值";
+                        $webSocketMessage = "上传的文件超过了 php.ini 中 upload_max_filesize 选项限制的值";
                         break;
                     
                     case '2':
-                        $message = "上传文件的大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值";
+                        $webSocketMessage = "上传文件的大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值";
                         break;
                     
                     case '3':
-                        $message = "文件只有部分被上传";
+                        $webSocketMessage = "文件只有部分被上传";
                         break;
                     
                     case '4':
-                        $message = "没有文件被上传";
+                        $webSocketMessage = "没有文件被上传";
                         break;
                     
                     case '6':
-                        $message = "找不到临时目录";
+                        $webSocketMessage = "找不到临时目录";
                         break;
                     
                     case '7':
-                        $message = "写文件到硬盘时出错";
+                        $webSocketMessage = "写文件到硬盘时出错";
                         break;
                     
                     case '8':
-                        $message = "某个扩展停止了文件的上传";
+                        $webSocketMessage = "某个扩展停止了文件的上传";
                         break;
                     
                     case '999':
                     default:
-                        $message = "未知错误，请检查文件是否损坏、是否超大等原因。";
+                        $webSocketMessage = "未知错误，请检查文件是否损坏、是否超大等原因。";
                         break;
                 }
 
-                $this->message($message);
+                $this->webSocketMessage($webSocketMessage);
                 
                 return false;
             }
@@ -304,7 +304,7 @@
          * @return  void
          */
 
-        public function message($message, $success = 0)
+        public function webSocketMessage($webSocketMessage, $success = 0)
         {
             $array = array(
                 'success' => $success
@@ -315,7 +315,7 @@
             // 适用于跨域上传时，跳转到中介页面等
             if ($this->redirect) 
             {
-                $this->redirectURL .= "&success=" . $success . "&message=" . $message;
+                $this->redirectURL .= "&success=" . $success . "&webSocketMessage=" . $webSocketMessage;
                 
                 if ($success == 1)
                 {
@@ -332,7 +332,7 @@
                 }
                 else
                 {
-                    $array['message'] = $message; 
+                    $array['webSocketMessage'] = $webSocketMessage;
                 }
                 
                 echo json_encode($array);

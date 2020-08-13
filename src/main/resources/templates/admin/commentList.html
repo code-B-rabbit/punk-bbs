@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:replace="admin/login::head">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="admin/advice::head">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>后台管理</title>
@@ -88,7 +88,7 @@
         <tbody>
         <tr th:each="comment:${page.list}">
             <td>
-                <input th:aid="${comment.aid}" name="cids" type="checkbox" th:value="${comment.id}" />
+                <input th:uid="${comment.uid}" th:aid="${comment.aid}" name="cids" type="checkbox" th:value="${comment.id}" />
             </td>
             <td scope="row" th:text="${comment.id}">1</td>
             <td>
@@ -98,29 +98,29 @@
             </td>
             <td th:text="${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
             <td>
-                <a th:if="${comment.user.id==session.uid or session.admin}" th:text="${comment.user.name}" th:href="@{listByUid(uid=${comment.uid})}">徐浩博</a>
-                <span th:unless="${comment.user.id==session.uid or session.admin}">
-                    <a th:unless="${comment.anonymous}" th:text="${comment.user.name}" th:href="@{listByUid(uid=${comment.uid})}">
+                <a shiro:hasRole="admin" th:text="${comment.user.name}" th:href="@{listByUid(uid=${comment.uid})}">徐浩博</a>
+                <span shiro:lacksRole="admin">
+                    <a th:if="${!comment.anonymous} or ${comment.user.id==session.uid}" th:text="${comment.user.name}" th:href="@{listByUid(uid=${comment.uid})}">
                         徐浩博
                     </a>
-                    <a th:if="${comment.anonymous}" th:text="匿名用户" href="#">
+                    <a th:unless="${!comment.anonymous} or ${comment.user.id==session.uid}" th:text="匿名用户" href="#">
                         徐浩博
                     </a>
                 </span>
             </td>
             <td>
                 <span style="text-align: center">
-                    <a style="margin: 0 5px"  th:each="childUser:${comment.replyUsers}" th:href="${childUser.id}?@{listByUid(uid=${childUser.id})}:'#'" th:text="${childUser.name}">
+                    <a style="margin: 0 5px"  th:each="childUser:${comment.replyUsers}" th:href="${childUser.id}?@{listByUid(uid=${childUser.id})}:'#'" th:text="${childUser.name}" th:classappend="${childUser.name=='匿名用户'}?'text-danger'">
                     </a>
                 </span>
             </td>
             <td>
-                <a th:if="${comment.user.id==session.uid or session.admin}" th:text="${comment.user.email}" >徐浩博</a>
-                <span th:unless="${comment.user.id==session.uid or session.admin}">
-                    <a th:unless="${comment.anonymous}" th:text="${comment.user.email}" >
+                <a shiro:hasRole="admin" th:text="${comment.user.email}" >徐浩博</a>
+                <span shiro:lacksRole="admin">
+                    <a th:if="${!comment.anonymous} or ${comment.user.id==session.uid}" th:text="${comment.user.email}" >
                         511928849@qq.com
                     </a>
-                    <a th:if="${comment.anonymous}" th:text="邮箱已被隐藏" href="#">
+                    <a th:unless="${!comment.anonymous} or ${comment.user.id==session.uid}" th:text="邮箱已被隐藏" href="#">
                         徐浩博
                     </a>
                 </span>
@@ -131,14 +131,13 @@
                 </a>
             </td>
             <td>
-               <span th:if="${comment.anonymous}">是</span>
+               <span class="text-danger" th:if="${comment.anonymous}">是</span>
                 <span th:unless="${comment.anonymous}">否</span>
             </td>
             <td>
-                <a th:onclick="showInput([[${comment.id}]],[[${comment.content}]],[[${comment.article.id}]])" class="btn btn-success btn-sm" type="button">回复</a>
-                <a type="button" th:if="${session.admin}"  th:onclick="del([[${comment.id}]],[[${comment.aid}]])" class="btn btn-danger btn-sm">删除</a>
-                <a type="button" th:if="${mine}"  href="#" th:onclick="del([[${comment.id}]],[[${comment.aid}]])" class="btn btn-danger btn-sm">删除</a>
-                <a type="button" th:if="${comment.uid==session.uid} and ${!session.admin} and ${!mine}"  href="#" th:onclick="del([[${comment.id}]],[[${comment.aid}]])" class="btn btn-danger btn-sm">删除</a>
+                <a th:onclick="showInput([[${comment.id}]],[[${comment.content}]],[[${comment.article.id}]],[[${comment.uid}]])" class="btn btn-success btn-sm" type="button">回复</a>
+                <a type="button" shiro:hasRole="admin"  th:onclick="del([[${comment.id}]],[[${comment.aid}]],[[${comment.uid}]])" class="btn btn-danger btn-sm">删除</a>
+                <a type="button" shiro:lacksRole="admin"  th:if="${comment.uid==session.uid} or ${mine}"  href="#" th:onclick="del([[${comment.id}]],[[${comment.aid}]],[[${comment.uid}]])" class="btn btn-danger btn-sm">删除</a>
                 <div class="modal fade" id="inputModal" style="z-index: 999999999999999999999999!important;" tabindex="999999999999999999999" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -234,8 +233,8 @@
         </tbody>
     </table>
     <button class="btn btn-primary"  id="choseAll">全选</button>
-    <button class="btn btn-warning" th:if="${session.admin}" onclick="delAll()">批量删除</button>
-    <button class="btn btn-warning" th:if="${mine}" onclick="delAll()">批量删除</button>
+    <button class="btn btn-warning" shiro:hasRole="admin" onclick="delAll()">批量删除</button>
+    <button class="btn btn-warning" shiro:lacksRole="admin" th:if="${mine}" onclick="delAll()">批量删除</button>
     <script th:inline="javascript">
         var chose=false;
         $('#choseAll').on("click",function(){
@@ -259,7 +258,7 @@
             var cids=new Array();
             $("input[name='cids']:checked").each(
                 function () {
-                    cids.push({'id':$(this).val(),'aid':$(this).attr("aid")});
+                    cids.push({'id':$(this).val(),'aid':$(this).attr("aid"),'uid':$(this).attr("uid")});
                 }
             );
             $.ajax({
@@ -281,7 +280,7 @@
                 }
             })
         };
-        del=function (cid,aid) {
+        del=function (cid,aid,uid) {
             if(confirmAct(0)==false){
                 return;
             }
@@ -290,7 +289,7 @@
                 type : "POST",
                 url : "deleteComment",
 
-                data:{'id':cid,'aid':aid},
+                data:{'id':cid,'aid':aid,'uid':uid},
                 //请求成功
                 success : function() {
                     window.location.reload();

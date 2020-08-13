@@ -21,18 +21,18 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     Logger logger =LoggerFactory.getLogger(LoginInterceptor.class);
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        HttpSession session=request.getSession();
-        User user= (User) session.getAttribute("user");
-        if(user!=null&&user.getRole().equals("admin"))           //只有权限为admin才能放行
-        {
-            return true;
-        } else{
-            logger.info("拦截请求{}",request.getRequestURI());
-            response.sendRedirect("/admin/adminLogin?message="+ URLEncoder.encode("您需要登录管理员才可进入","utf8"));
-            return false;
-        }
-    }
+//    @Override
+//    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+//        HttpSession session=request.getSession();
+//        User user= (User) session.getAttribute("user");
+//        if(user!=null&&user.getRole().equals("admin"))           //只有权限为admin才能放行
+//        {
+//            return true;
+//        } else{
+//            logger.info("拦截请求{}",request.getRequestURI());
+//            response.sendRedirect("/admin/adminLogin?message="+ URLEncoder.encode("您需要登录管理员才可进入","utf8"));
+//            return false;
+//        }
+//    }
 
 }

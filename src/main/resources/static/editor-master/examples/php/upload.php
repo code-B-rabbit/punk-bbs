@@ -41,11 +41,11 @@
         
         if ($imageUploader->upload($name))
         {
-            $imageUploader->message('上传成功！', 1);
+            $imageUploader->webSocketMessage('上传成功！', 1);
         }
         else
         {
-            $imageUploader->message('上传失败！', 0);
+            $imageUploader->webSocketMessage('上传失败！', 0);
         }
     }
 ?>

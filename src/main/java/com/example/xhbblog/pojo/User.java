@@ -2,10 +2,11 @@ package com.example.xhbblog.pojo;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-
-
+import java.util.Date;
 
 public class User implements Serializable {
+
+    private static final long serialVersionUID = 7345942443566284147L;
 
     @NotNull
     private String name;
@@ -17,8 +18,6 @@ public class User implements Serializable {
 
     private Integer commentSize=0;       //默认为零
 
-    private Boolean checked;               //是否记住密码(传参用)
-
     private Integer articleSize=0;
 
     private String checkCode;    //用户用于邮件服务的验证码
@@ -27,7 +26,37 @@ public class User implements Serializable {
 
     private String email;
 
+    private String salt;
+
     private String headSculpture;
+
+    private Date createTime;
+
+    private Date updateTime;
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
 
     public String getHeadSculpture() {
         return headSculpture;
@@ -51,14 +80,6 @@ public class User implements Serializable {
 
     public void setArticleSize(Integer articleSize) {
         this.articleSize = articleSize;
-    }
-
-    public Boolean getChecked() {
-        return checked;
-    }
-
-    public void setChecked(Boolean checked) {
-        this.checked = checked;
     }
 
     public Integer getCommentSize() {
@@ -116,18 +137,18 @@ public class User implements Serializable {
                 ", password='" + password + '\'' +
                 ", id=" + id +
                 ", commentSize=" + commentSize +
-                ", checked=" + checked +
                 ", articleSize=" + articleSize +
                 ", checkCode='" + checkCode + '\'' +
                 ", role='" + role + '\'' +
                 ", email='" + email + '\'' +
+                ", salt='" + salt + '\'' +
                 ", headSculpture='" + headSculpture + '\'' +
                 '}';
     }
 
-
     /**
      * 用于后台查询时使用set对用户对象去重的代码
+     * 这里使用了hashcode与id的设计规范
      * @param o
      * @return
      */
