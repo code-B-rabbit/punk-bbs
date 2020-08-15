@@ -50,7 +50,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form id="addTag" method="get" th:action="@{saveTag}">
+                        <form id="addTag" method="post" th:action="@{saveTag}">
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <br>
@@ -98,7 +98,7 @@
             </td>
             <td><div class="btn-group" role="group" aria-label="Basic example">
                 <a type="button" th:href="@{editTag(id=${tag.id})}" class="btn btn-warning btn-sm">修改</a>
-                <a type="button" th:href="@{deleteTag(id=${tag.id})}" class="btn btn-danger btn-sm">删除</a>
+                <a type="button" th:onclick="deleteTag([[${tag.id}]])" class="btn btn-danger btn-sm">删除</a>
             </div>
             </td>
         </tr>
@@ -106,6 +106,16 @@
     </table>
 </div>
 </body>
+<script th:inline="javascript">
+    deleteTag=function(id){
+        $.post(
+                "/admin/deleteTag/"+id,
+                    function () {
+                        window.location.reload();
+                    }
+        )
+    };
+</script>
 <footer class="main-footer" th:replace="admin/foot::foot">
     <div class="container">
         <div class="row">

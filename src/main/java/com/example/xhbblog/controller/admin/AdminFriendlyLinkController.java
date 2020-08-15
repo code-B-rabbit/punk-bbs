@@ -9,10 +9,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,7 +33,7 @@ public class AdminFriendlyLinkController {          //这里提供改和同意�
     }
 
 
-    @RequestMapping("/flList")
+    @GetMapping("/flList")
     public String list(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count, Model model,@RequestParam(name = "agree",defaultValue = "false")boolean agree)
     {
         PageHelper.offsetPage(start,count);
@@ -48,10 +45,12 @@ public class AdminFriendlyLinkController {          //这里提供改和同意�
     }
 
 
-    @RequestMapping("/addFl")
-    public String add(FriendlyLink fl)
+    @PostMapping("/addFl")
+    public String add(FriendlyLink friendlyLink)
     {
-        friendLyLinkService.add(fl);
+        friendLyLinkService.add(friendlyLink);
+        emailService.sendEmail("友链申请成功通知",friendlyLink.getEmail(),"您的网站" +friendlyLink.getLink()+
+                "在xuhaobo.site的友链申请已成功"+"如非本人操作请忽略");
         return "redirect:/admin/flList?agree="+true;
     }
 
@@ -62,15 +61,14 @@ public class AdminFriendlyLinkController {          //这里提供改和同意�
         return "redirect:/admin/flList?agree="+agree;
     }
 
-    @RequestMapping("/checkAgree")     //审核查询友链并发送邮件
-    public String agree(@RequestParam(name = "start",defaultValue = "0")Integer start,@RequestParam(name = "id",defaultValue = "0")Integer id)  //存储start
+    @PostMapping("/checkAgree")     //审核查询友链并发送邮件
+    public @ResponseBody void agree(@RequestParam(name = "id",defaultValue = "0")Integer id)  //存储start
     {
         FriendlyLink friendlyLink = friendLyLinkService.get(id);
         friendlyLink.setAllowed(true);
         friendLyLinkService.update(friendlyLink);
         emailService.sendEmail("友链申请成功通知",friendlyLink.getEmail(),"您的网站" +friendlyLink.getLink()+
                 "在xuhaobo.site的友链申请已成功"+"如非本人操作请忽略");
-        return "redirect:/admin/flList?start="+start+"&agree=false";    //一定在未同意的界面进行同意的操作
     }
 
 

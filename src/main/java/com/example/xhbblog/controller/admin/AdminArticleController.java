@@ -69,7 +69,7 @@ public class AdminArticleController {
      * @param order
      * @return
      */
-    @RequestMapping("/articleList")
+    @GetMapping("/articleList")
     private String list(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count,Boolean published
     ,@RequestParam(name = "order",defaultValue = "0") Integer order,Integer uid, Model model)
     {
@@ -112,7 +112,7 @@ public class AdminArticleController {
      * @param order
      * @return
      */
-    @RequestMapping("/articleListByTag")
+    @GetMapping("/articleListByTag")
     private String list(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count, Model model,Integer tid,Boolean published
     ,@RequestParam(name = "order",defaultValue = "0") Integer order,Integer uid)
     {
@@ -146,7 +146,7 @@ public class AdminArticleController {
      * @param order
      * @return
      */
-    @RequestMapping("/articleLike")
+    @GetMapping("/articleLike")
     public String research(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "5")Integer count, Model model,String key
     ,Boolean published,@RequestParam(name = "order",defaultValue = "0") Integer order,Integer uid)
     {

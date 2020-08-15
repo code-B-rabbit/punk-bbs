@@ -4,6 +4,7 @@ import com.example.xhbblog.service.FriendLyLinkService;
 import com.example.xhbblog.mapper.FriendlyLinkMapper;
 import com.example.xhbblog.pojo.FriendlyLink;
 import com.example.xhbblog.pojo.FriendlyLinkExample;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,29 +21,27 @@ import java.util.List;
 
 @Service
 @Transactional(isolation= Isolation.READ_COMMITTED)
-@EnableScheduling
+@Slf4j
 public class FrientLyLinkServiceImpl implements FriendLyLinkService {
 
     @Autowired
     private FriendlyLinkMapper mapper;
 
-    private static final Logger LOG = LoggerFactory.getLogger(CommentServiceImpl.class);
-
     @Override
-    @CacheEvict(allEntries = true)
     public void add(FriendlyLink friendlyLink) {
+        log.info("新增友链{}",friendlyLink);
         mapper.insert(friendlyLink);
     }
 
     @Override
-    @CacheEvict(allEntries = true)
     public void delete(Integer id) {
+        log.info("删除友链{}",id);
         mapper.deleteByPrimaryKey(id);
     }
 
     @Override
-    @CacheEvict(allEntries = true)
     public void update(FriendlyLink friendlyLink) {
+        log.info("修改友链{}",friendlyLink);
         mapper.updateByPrimaryKey(friendlyLink);
     }
 
@@ -64,7 +63,6 @@ public class FrientLyLinkServiceImpl implements FriendLyLinkService {
      * @return
      */
     @Override
-    @Cacheable("fls")
     public List<FriendlyLink> ListOf(Boolean b) {
         FriendlyLinkExample example=new FriendlyLinkExample();
         example.setOrderByClause("id desc");
@@ -77,12 +75,5 @@ public class FrientLyLinkServiceImpl implements FriendLyLinkService {
     @Override
     public Integer count() {
         return mapper.count();
-    }
-
-    @Scheduled(cron = "0 0 1 * * ?")  //每天的凌晨一点
-    @CacheEvict(allEntries = true)
-    public void evit()
-    {
-        LOG.info(new Date()+"定时清除所有友链缓存");
     }
 }

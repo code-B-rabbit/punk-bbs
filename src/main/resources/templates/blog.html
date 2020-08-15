@@ -114,7 +114,7 @@
                           <span th:text="${a.title}"></span>
                         </a>
                       </h5>
-                      <p class="card-text" th:utext="${a.info}">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                      <p class="card-text" th:text="${a.info}">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                       <p class="card-text">
                         <style>
                           .text-muted{
@@ -248,7 +248,7 @@
                       <h5 class="card-title">
                         <a style="text-decoration: none!important;color: black" th:text="${a.title}"  th:href="@{article(id=${a.id})}"></a>
                       </h5>
-                      <p class="card-text" th:utext="${a.info}">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                      <p class="card-text" th:text="${a.info}">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                       <p class="card-text">
                         <style>
                           .text-muted{

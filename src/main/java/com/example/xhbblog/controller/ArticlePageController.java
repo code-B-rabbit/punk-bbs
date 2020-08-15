@@ -82,7 +82,7 @@ public class ArticlePageController {
      * @param aid
      * @return
      */
-    @RequestMapping("/comments")
+    @GetMapping("/comments")
     public String comments(@RequestParam(name = "start", defaultValue = "0") Integer start, @RequestParam(name = "count", defaultValue = "5") Integer count, Model model, Integer aid,Boolean error)
     {
         if(error!=null) //出现登录超时错误

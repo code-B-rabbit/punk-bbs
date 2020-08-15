@@ -29,7 +29,7 @@ public class AdminCommentController {   //后台评论只有查找和删除逻�
     }
 
 
-    @RequestMapping("/commentListOfAll")
+    @GetMapping("/commentListOfAll")
     public String list(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count, Model model)
     {
         PageHelper.offsetPage(start,count);
@@ -39,7 +39,7 @@ public class AdminCommentController {   //后台评论只有查找和删除逻�
         return "admin/commentList";
     }
 
-    @RequestMapping("/listAnoComments")
+    @GetMapping("/listAnoComments")
     public String listByUid(@RequestParam(name = "start",defaultValue = "0")Integer start, @RequestParam(name = "count",defaultValue = "10")Integer count,Model model)
     {
         PageHelper.offsetPage(start,count);

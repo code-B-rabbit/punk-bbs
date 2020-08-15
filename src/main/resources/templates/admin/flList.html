@@ -73,17 +73,30 @@
             <td><a th:href="${fl.link}" th:text="${fl.link}"></a></td>
             <th th:text="${fl.allowed}?'同意':'未同意'">同意</th>
             <td><div class="btn-group" role="group" aria-label="Basic example">
-                <a type="button" th:unless="${fl.allowed}" th:href="@{checkAgree(id=${fl.id},start=${page.pageSize*(page.pageNum-1)})}" class="btn btn-warning btn-sm">同意</a>
+                <a type="button" th:unless="${fl.allowed}" href="#" th:onclick="checkAgree([[${fl.id}]])" class="btn btn-warning btn-sm">
+                    同意
+                </a>
                 <a type="button" th:href="@{deleteFl(id=${fl.id},agree=${agree})}" class="btn btn-danger btn-sm">删除</a>
             </div>
             </td>
         </tr>
         </tbody>
     </table>
+    <script th:inline="javascript">
+        checkAgree=function (id) {
+            $.post(
+                "checkAgree",
+                {"id":id},
+                function () {
+                    window.location.reload();
+                }
+            )
+        }
+    </script>
     <nav th:replace="admin/page::page"></nav>
 
 
-    <form id="addFl" method="get" th:action="@{addFl}">
+    <form id="addFl" method="post" th:action="@{addFl}">
 
         <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">

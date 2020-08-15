@@ -31,7 +31,7 @@
 </head>
 <nav th:replace="admin/nav::admin_nav(1)"></nav>
 <body>
-<form class="addTag" method="get" th:action="@{/admin/saveTag}">
+<form class="addTag" method="post" th:action="@{/admin/saveTag}">
     <div class="panel panel-default">
         <div class="panel-heading">编辑标签</div>
         <div class="panel-body">
