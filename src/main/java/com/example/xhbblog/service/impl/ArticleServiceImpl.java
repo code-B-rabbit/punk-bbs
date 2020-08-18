@@ -363,8 +363,8 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     //排行榜相关业务
+    @Override
     @PostConstruct        //启动后初始化会执行一次
-    @Scheduled(cron = "0 0 1 * * ?")  //每天的凌晨一点执行一次
     public void initCache(){
         LOG.info("对文章访问量进行定时写入");
         redisArticleManager.writeOut();

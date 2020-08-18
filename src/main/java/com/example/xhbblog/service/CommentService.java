@@ -28,4 +28,5 @@ public interface CommentService {
     List<Comment> listAnonymousComment();
 
     public Integer countOfComment(Integer aid);              //显示的总数
+    public void clearCache();
 }

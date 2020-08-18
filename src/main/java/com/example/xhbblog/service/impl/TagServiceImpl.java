@@ -74,10 +74,4 @@ public class TagServiceImpl implements TagService {
         return tagMapper.count();
     }
 
-    @Scheduled(cron = "0 0 1 * * ?")  //每天的凌晨一点
-    public void evit()
-    {
-        redisTagManager.evit();
-    }
-
 }

@@ -139,7 +139,6 @@ public class RedisCommentManager {
 
     @CacheEvict(allEntries = true)
     public void evit(){
-        LOG.info(new Date()+"定时清除所有评论缓存");
     }
 
 }

@@ -38,7 +38,6 @@ public class LogServiceImpl implements LogService {
     private LogMapper logMapper;
 
 
-    @Scheduled(cron = "0 59 23 * * ?")
     @CacheEvict
     @Override
     public void writeDate() {   //将每日的访问量持久化到数据库中

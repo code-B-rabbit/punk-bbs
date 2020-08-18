@@ -36,5 +36,6 @@ public interface ArticleService {
     public Integer count();
 
     void deleteArticle(Integer id,Integer uid);
+    public void initCache();
 
 }

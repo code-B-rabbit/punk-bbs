@@ -13,6 +13,7 @@ import com.example.xhbblog.pojo.User;
 import com.example.xhbblog.message.MessageUtil;
 import com.example.xhbblog.utils.RedisKey;
 import com.example.xhbblog.websocket.WebSocketServer;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -36,9 +37,8 @@ import java.util.Set;
 @Service
 @Transactional(isolation= Isolation.READ_COMMITTED)
 @EnableScheduling           //开启定时器
+@Slf4j
 public class CommentServiceImpl implements CommentService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(CommentServiceImpl.class);
 
     @Autowired
     private CommentMapper mapper;
@@ -88,7 +88,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void add(Comment comment) {
-        LOG.info("{}添加评论{}",comment.getUid(),comment.getContent());
+        log.info("{}添加评论{}",comment.getUid(),comment.getContent());
         redisCommentManager.add(comment);
     }
 
@@ -112,13 +112,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> findByAid(Integer aid,Integer start,Integer count) {
-        LOG.info("查看文章id为{}的所有评论,起始点为{},查询{}条",aid,start,count);
+        log.info("查看文章id为{}的所有评论,起始点为{},查询{}条",aid,start,count);
         return redisCommentManager.findByAid(aid,start,count);
     }
 
     @Override
     public List<Comment> listByAid(Integer aid) {
-        LOG.info("查看文章id为{}的所有评论",aid);
+        log.info("查看文章id为{}的所有评论",aid);
         List<Comment> comments=mapper.listByAid(aid);       //给后台查看评论使用的接口
         Article article = articleMapper.get(aid);
         setUserAndChild(comments);
@@ -127,25 +127,25 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Integer countOfArticle(Integer aid) {
-        LOG.info("查看文章id为{}的所有首发评论(非回复)",aid);
+        log.info("查看文章id为{}的所有首发评论(非回复)",aid);
         return redisCommentManager.countOfArticle(aid);
     }
 
     @Override
     public Integer countOfComment(Integer aid) {
-        LOG.info("查看文章id为{}的所有评论(含回复)",aid);
+        log.info("查看文章id为{}的所有评论(含回复)",aid);
         return redisCommentManager.countOfComment(aid);
     }
 
     @Override
     public List<Comment> lastComment() {
-        LOG.info("查询最新评论");
+        log.info("查询最新评论");
         return redisCommentManager.lastComment();
     }
 
     @Override
     public List<Comment> listByUid(Integer uid) {
-        LOG.info("查看用户{}的所有评论",uid);
+        log.info("查看用户{}的所有评论",uid);
         List<Comment> comments=mapper.listByUid(uid);       //给后台查看评论使用的接口
         setUserAndChild(comments);
         return setArticle(comments);
@@ -153,7 +153,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> findChilds(Integer cid) {
-        LOG.info("查看评论{}的所有评论",cid);
+        log.info("查看评论{}的所有评论",cid);
         List<Comment> comments=mapper.listByCid(cid);
         setUserAndChild(comments);
         return setArticle(comments);
@@ -176,7 +176,7 @@ public class CommentServiceImpl implements CommentService {
             redisUserManager.sendMessageTo(article.getUid(),messageToAdd);
         }
         if(comment.getParentID()!=null){
-            LOG.info("{}",comment.getParentID());
+            log.info("{}",comment.getParentID());
             Comment parComment=mapper.selectByPrimaryKey(comment.getParentID());
             User parentUser=userMapper.selectByPrimaryKey(parComment.getUid());
             if(parentUser.getId()!=comment.getUid()){   //自己回复自己除外
@@ -198,13 +198,13 @@ public class CommentServiceImpl implements CommentService {
         boolean hasAdmin=user.getRole().equals("admin");
         if(user!=null&&(hasAdmin||hasComment ||articleMapper.getTitle(comment.getAid()).getUid().equals(user.getId()))){
             redisCommentManager.delete(comment);
-            LOG.info("评论{}被删除",comment.getId());
+            log.info("评论{}被删除",comment.getId());
         }
     }
 
     @Override
     public void deleteCids(List<Comment> comments) {
-        LOG.info("删除评论{}的所有评论",comments);
+        log.info("删除评论{}的所有评论",comments);
         for (Comment comment : comments) {
             this.delete(comment);
         }
@@ -212,13 +212,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Integer count() {
-        LOG.info("查询评论数量");
         return mapper.count();
     }
 
     @Override
     public List<Comment> listAnonymousByUid(Integer uid) {
-        LOG.info("查看用户{}的所有匿名评论",uid);
         List<Comment> comments=mapper.listAnonymousByUid(uid);       //给后台查看评论使用的接口
         setUserAndChild(comments);
         return setArticle(comments);
@@ -226,15 +224,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> listAnonymousComment() {
-        LOG.info("查询所有匿名评论");
         List<Comment> comments=mapper.listAnonymousComment();       //给后台查看评论使用的接口
         setUserAndChild(comments);
         return setArticle(comments);
     }
 
 
-    @Scheduled(cron = "0 0 10,14,16 * * ?")  //每天上午10点，下午2点，4点
-    public void evit()
+    public void clearCache()
     {
         redisCommentManager.evit();  //清除所有相关缓存
     }

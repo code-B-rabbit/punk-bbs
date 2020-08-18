@@ -51,8 +51,8 @@ public class ThumbsServiceImpl implements ThumbsService {
     /**
      * 每天两点和凌晨一点将点赞缓存持久化进数据库
      */
-    @PostConstruct
-    @Scheduled(cron = "0 0 1,14 * * ?")
+ //   @PostConstruct
+   // @Scheduled(cron = "0 0 1,14 * * ?")
     @Override
     public void redisDataToMySQL() {
         redisThumbManager.redisThumbDataToMySQL();

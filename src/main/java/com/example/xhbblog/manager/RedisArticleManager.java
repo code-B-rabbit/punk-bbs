@@ -7,6 +7,7 @@ import com.example.xhbblog.pojo.Article;
 import com.example.xhbblog.pojo.ArticleWithBLOBs;
 import com.example.xhbblog.pojo.Comment;
 import com.example.xhbblog.utils.RedisKey;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ import java.util.List;
 import java.util.Set;
 
 @Component
+@Slf4j
 public class RedisArticleManager {
-    private Logger LOG= LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -71,7 +72,7 @@ public class RedisArticleManager {
         List<Article> lastestArticle=null;
         if(redisTemplate.hasKey(RedisKey.LAST_ARTICLE)==false)            //缓存未命中
         {
-            LOG.info("最近更新文章缓存未命中");
+            log.info("最近更新文章缓存未命中");
             lastestArticle = articleMapper.findLastestArticle();
             redisTemplate.opsForValue().set(RedisKey.LAST_ARTICLE,lastestArticle);
         }
@@ -86,7 +87,7 @@ public class RedisArticleManager {
     public Set<ZSetOperations.TypedTuple<Object>> foreArticle(){
         if(redisTemplate.hasKey(RedisKey.ART_VISITS_ZSET)==false)   //缓存未命中,只能去数据库查找三次
         {
-            LOG.info("缓存未命中,将从数据库中查找三次");
+            log.info("缓存未命中,将从数据库中查找三次");
             readIn();
         }                                        //缓存命中,按照缓存里的数据去进行数据拼接
         return zSet.reverseRangeWithScores(RedisKey.ART_VISITS_ZSET,0,2);
@@ -100,10 +101,10 @@ public class RedisArticleManager {
     public void incr(ArticleWithBLOBs article) {
         if(zSet.score(RedisKey.ART_VISITS_ZSET, RedisKey.ART_VISIT+article.getId())==null)
         {
-            LOG.info("文章{}访问量,开始写入",article.getTitle());
+            log.info("文章{}访问量,开始写入",article.getTitle());
             zSet.add(RedisKey.ART_VISITS_ZSET, RedisKey.ART_VISIT+article.getId(),article.getVisit());
         }
-        LOG.info("文章{}访问量加一",article.getTitle());
+        log.info("文章{}访问量加一",article.getTitle());
         zSet.incrementScore(RedisKey.ART_VISITS_ZSET, RedisKey.ART_VISIT+article.getId(),1);
         article.setVisit(getVisit(zSet.score(RedisKey.ART_VISITS_ZSET, RedisKey.ART_VISIT+article.getId())));   //文章本身访问量加一
     }
@@ -119,7 +120,7 @@ public class RedisArticleManager {
         {
             article.setVisit(visits.longValue());
         }else{
-            LOG.info("文章{}访问量未改变",article.getTitle());
+            log.info("文章{}访问量未改变",article.getTitle());
         }
     }
 
