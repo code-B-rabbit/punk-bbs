@@ -9,6 +9,10 @@ public class RabbitConfig {
 
     public static String MAIL_CHANNEL="mail";
 
+    /**
+     * 邮件消息队列
+     * @return
+     */
     @Bean
     public Queue Queue() {
         return new Queue(MAIL_CHANNEL);
