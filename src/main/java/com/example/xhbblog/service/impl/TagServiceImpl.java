@@ -50,14 +50,12 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag get(Integer id) {
-        LOG.info("查询标签{}",id);
         return redisTagManager.get(id);
     }
 
 
     @Override
     public List<Tag> list() {
-        LOG.info("查询全部标签");
         return redisTagManager.list();
     }
 
@@ -70,7 +68,6 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Integer count() {
-        LOG.info("查询标签数量");
         return tagMapper.count();
     }
 

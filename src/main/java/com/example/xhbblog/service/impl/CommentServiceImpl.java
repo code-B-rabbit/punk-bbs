@@ -112,13 +112,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> findByAid(Integer aid,Integer start,Integer count) {
-        log.info("查看文章id为{}的所有评论,起始点为{},查询{}条",aid,start,count);
         return redisCommentManager.findByAid(aid,start,count);
     }
 
     @Override
     public List<Comment> listByAid(Integer aid) {
-        log.info("查看文章id为{}的所有评论",aid);
         List<Comment> comments=mapper.listByAid(aid);       //给后台查看评论使用的接口
         Article article = articleMapper.get(aid);
         setUserAndChild(comments);
@@ -127,25 +125,21 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Integer countOfArticle(Integer aid) {
-        log.info("查看文章id为{}的所有首发评论(非回复)",aid);
         return redisCommentManager.countOfArticle(aid);
     }
 
     @Override
     public Integer countOfComment(Integer aid) {
-        log.info("查看文章id为{}的所有评论(含回复)",aid);
         return redisCommentManager.countOfComment(aid);
     }
 
     @Override
     public List<Comment> lastComment() {
-        log.info("查询最新评论");
         return redisCommentManager.lastComment();
     }
 
     @Override
     public List<Comment> listByUid(Integer uid) {
-        log.info("查看用户{}的所有评论",uid);
         List<Comment> comments=mapper.listByUid(uid);       //给后台查看评论使用的接口
         setUserAndChild(comments);
         return setArticle(comments);
@@ -153,7 +147,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> findChilds(Integer cid) {
-        log.info("查看评论{}的所有评论",cid);
         List<Comment> comments=mapper.listByCid(cid);
         setUserAndChild(comments);
         return setArticle(comments);
@@ -176,7 +169,6 @@ public class CommentServiceImpl implements CommentService {
             redisUserManager.sendMessageTo(article.getUid(),messageToAdd);
         }
         if(comment.getParentID()!=null){
-            log.info("{}",comment.getParentID());
             Comment parComment=mapper.selectByPrimaryKey(comment.getParentID());
             User parentUser=userMapper.selectByPrimaryKey(parComment.getUid());
             if(parentUser.getId()!=comment.getUid()){   //自己回复自己除外

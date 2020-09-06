@@ -1,5 +1,7 @@
 package com.example.xhbblog.service.impl;
 
+import com.example.xhbblog.rabbitmq.MailCommandReceiver;
+import com.example.xhbblog.rabbitmq.MailCommandSender;
 import com.example.xhbblog.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +18,7 @@ import java.util.Date;
 public class EmailServiceImpl implements EmailService {
 
     @Autowired
-    private JavaMailSender javaMailSender;
+    private MailCommandSender mailCommandSender;  //将邮件消息发送到信息队列里去
 
     private Logger LOG= LoggerFactory.getLogger(this.getClass());
 
@@ -29,7 +31,6 @@ public class EmailServiceImpl implements EmailService {
      * @param to
      * @param text
      */
-    @Async("taskExecutor")
     @Override
     public void sendEmail(String subject,String to, String text) {
         if(to!=null){
@@ -40,7 +41,7 @@ public class EmailServiceImpl implements EmailService {
             message.setSentDate(new Date());
             message.setText(text);
             LOG.info("邮件服务:从{}给{}发送消息{},标题为",from,to,message,subject);
-            javaMailSender.send(message);
+            mailCommandSender.sendMessage(message);
         }
     }
 

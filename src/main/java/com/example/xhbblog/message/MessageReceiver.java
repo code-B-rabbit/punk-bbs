@@ -30,4 +30,6 @@ public class MessageReceiver{
         log.info("收到消息{}",webSocketMessage);
         webSocketServer.sendMessage(webSocketMessage.getUid(), webSocketMessage.getMessage());
     }
+
+
 }

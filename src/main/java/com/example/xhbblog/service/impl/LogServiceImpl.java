@@ -4,6 +4,7 @@ import com.example.xhbblog.service.LogService;
 import com.example.xhbblog.mapper.LogMapper;
 import com.example.xhbblog.pojo.Log;
 import com.example.xhbblog.utils.RedisKey;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

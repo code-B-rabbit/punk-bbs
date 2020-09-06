@@ -8,6 +8,7 @@ import com.example.xhbblog.service.*;
 import com.example.xhbblog.mapper.ArticleMapper;
 import com.example.xhbblog.pojo.*;
 import com.example.xhbblog.utils.RedisKey;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import java.util.*;
 @Service
 @Transactional(isolation= Isolation.READ_COMMITTED)
 @EnableScheduling
+@Slf4j
 public class ArticleServiceImpl implements ArticleService {
 
 
@@ -192,7 +194,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleWithBLOBs> listByTid(Integer tid,Boolean published,Integer rank,Integer uid) {
-        LOG.info("查询标签为{},是否发表为{}的文章内容",tid,published);
         Order order=Order.getOrder(rank);
         checkOrder(order);
         List<ArticleWithBLOBs> articles = articleMapper.findByTid(tid, published,order,uid);
@@ -205,7 +206,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleWithBLOBs findById(Integer id,String address,String role)
     {
-        LOG.info("查询文章{}",id);
         ArticleWithBLOBs article = articleMapper.findById(id);
         if(role==null||!role.equals("admin")){
             setUp(article,address);
@@ -217,7 +217,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleWithBLOBs> findByTid(Integer tid,String address,Boolean published) {
-        LOG.info("查询标签为{},是否发表为{}的文章内容",tid,published);
         List<ArticleWithBLOBs> all = articleMapper.findByTid(tid,published,null,null);
         for (ArticleWithBLOBs item : all) {
             setUp(item,address);
@@ -227,7 +226,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleWithBLOBs> findByUid(Integer uid, String address, Boolean published) {
-        LOG.info("查询标签为{},是否发表为{}的文章内容",uid,published);
         List<ArticleWithBLOBs> all = articleMapper.findAll(published,null,uid);
         for (ArticleWithBLOBs item : all) {
             setUp(item,address);
@@ -237,7 +235,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleWithBLOBs> listAll(Boolean published,Integer rank,Integer uid) {
-        LOG.info("查询是否发表为{}的全部文章",published);
         Order order=Order.getOrder(rank);
         checkOrder(order);
         List<ArticleWithBLOBs> articles = articleMapper.findAll(published,order,uid);
@@ -255,7 +252,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleWithBLOBs> findAll(String address) {
-        LOG.info("查询全部文章");
         List<ArticleWithBLOBs> all = articleMapper.findAll(true,null,null);
         for (ArticleWithBLOBs item : all) {
             setUp(item,address);
@@ -266,7 +262,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleWithBLOBs> findArticleLike(String key,String address) {
-        LOG.info("以关键字{}搜索文章",key);
         List<ArticleWithBLOBs> articles=articleMapper.findArticleLike("%"+key+"%",true,null,null);
         for (ArticleWithBLOBs item: articles) {
             setUp(item,address);
@@ -276,7 +271,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleWithBLOBs> listArticleLike(String s,Boolean published,Integer rank,Integer uid) {
-        LOG.info("以关键字{}搜索是否发表为{}的文章",s,published);
         Order order=Order.getOrder(rank);
         checkOrder(order);
         List<ArticleWithBLOBs> articles = articleMapper.findArticleLike("%" + s + "%", published,order,uid);
@@ -288,7 +282,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Article> findLastestArticle() {
-        LOG.info("查询最新发布文章");
         List<Article> lastestArticle=redisArticleManager.lastestArticle();
         for (Article article : lastestArticle) {
            setUp(article);
@@ -304,7 +297,6 @@ public class ArticleServiceImpl implements ArticleService {
     //访问量最大的三篇文章
     @Override
     public List<Article> foreArticle() {
-        LOG.info("查询访问量最大的三篇文章");
         List<Article> articles=new LinkedList<>();
         Set<ZSetOperations.TypedTuple<Object>> visits=redisArticleManager.foreArticle();
         for (ZSetOperations.TypedTuple<Object> visit : visits) {
@@ -339,7 +331,7 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public void topArticle(Integer id) {
-        LOG.info("将文章{}设为置顶",id);
+        log.info("将文章{}设为置顶",id);
         articleMapper.topArticle(id);
         redisArticleManager.delTop();
     }
@@ -350,7 +342,7 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public void downArticle(Integer id) {
-        LOG.info("将文章{}取消置顶",id);
+        log.info("将文章{}取消置顶",id);
         articleMapper.downArticle(id);
         redisArticleManager.delTop();
     }
@@ -366,7 +358,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     @PostConstruct        //启动后初始化会执行一次
     public void initCache(){
-        LOG.info("对文章访问量进行定时写入");
+        log.info("对文章访问量进行定时写入");
         redisArticleManager.writeOut();
         redisArticleManager.readIn();
     }
